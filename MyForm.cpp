@@ -5,16 +5,12 @@ using namespace System::Windows::Forms;
 
 [STAThreadAttribute]
 int main(array<String^>^ args) {
-    // Initializing visual styles for the Windows app
     Application::EnableVisualStyles();
     Application::SetCompatibleTextRenderingDefault(false);
 
-    // 'BloodBank' is your namespace (Project Name)
-    // 'MyForm' is your class name (Form Name)
+    // Ensure "BloodBank" matches your Project Name 
+    // and "MyForm" matches your Form Name
     BloodBank::MyForm form;
-
-    // This starts the application and opens your window
     Application::Run(% form);
-
     return 0;
 }
