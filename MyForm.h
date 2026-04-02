@@ -37,7 +37,7 @@ namespace BloodBank {
 	private: System::Windows::Forms::Label^ lblStatus;
 
 	private:
-		System::ComponentModel::Container ^components;
+		System::ComponentModel::Container^ components;
 
 #pragma region Windows Form Designer generated code
 		void InitializeComponent(void)
@@ -53,11 +53,11 @@ namespace BloodBank {
 			this->lblStatus = (gcnew System::Windows::Forms::Label());
 			this->loginPanel->SuspendLayout();
 			this->SuspendLayout();
-			
+
 			// 
 			// loginPanel
 			// 
-			this->loginPanel->BackColor = System::Drawing::Color::FromArgb(15, 30, 70); 
+			this->loginPanel->BackColor = System::Drawing::Color::FromArgb(15, 30, 70); // Slightly lighter than BG to define the box
 			this->loginPanel->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 			this->loginPanel->Controls->Add(this->lblStatus);
 			this->loginPanel->Controls->Add(this->btnSignup);
@@ -67,32 +67,33 @@ namespace BloodBank {
 			this->loginPanel->Controls->Add(this->txtUsername);
 			this->loginPanel->Controls->Add(this->lblUsername);
 			this->loginPanel->Controls->Add(this->lblTitle);
-			this->loginPanel->Location = System::Drawing::Point(0, 0); 
+			this->loginPanel->Location = System::Drawing::Point(0, 0);
 			this->loginPanel->Name = L"loginPanel";
-			this->loginPanel->Size = System::Drawing::Size(600, 500); 
+			this->loginPanel->Size = System::Drawing::Size(600, 500); // LARGER PANEL SIZE
 			this->loginPanel->TabIndex = 0;
 			// 
 			// lblTitle
 			// 
 			this->lblTitle->AutoSize = true;
-			this->lblTitle->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 28, System::Drawing::FontStyle::Bold)); 
+			this->lblTitle->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 28, System::Drawing::FontStyle::Bold)); // MUCH LARGER TITLE
 			this->lblTitle->ForeColor = System::Drawing::Color::White;
 			this->lblTitle->Location = System::Drawing::Point(100, 40);
 			this->lblTitle->Name = L"lblTitle";
 			this->lblTitle->Size = System::Drawing::Size(400, 60);
 			this->lblTitle->Text = L"Admin Portal";
+			this->lblTitle->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			// 
 			// lblUsername
 			// 
 			this->lblUsername->AutoSize = true;
-			this->lblUsername->Font = (gcnew System::Drawing::Font(L"Segoe UI", 14)); 
+			this->lblUsername->Font = (gcnew System::Drawing::Font(L"Segoe UI", 14)); // LARGER FONT
 			this->lblUsername->ForeColor = System::Drawing::Color::LightGray;
 			this->lblUsername->Location = System::Drawing::Point(80, 150);
 			this->lblUsername->Text = L"Username";
 			// 
 			// txtUsername
 			// 
-			this->txtUsername->Font = (gcnew System::Drawing::Font(L"Segoe UI", 14)); 
+			this->txtUsername->Font = (gcnew System::Drawing::Font(L"Segoe UI", 14)); // LARGER INPUT BOX
 			this->txtUsername->Location = System::Drawing::Point(80, 185);
 			this->txtUsername->Name = L"txtUsername";
 			this->txtUsername->Size = System::Drawing::Size(440, 39);
@@ -115,7 +116,7 @@ namespace BloodBank {
 			// 
 			// btnLogin
 			// 
-			this->btnLogin->BackColor = System::Drawing::Color::Crimson; 
+			this->btnLogin->BackColor = System::Drawing::Color::Crimson; // A "Blood Bank" red accent
 			this->btnLogin->Cursor = System::Windows::Forms::Cursors::Hand;
 			this->btnLogin->FlatAppearance->BorderSize = 0;
 			this->btnLogin->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
@@ -142,7 +143,6 @@ namespace BloodBank {
 			this->btnSignup->Size = System::Drawing::Size(210, 50);
 			this->btnSignup->Text = L"SIGN UP";
 			this->btnSignup->UseVisualStyleBackColor = false;
-			this->btnSignup->Click += gcnew System::EventHandler(this, &MyForm::btnSignup_Click);
 			// 
 			// lblStatus
 			// 
@@ -155,7 +155,7 @@ namespace BloodBank {
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->BackColor = System::Drawing::Color::FromArgb(5, 15, 35); 
+			this->BackColor = System::Drawing::Color::FromArgb(5, 15, 35); // DEEP NAVY BACKGROUND
 			this->ClientSize = System::Drawing::Size(1200, 800);
 			this->Controls->Add(this->loginPanel);
 			this->Name = L"MyForm";
@@ -185,18 +185,13 @@ namespace BloodBank {
 
 	private: System::Void btnLogin_Click(System::Object^ sender, System::EventArgs^ e) {
 		if (txtUsername->Text == "admin" && txtPassword->Text == "admin123") {
-			MessageBox::Show("Admin Verified. Loading Database...", "Access Granted", 
+			MessageBox::Show("Admin Verified. Loading Database...", "Access Granted",
 				MessageBoxButtons::OK, MessageBoxIcon::Information);
-		} else {
+		}
+		else {
 			lblStatus->ForeColor = System::Drawing::Color::OrangeRed;
 			lblStatus->Text = "Error: Invalid admin credentials.";
 		}
 	}
-
-	// THE UPDATED SIGN UP MESSAGE:
-	private: System::Void btnSignup_Click(System::Object^ sender, System::EventArgs^ e) {
-		MessageBox::Show("The Sign Up form is not ready yet. It will be ready soon!", "System Update",
-			MessageBoxButtons::OK, MessageBoxIcon::Information);
-	}
-};
+	};
 }
