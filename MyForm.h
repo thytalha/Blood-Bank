@@ -35,7 +35,7 @@ namespace BloodBank {
 			}
 		}
 
-		// --- NEW UI COMPONENTS ---
+		// --- UI COMPONENTS ---
 	private: System::Windows::Forms::Label^ lblTitle;
 	private: System::Windows::Forms::Label^ lblUsername;
 	private: System::Windows::Forms::TextBox^ txtUsername;
@@ -111,7 +111,7 @@ namespace BloodBank {
 			// 
 			this->txtPassword->Location = System::Drawing::Point(130, 147);
 			this->txtPassword->Name = L"txtPassword";
-			this->txtPassword->PasswordChar = '*'; // Masks the password text
+			this->txtPassword->PasswordChar = '*';
 			this->txtPassword->Size = System::Drawing::Size(170, 22);
 			this->txtPassword->TabIndex = 4;
 			// 
@@ -159,7 +159,8 @@ namespace BloodBank {
 			this->Controls->Add(this->lblUsername);
 			this->Controls->Add(this->lblTitle);
 			this->Name = L"MyForm";
-			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen; // Centers the form on launch
+			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
+			this->WindowState = System::Windows::Forms::FormWindowState::Maximized; // Full-screen mode
 			this->Text = L"Blood Bank Interface";
 			this->Load += gcnew System::EventHandler(this, &MyForm::MyForm_Load);
 			this->ResumeLayout(false);
