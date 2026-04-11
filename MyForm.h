@@ -83,7 +83,7 @@ namespace BloodBank
 			this->leftPanel->Dock = System::Windows::Forms::DockStyle::Left;
 			this->leftPanel->Location = System::Drawing::Point(0, 0);
 			this->leftPanel->Name = L"leftPanel";
-			this->leftPanel->Size = System::Drawing::Size(460, 800);
+			this->leftPanel->Size = System::Drawing::Size(950, 800);
 			this->leftPanel->TabIndex = 0;
 			// 
 			// lblStatus
@@ -217,7 +217,7 @@ namespace BloodBank
 			this->rightPanel->Controls->Add(this->lblPortal);
 			this->rightPanel->Controls->Add(this->lblWelcome);
 			this->rightPanel->Dock = System::Windows::Forms::DockStyle::Fill;
-			this->rightPanel->Location = System::Drawing::Point(460, 0);
+			this->rightPanel->Location = System::Drawing::Point(950, 0);
 			this->rightPanel->Name = L"rightPanel";
 			this->rightPanel->Size = System::Drawing::Size(740, 800);
 			this->rightPanel->TabIndex = 1;
@@ -254,6 +254,8 @@ namespace BloodBank
 			this->Name = L"MyForm";
 			this->Text = L"Blood Bank Management System";
 			this->WindowState = System::Windows::Forms::FormWindowState::Maximized;
+           this->Load += gcnew System::EventHandler(this, &MyForm::MyForm_Load);
+			this->Resize += gcnew System::EventHandler(this, &MyForm::MyForm_Resize);
 			this->leftPanel->ResumeLayout(false);
 			this->leftPanel->PerformLayout();
 			this->rightPanel->ResumeLayout(false);
@@ -262,6 +264,34 @@ namespace BloodBank
 
 		}
 #pragma endregion
+
+	private: System::Void ArrangeLeftPanelControls()
+	{
+		int fieldWidth = txtUsername->Width;
+		int x = (leftPanel->ClientSize.Width - fieldWidth) / 2;
+
+		lblLoginTitle->Left = x;
+		lblLoginSubTitle->Left = x;
+		lblUsername->Left = x;
+		txtUsername->Left = x;
+		lblPassword->Left = x;
+		txtPassword->Left = x;
+		btnLogin->Left = x;
+		lblStatus->Left = x;
+
+		lblNoAccount->Left = x;
+		btnSignup->Left = x + fieldWidth - btnSignup->Width;
+	}
+
+	private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e)
+	{
+		ArrangeLeftPanelControls();
+	}
+
+	private: System::Void MyForm_Resize(System::Object^ sender, System::EventArgs^ e)
+	{
+		ArrangeLeftPanelControls();
+	}
 
 	private: System::Void btnLogin_Click(System::Object^ sender, System::EventArgs^ e)
 	{
