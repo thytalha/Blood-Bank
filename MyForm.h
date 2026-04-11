@@ -286,7 +286,8 @@ namespace BloodBank
 		lblStatus->Left = x;
 
 		lblNoAccount->Left = x;
-		btnSignup->Left = x + fieldWidth - btnSignup->Width;
+        btnSignup->Left = lblNoAccount->Right + 14;
+		btnSignup->Top = lblNoAccount->Top - ((btnSignup->Height - lblNoAccount->Height) / 2);
 	}
 
 	private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e)
