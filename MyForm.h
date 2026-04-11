@@ -290,15 +290,21 @@ namespace BloodBank
 			// 
 			this->btnTogglePassword->BackColor = System::Drawing::Color::Transparent;
 			this->btnTogglePassword->Cursor = System::Windows::Forms::Cursors::Hand;
+            this->btnTogglePassword->FlatAppearance->MouseDownBackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(24)), static_cast<System::Int32>(static_cast<System::Byte>(26)),
+				static_cast<System::Int32>(static_cast<System::Byte>(36)));
+			this->btnTogglePassword->FlatAppearance->MouseOverBackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(24)), static_cast<System::Int32>(static_cast<System::Byte>(26)),
+				static_cast<System::Int32>(static_cast<System::Byte>(36)));
 			this->btnTogglePassword->FlatAppearance->BorderSize = 0;
 			this->btnTogglePassword->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-          this->btnTogglePassword->Font = (gcnew System::Drawing::Font(L"Segoe UI Emoji", 11));
+         this->btnTogglePassword->Font = (gcnew System::Drawing::Font(L"Segoe MDL2 Assets", 12));
 			this->btnTogglePassword->ForeColor = System::Drawing::Color::Silver;
 			this->btnTogglePassword->Location = System::Drawing::Point(334, 444);
 			this->btnTogglePassword->Name = L"btnTogglePassword";
-			this->btnTogglePassword->Size = System::Drawing::Size(61, 35);
+          this->btnTogglePassword->Size = System::Drawing::Size(44, 32);
 			this->btnTogglePassword->TabIndex = 12;
-            this->btnTogglePassword->Text = L"👁";
+          this->btnTogglePassword->TabStop = false;
+			this->btnTogglePassword->Text = L"\xE890";
+			this->btnTogglePassword->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			this->btnTogglePassword->UseVisualStyleBackColor = false;
 			this->btnTogglePassword->Click += gcnew System::EventHandler(this, &MyForm::btnTogglePassword_Click);
 			// 
@@ -409,7 +415,7 @@ namespace BloodBank
 			txtPassword->UseSystemPasswordChar = false;
 			txtPassword->Text = L"Password";
 			txtPassword->ForeColor = System::Drawing::Color::Silver;
-          btnTogglePassword->Text = L"👁";
+          btnTogglePassword->Text = L"\xE890";
 		}
 	}
 
@@ -422,7 +428,7 @@ namespace BloodBank
 
 		isPasswordVisible = !isPasswordVisible;
 		txtPassword->UseSystemPasswordChar = !isPasswordVisible;
-        btnTogglePassword->Text = isPasswordVisible ? L"🙈" : L"👁";
+        btnTogglePassword->Text = isPasswordVisible ? L"\xE8F4" : L"\xE890";
 	}
 
 	private: System::Void btnLogin_Click(System::Object^ sender, System::EventArgs^ e)
