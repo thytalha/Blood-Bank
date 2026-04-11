@@ -41,6 +41,10 @@ namespace BloodBank
 	private: System::Windows::Forms::Label^ lblStatus;
 	private: System::Windows::Forms::Label^ lblWelcome;
 	private: System::Windows::Forms::Label^ lblPortal;
+	private: System::Windows::Forms::Panel^ lineUsername;
+	private: System::Windows::Forms::Panel^ linePassword;
+	private: System::Windows::Forms::Button^ btnTogglePassword;
+	private: bool isPasswordVisible;
 
 	private:
 		System::ComponentModel::Container^ components;
@@ -62,6 +66,9 @@ namespace BloodBank
 			this->rightPanel = (gcnew System::Windows::Forms::Panel());
 			this->lblPortal = (gcnew System::Windows::Forms::Label());
 			this->lblWelcome = (gcnew System::Windows::Forms::Label());
+           this->lineUsername = (gcnew System::Windows::Forms::Panel());
+			this->linePassword = (gcnew System::Windows::Forms::Panel());
+			this->btnTogglePassword = (gcnew System::Windows::Forms::Button());
 			this->leftPanel->SuspendLayout();
 			this->rightPanel->SuspendLayout();
 			this->SuspendLayout();
@@ -74,6 +81,9 @@ namespace BloodBank
 			this->leftPanel->Controls->Add(this->btnSignup);
 			this->leftPanel->Controls->Add(this->lblNoAccount);
 			this->leftPanel->Controls->Add(this->btnLogin);
+          this->leftPanel->Controls->Add(this->btnTogglePassword);
+			this->leftPanel->Controls->Add(this->linePassword);
+			this->leftPanel->Controls->Add(this->lineUsername);
 			this->leftPanel->Controls->Add(this->txtPassword);
 			this->leftPanel->Controls->Add(this->lblPassword);
 			this->leftPanel->Controls->Add(this->txtUsername);
@@ -145,14 +155,16 @@ namespace BloodBank
 			// 
 			this->txtPassword->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(24)), static_cast<System::Int32>(static_cast<System::Byte>(26)),
 				static_cast<System::Int32>(static_cast<System::Byte>(36)));
-			this->txtPassword->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
-			this->txtPassword->Font = (gcnew System::Drawing::Font(L"Segoe UI", 14));
-			this->txtPassword->ForeColor = System::Drawing::Color::White;
+          this->txtPassword->BorderStyle = System::Windows::Forms::BorderStyle::None;
+           this->txtPassword->Font = (gcnew System::Drawing::Font(L"Segoe UI", 12));
+           this->txtPassword->ForeColor = System::Drawing::Color::Silver;
           this->txtPassword->Location = System::Drawing::Point(70, 449);
 			this->txtPassword->Name = L"txtPassword";
-			this->txtPassword->PasswordChar = '*';
-			this->txtPassword->Size = System::Drawing::Size(325, 32);
+          this->txtPassword->Size = System::Drawing::Size(260, 32);
 			this->txtPassword->TabIndex = 5;
+         this->txtPassword->Text = L"Password";
+			this->txtPassword->Enter += gcnew System::EventHandler(this, &MyForm::txtPassword_Enter);
+			this->txtPassword->Leave += gcnew System::EventHandler(this, &MyForm::txtPassword_Leave);
 			// 
 			// lblPassword
 			// 
@@ -164,18 +176,22 @@ namespace BloodBank
 			this->lblPassword->Size = System::Drawing::Size(70, 20);
 			this->lblPassword->TabIndex = 4;
 			this->lblPassword->Text = L"Password";
+         this->lblPassword->Visible = false;
 			// 
 			// txtUsername
 			// 
 			this->txtUsername->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(24)), static_cast<System::Int32>(static_cast<System::Byte>(26)),
 				static_cast<System::Int32>(static_cast<System::Byte>(36)));
-			this->txtUsername->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
-           this->txtUsername->Font = (gcnew System::Drawing::Font(L"Segoe UI", 14));
-			this->txtUsername->ForeColor = System::Drawing::Color::White;
+          this->txtUsername->BorderStyle = System::Windows::Forms::BorderStyle::None;
+            this->txtUsername->Font = (gcnew System::Drawing::Font(L"Segoe UI", 12));
+           this->txtUsername->ForeColor = System::Drawing::Color::Silver;
           this->txtUsername->Location = System::Drawing::Point(70, 364);
 			this->txtUsername->Name = L"txtUsername";
 			this->txtUsername->Size = System::Drawing::Size(325, 32);
 			this->txtUsername->TabIndex = 3;
+         this->txtUsername->Text = L"Username";
+			this->txtUsername->Enter += gcnew System::EventHandler(this, &MyForm::txtUsername_Enter);
+			this->txtUsername->Leave += gcnew System::EventHandler(this, &MyForm::txtUsername_Leave);
 			// 
 			// lblUsername
 			// 
@@ -187,6 +203,7 @@ namespace BloodBank
 			this->lblUsername->Size = System::Drawing::Size(184, 20);
 			this->lblUsername->TabIndex = 2;
 			this->lblUsername->Text = L"Username";
+         this->lblUsername->Visible = false;
 			// 
 			// lblLoginSubTitle
 			// 
@@ -249,6 +266,40 @@ namespace BloodBank
 			this->lblWelcome->Text = L"Welcome to";
          this->lblWelcome->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
 			this->lblWelcome->UseCompatibleTextRendering = true;
+         // 
+			// lineUsername
+			// 
+			this->lineUsername->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(90)), static_cast<System::Int32>(static_cast<System::Byte>(95)),
+				static_cast<System::Int32>(static_cast<System::Byte>(110)));
+			this->lineUsername->Location = System::Drawing::Point(70, 401);
+			this->lineUsername->Name = L"lineUsername";
+			this->lineUsername->Size = System::Drawing::Size(325, 1);
+			this->lineUsername->TabIndex = 10;
+			// 
+			// linePassword
+			// 
+			this->linePassword->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(90)), static_cast<System::Int32>(static_cast<System::Byte>(95)),
+				static_cast<System::Int32>(static_cast<System::Byte>(110)));
+			this->linePassword->Location = System::Drawing::Point(70, 486);
+			this->linePassword->Name = L"linePassword";
+			this->linePassword->Size = System::Drawing::Size(325, 1);
+			this->linePassword->TabIndex = 11;
+			// 
+			// btnTogglePassword
+			// 
+			this->btnTogglePassword->BackColor = System::Drawing::Color::Transparent;
+			this->btnTogglePassword->Cursor = System::Windows::Forms::Cursors::Hand;
+			this->btnTogglePassword->FlatAppearance->BorderSize = 0;
+			this->btnTogglePassword->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+          this->btnTogglePassword->Font = (gcnew System::Drawing::Font(L"Segoe UI Emoji", 11));
+			this->btnTogglePassword->ForeColor = System::Drawing::Color::Silver;
+			this->btnTogglePassword->Location = System::Drawing::Point(334, 444);
+			this->btnTogglePassword->Name = L"btnTogglePassword";
+			this->btnTogglePassword->Size = System::Drawing::Size(61, 35);
+			this->btnTogglePassword->TabIndex = 12;
+            this->btnTogglePassword->Text = L"👁";
+			this->btnTogglePassword->UseVisualStyleBackColor = false;
+			this->btnTogglePassword->Click += gcnew System::EventHandler(this, &MyForm::btnTogglePassword_Click);
 			// 
 			// MyForm
 			// 
@@ -280,8 +331,15 @@ namespace BloodBank
 		lblLoginSubTitle->Left = x;
 		lblUsername->Left = x;
 		txtUsername->Left = x;
+      lineUsername->Left = x;
+		lineUsername->Width = fieldWidth;
 		lblPassword->Left = x;
 		txtPassword->Left = x;
+     linePassword->Left = x;
+		linePassword->Width = fieldWidth;
+		btnTogglePassword->Left = x + fieldWidth - btnTogglePassword->Width;
+		btnTogglePassword->Top = txtPassword->Top - 5;
+		txtPassword->Width = fieldWidth - btnTogglePassword->Width - 8;
 		btnLogin->Left = x;
 		lblStatus->Left = x;
 
@@ -300,11 +358,65 @@ namespace BloodBank
 		ArrangeLeftPanelControls();
 	}
 
+	private: System::Void txtUsername_Enter(System::Object^ sender, System::EventArgs^ e)
+	{
+		if (txtUsername->Text == L"Username")
+		{
+			txtUsername->Text = L"";
+			txtUsername->ForeColor = System::Drawing::Color::White;
+		}
+	}
+
+	private: System::Void txtUsername_Leave(System::Object^ sender, System::EventArgs^ e)
+	{
+		if (String::IsNullOrWhiteSpace(txtUsername->Text))
+		{
+			txtUsername->Text = L"Username";
+			txtUsername->ForeColor = System::Drawing::Color::Silver;
+		}
+	}
+
+	private: System::Void txtPassword_Enter(System::Object^ sender, System::EventArgs^ e)
+	{
+		if (txtPassword->Text == L"Password" && txtPassword->ForeColor == System::Drawing::Color::Silver)
+		{
+			txtPassword->Text = L"";
+			txtPassword->ForeColor = System::Drawing::Color::White;
+			txtPassword->UseSystemPasswordChar = !isPasswordVisible;
+		}
+	}
+
+	private: System::Void txtPassword_Leave(System::Object^ sender, System::EventArgs^ e)
+	{
+		if (String::IsNullOrWhiteSpace(txtPassword->Text))
+		{
+			txtPassword->UseSystemPasswordChar = false;
+			txtPassword->Text = L"Password";
+			txtPassword->ForeColor = System::Drawing::Color::Silver;
+          btnTogglePassword->Text = L"👁";
+		}
+	}
+
+	private: System::Void btnTogglePassword_Click(System::Object^ sender, System::EventArgs^ e)
+	{
+		if (txtPassword->Text == L"Password" && txtPassword->ForeColor == System::Drawing::Color::Silver)
+		{
+			return;
+		}
+
+		isPasswordVisible = !isPasswordVisible;
+		txtPassword->UseSystemPasswordChar = !isPasswordVisible;
+        btnTogglePassword->Text = isPasswordVisible ? L"🙈" : L"👁";
+	}
+
 	private: System::Void btnLogin_Click(System::Object^ sender, System::EventArgs^ e)
 	{
 		String^ username = txtUsername->Text->Trim();
 		String^ password = txtPassword->Text;
 		lblStatus->Text = L"";
+
+		if (username == L"Username") username = L"";
+		if (password == L"Password" && txtPassword->ForeColor == System::Drawing::Color::Silver) password = L"";
 
 		if (String::IsNullOrWhiteSpace(username) || String::IsNullOrWhiteSpace(password))
 		{
