@@ -89,9 +89,9 @@ namespace BloodBank
 			// lblStatus
 			// 
 			this->lblStatus->AutoSize = true;
-			this->lblStatus->Font = (gcnew System::Drawing::Font(L"Segoe UI", 9));
+			this->lblStatus->Font = (gcnew System::Drawing::Font(L"Segoe UI", 12));
 			this->lblStatus->ForeColor = System::Drawing::Color::OrangeRed;
-			this->lblStatus->Location = System::Drawing::Point(70, 522);
+            this->lblStatus->Location = System::Drawing::Point(70, 597);
 			this->lblStatus->Name = L"lblStatus";
 			this->lblStatus->Size = System::Drawing::Size(0, 20);
 			this->lblStatus->TabIndex = 9;
@@ -103,9 +103,9 @@ namespace BloodBank
 			this->btnSignup->Cursor = System::Windows::Forms::Cursors::Hand;
 			this->btnSignup->FlatAppearance->BorderSize = 0;
 			this->btnSignup->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->btnSignup->Font = (gcnew System::Drawing::Font(L"Segoe UI", 10));
+			this->btnSignup->Font = (gcnew System::Drawing::Font(L"Segoe UI", 12));
 			this->btnSignup->ForeColor = System::Drawing::Color::White;
-			this->btnSignup->Location = System::Drawing::Point(285, 610);
+           this->btnSignup->Location = System::Drawing::Point(285, 685);
 			this->btnSignup->Name = L"btnSignup";
 			this->btnSignup->Size = System::Drawing::Size(110, 38);
 			this->btnSignup->TabIndex = 8;
@@ -116,9 +116,9 @@ namespace BloodBank
 			// lblNoAccount
 			// 
 			this->lblNoAccount->AutoSize = true;
-			this->lblNoAccount->Font = (gcnew System::Drawing::Font(L"Segoe UI", 9));
+			this->lblNoAccount->Font = (gcnew System::Drawing::Font(L"Segoe UI", 12));
 			this->lblNoAccount->ForeColor = System::Drawing::Color::Silver;
-			this->lblNoAccount->Location = System::Drawing::Point(70, 618);
+         this->lblNoAccount->Location = System::Drawing::Point(70, 693);
 			this->lblNoAccount->Name = L"lblNoAccount";
 			this->lblNoAccount->Size = System::Drawing::Size(171, 20);
 			this->lblNoAccount->TabIndex = 7;
@@ -131,9 +131,9 @@ namespace BloodBank
 			this->btnLogin->Cursor = System::Windows::Forms::Cursors::Hand;
 			this->btnLogin->FlatAppearance->BorderSize = 0;
 			this->btnLogin->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->btnLogin->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 11));
+			this->btnLogin->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 14));
 			this->btnLogin->ForeColor = System::Drawing::Color::White;
-			this->btnLogin->Location = System::Drawing::Point(70, 452);
+         this->btnLogin->Location = System::Drawing::Point(70, 527);
 			this->btnLogin->Name = L"btnLogin";
 			this->btnLogin->Size = System::Drawing::Size(325, 44);
 			this->btnLogin->TabIndex = 6;
@@ -146,9 +146,9 @@ namespace BloodBank
 			this->txtPassword->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(24)), static_cast<System::Int32>(static_cast<System::Byte>(26)),
 				static_cast<System::Int32>(static_cast<System::Byte>(36)));
 			this->txtPassword->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
-			this->txtPassword->Font = (gcnew System::Drawing::Font(L"Segoe UI", 11));
+			this->txtPassword->Font = (gcnew System::Drawing::Font(L"Segoe UI", 14));
 			this->txtPassword->ForeColor = System::Drawing::Color::White;
-			this->txtPassword->Location = System::Drawing::Point(70, 374);
+          this->txtPassword->Location = System::Drawing::Point(70, 449);
 			this->txtPassword->Name = L"txtPassword";
 			this->txtPassword->PasswordChar = '*';
 			this->txtPassword->Size = System::Drawing::Size(325, 32);
@@ -157,9 +157,9 @@ namespace BloodBank
 			// lblPassword
 			// 
 			this->lblPassword->AutoSize = true;
-			this->lblPassword->Font = (gcnew System::Drawing::Font(L"Segoe UI", 9));
+            this->lblPassword->Font = (gcnew System::Drawing::Font(L"Segoe UI", 12));
 			this->lblPassword->ForeColor = System::Drawing::Color::LightGray;
-			this->lblPassword->Location = System::Drawing::Point(70, 344);
+          this->lblPassword->Location = System::Drawing::Point(70, 419);
 			this->lblPassword->Name = L"lblPassword";
 			this->lblPassword->Size = System::Drawing::Size(70, 20);
 			this->lblPassword->TabIndex = 4;
@@ -170,9 +170,9 @@ namespace BloodBank
 			this->txtUsername->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(24)), static_cast<System::Int32>(static_cast<System::Byte>(26)),
 				static_cast<System::Int32>(static_cast<System::Byte>(36)));
 			this->txtUsername->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
-			this->txtUsername->Font = (gcnew System::Drawing::Font(L"Segoe UI", 11));
+           this->txtUsername->Font = (gcnew System::Drawing::Font(L"Segoe UI", 14));
 			this->txtUsername->ForeColor = System::Drawing::Color::White;
-			this->txtUsername->Location = System::Drawing::Point(70, 289);
+          this->txtUsername->Location = System::Drawing::Point(70, 364);
 			this->txtUsername->Name = L"txtUsername";
 			this->txtUsername->Size = System::Drawing::Size(325, 32);
 			this->txtUsername->TabIndex = 3;
@@ -180,9 +180,9 @@ namespace BloodBank
 			// lblUsername
 			// 
 			this->lblUsername->AutoSize = true;
-			this->lblUsername->Font = (gcnew System::Drawing::Font(L"Segoe UI", 9));
+            this->lblUsername->Font = (gcnew System::Drawing::Font(L"Segoe UI", 12));
 			this->lblUsername->ForeColor = System::Drawing::Color::LightGray;
-			this->lblUsername->Location = System::Drawing::Point(70, 259);
+          this->lblUsername->Location = System::Drawing::Point(70, 334);
 			this->lblUsername->Name = L"lblUsername";
 			this->lblUsername->Size = System::Drawing::Size(184, 20);
 			this->lblUsername->TabIndex = 2;
@@ -191,9 +191,9 @@ namespace BloodBank
 			// lblLoginSubTitle
 			// 
 			this->lblLoginSubTitle->AutoSize = true;
-			this->lblLoginSubTitle->Font = (gcnew System::Drawing::Font(L"Segoe UI", 9));
+           this->lblLoginSubTitle->Font = (gcnew System::Drawing::Font(L"Segoe UI", 12));
 			this->lblLoginSubTitle->ForeColor = System::Drawing::Color::Silver;
-			this->lblLoginSubTitle->Location = System::Drawing::Point(70, 196);
+			this->lblLoginSubTitle->Location = System::Drawing::Point(70, 225);
 			this->lblLoginSubTitle->Name = L"lblLoginSubTitle";
 			this->lblLoginSubTitle->Size = System::Drawing::Size(158, 20);
 			this->lblLoginSubTitle->TabIndex = 1;
@@ -201,14 +201,16 @@ namespace BloodBank
 			// 
 			// lblLoginTitle
 			// 
-			this->lblLoginTitle->AutoSize = true;
-			this->lblLoginTitle->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 24, System::Drawing::FontStyle::Bold));
+           this->lblLoginTitle->AutoSize = false;
+          this->lblLoginTitle->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 32, System::Drawing::FontStyle::Bold));
 			this->lblLoginTitle->ForeColor = System::Drawing::Color::White;
 			this->lblLoginTitle->Location = System::Drawing::Point(62, 140);
 			this->lblLoginTitle->Name = L"lblLoginTitle";
-			this->lblLoginTitle->Size = System::Drawing::Size(121, 54);
+         this->lblLoginTitle->Size = System::Drawing::Size(320, 92);
 			this->lblLoginTitle->TabIndex = 0;
 			this->lblLoginTitle->Text = L"Login";
+         this->lblLoginTitle->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
+			this->lblLoginTitle->UseCompatibleTextRendering = true;
 			// 
 			// rightPanel
 			// 
@@ -224,25 +226,29 @@ namespace BloodBank
 			// 
 			// lblPortal
 			// 
-			this->lblPortal->AutoSize = true;
-			this->lblPortal->Font = (gcnew System::Drawing::Font(L"Segoe UI", 28));
+           this->lblPortal->AutoSize = false;
+         this->lblPortal->Font = (gcnew System::Drawing::Font(L"Segoe UI", 32));
 			this->lblPortal->ForeColor = System::Drawing::Color::White;
-			this->lblPortal->Location = System::Drawing::Point(74, 260);
+            this->lblPortal->Location = System::Drawing::Point(74, 285);
 			this->lblPortal->Name = L"lblPortal";
-			this->lblPortal->Size = System::Drawing::Size(290, 62);
+         this->lblPortal->Size = System::Drawing::Size(560, 92);
 			this->lblPortal->TabIndex = 1;
 			this->lblPortal->Text = L"login portal";
+         this->lblPortal->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
+			this->lblPortal->UseCompatibleTextRendering = true;
 			// 
 			// lblWelcome
 			// 
-			this->lblWelcome->AutoSize = true;
-			this->lblWelcome->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 30, System::Drawing::FontStyle::Bold));
+          this->lblWelcome->AutoSize = false;
+         this->lblWelcome->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 38, System::Drawing::FontStyle::Bold));
 			this->lblWelcome->ForeColor = System::Drawing::Color::White;
 			this->lblWelcome->Location = System::Drawing::Point(74, 198);
 			this->lblWelcome->Name = L"lblWelcome";
-			this->lblWelcome->Size = System::Drawing::Size(346, 67);
+            this->lblWelcome->Size = System::Drawing::Size(560, 110);
 			this->lblWelcome->TabIndex = 0;
 			this->lblWelcome->Text = L"Welcome to";
+         this->lblWelcome->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
+			this->lblWelcome->UseCompatibleTextRendering = true;
 			// 
 			// MyForm
 			// 
