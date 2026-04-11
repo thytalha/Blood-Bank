@@ -186,7 +186,7 @@ namespace BloodBank
 			this->lblUsername->Name = L"lblUsername";
 			this->lblUsername->Size = System::Drawing::Size(184, 20);
 			this->lblUsername->TabIndex = 2;
-			this->lblUsername->Text = L"Username (ADMIN or lowercase)";
+			this->lblUsername->Text = L"Username";
 			// 
 			// lblLoginSubTitle
 			// 
@@ -231,7 +231,7 @@ namespace BloodBank
 			this->lblPortal->Name = L"lblPortal";
 			this->lblPortal->Size = System::Drawing::Size(290, 62);
 			this->lblPortal->TabIndex = 1;
-			this->lblPortal->Text = L"student portal";
+			this->lblPortal->Text = L"login portal";
 			// 
 			// lblWelcome
 			// 
