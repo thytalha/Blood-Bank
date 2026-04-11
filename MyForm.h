@@ -137,8 +137,8 @@ namespace BloodBank
 			// 
 			// btnLogin
 			// 
-			this->btnLogin->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(137)), static_cast<System::Int32>(static_cast<System::Byte>(95)),
-				static_cast<System::Int32>(static_cast<System::Byte>(232)));
+         this->btnLogin->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(220)), static_cast<System::Int32>(static_cast<System::Byte>(20)),
+				static_cast<System::Int32>(static_cast<System::Byte>(60)));
 			this->btnLogin->Cursor = System::Windows::Forms::Cursors::Hand;
 			this->btnLogin->FlatAppearance->BorderSize = 0;
 			this->btnLogin->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
@@ -232,8 +232,8 @@ namespace BloodBank
 			// 
 			// rightPanel
 			// 
-			this->rightPanel->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(128)), static_cast<System::Int32>(static_cast<System::Byte>(88)),
-				static_cast<System::Int32>(static_cast<System::Byte>(224)));
+           this->rightPanel->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(170)), static_cast<System::Int32>(static_cast<System::Byte>(30)),
+				static_cast<System::Int32>(static_cast<System::Byte>(50)));
 			this->rightPanel->Controls->Add(this->lblPortal);
 			this->rightPanel->Controls->Add(this->lblWelcome);
 			this->rightPanel->Dock = System::Windows::Forms::DockStyle::Fill;
@@ -303,10 +303,11 @@ namespace BloodBank
           this->btnTogglePassword->Size = System::Drawing::Size(44, 32);
 			this->btnTogglePassword->TabIndex = 12;
           this->btnTogglePassword->TabStop = false;
-			this->btnTogglePassword->Text = L"\xE890";
+          this->btnTogglePassword->Text = L"";
 			this->btnTogglePassword->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			this->btnTogglePassword->UseVisualStyleBackColor = false;
 			this->btnTogglePassword->Click += gcnew System::EventHandler(this, &MyForm::btnTogglePassword_Click);
+         this->btnTogglePassword->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MyForm::btnTogglePassword_Paint);
 			// 
 			// MyForm
 			// 
@@ -413,9 +414,10 @@ namespace BloodBank
 		if (String::IsNullOrWhiteSpace(txtPassword->Text))
 		{
 			txtPassword->UseSystemPasswordChar = false;
+            isPasswordVisible = false;
 			txtPassword->Text = L"Password";
 			txtPassword->ForeColor = System::Drawing::Color::Silver;
-          btnTogglePassword->Text = L"\xE890";
+          btnTogglePassword->Invalidate();
 		}
 	}
 
@@ -428,7 +430,24 @@ namespace BloodBank
 
 		isPasswordVisible = !isPasswordVisible;
 		txtPassword->UseSystemPasswordChar = !isPasswordVisible;
-        btnTogglePassword->Text = isPasswordVisible ? L"\xE8F4" : L"\xE890";
+        btnTogglePassword->Invalidate();
+	}
+
+	private: System::Void btnTogglePassword_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e)
+	{
+		e->Graphics->SmoothingMode = System::Drawing::Drawing2D::SmoothingMode::AntiAlias;
+		e->Graphics->Clear(System::Drawing::Color::FromArgb(24, 26, 36));
+
+		Pen^ pen = gcnew Pen(System::Drawing::Color::Silver, 1.7f);
+		Rectangle eye = Rectangle(8, 10, btnTogglePassword->Width - 16, 12);
+		e->Graphics->DrawArc(pen, eye, 0, 180);
+		e->Graphics->DrawArc(pen, eye, 180, 180);
+		e->Graphics->FillEllipse(System::Drawing::Brushes::Silver, btnTogglePassword->Width / 2 - 2, btnTogglePassword->Height / 2 - 2, 4, 4);
+
+		if (isPasswordVisible)
+		{
+			e->Graphics->DrawLine(pen, 7, btnTogglePassword->Height - 7, btnTogglePassword->Width - 7, 7);
+		}
 	}
 
 	private: System::Void btnLogin_Click(System::Object^ sender, System::EventArgs^ e)
