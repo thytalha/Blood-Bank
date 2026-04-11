@@ -9,6 +9,7 @@ namespace BloodBank
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+	using namespace System::IO;
 
 	public ref class MyForm : public System::Windows::Forms::Form
 	{
@@ -36,6 +37,7 @@ namespace BloodBank
 	private: System::Windows::Forms::Button^ btnLogin;
 	private: System::Windows::Forms::Button^ btnSignup;
 	private: System::Windows::Forms::Label^ lblStatus;
+	private: System::Windows::Forms::WebBrowser^ videoBrowser;
 
 	private:
 		System::ComponentModel::Container^ components;
@@ -43,6 +45,7 @@ namespace BloodBank
 #pragma region Windows Form Designer generated code
 		void InitializeComponent(void)
 		{
+         this->videoBrowser = (gcnew System::Windows::Forms::WebBrowser());
 			this->loginPanel = (gcnew System::Windows::Forms::Panel());
 			this->lblStatus = (gcnew System::Windows::Forms::Label());
 			this->btnSignup = (gcnew System::Windows::Forms::Button());
@@ -54,6 +57,20 @@ namespace BloodBank
 			this->lblTitle = (gcnew System::Windows::Forms::Label());
 			this->loginPanel->SuspendLayout();
 			this->SuspendLayout();
+         // 
+			// videoBrowser
+			// 
+			this->videoBrowser->AllowWebBrowserDrop = false;
+			this->videoBrowser->Dock = System::Windows::Forms::DockStyle::Fill;
+			this->videoBrowser->IsWebBrowserContextMenuEnabled = false;
+			this->videoBrowser->Location = System::Drawing::Point(0, 0);
+			this->videoBrowser->MinimumSize = System::Drawing::Size(20, 20);
+			this->videoBrowser->Name = L"videoBrowser";
+			this->videoBrowser->ScriptErrorsSuppressed = true;
+			this->videoBrowser->ScrollBarsEnabled = false;
+			this->videoBrowser->Size = System::Drawing::Size(1200, 800);
+			this->videoBrowser->TabIndex = 8;
+			this->videoBrowser->WebBrowserShortcutsEnabled = false;
 			// 
 			// loginPanel
 			// 
@@ -171,6 +188,7 @@ namespace BloodBank
 			this->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(5)), static_cast<System::Int32>(static_cast<System::Byte>(15)),
 				static_cast<System::Int32>(static_cast<System::Byte>(35)));
 			this->ClientSize = System::Drawing::Size(1200, 800);
+          this->Controls->Add(this->videoBrowser);
 			this->Controls->Add(this->loginPanel);
 			this->Name = L"MyForm";
 			this->Text = L"Blood Bank Management System";
@@ -191,14 +209,56 @@ namespace BloodBank
 		loginPanel->Location = System::Drawing::Point(x, y);
 	}
 
+	private: System::Void InitializeVideoBackground()
+	{
+       String^ videoFile = nullptr;
+		array<String^>^ candidates = gcnew array<String^>
+		{
+			Path::Combine(Application::StartupPath, L"bg_video.mp4"),
+			Path::GetFullPath(Path::Combine(Application::StartupPath, L"..\\bg_video.mp4")),
+			Path::GetFullPath(Path::Combine(Application::StartupPath, L"..\\..\\bg_video.mp4")),
+			Path::GetFullPath(Path::Combine(Application::StartupPath, L"..\\..\\..\\bg_video.mp4"))
+		};
+
+		for each (String ^ candidate in candidates)
+		{
+			if (File::Exists(candidate))
+			{
+				videoFile = candidate;
+				break;
+			}
+		}
+
+       if (String::IsNullOrEmpty(videoFile))
+		{
+			lblStatus->ForeColor = System::Drawing::Color::Orange;
+          lblStatus->Text = L"Background video not found. Put bg_video.mp4 in Debug/x64 folder or project root.";
+			return;
+		}
+
+		String^ videoUri = (gcnew Uri(videoFile))->AbsoluteUri;
+		String^ html = String::Format(
+			L"<html><head><meta http-equiv='X-UA-Compatible' content='IE=edge' />"
+			L"<style>html,body{{margin:0;padding:0;overflow:hidden;background:black;height:100%;}}"
+			L"video{{position:fixed;right:0;bottom:0;min-width:100%;min-height:100%;object-fit:cover;}}</style>"
+			L"</head><body><video autoplay muted loop>"
+			L"<source src='{0}' type='video/mp4'></video></body></html>",
+			videoUri);
+
+		videoBrowser->DocumentText = html;
+	}
+
 	private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e) 
 	{
+      InitializeVideoBackground();
 		CenterPanel();
+       loginPanel->BringToFront();
 	}
 
 	private: System::Void MyForm_Resize(System::Object^ sender, System::EventArgs^ e) 
 	{
 		CenterPanel();
+       loginPanel->BringToFront();
 	}
 
 	private: System::Void btnLogin_Click(System::Object^ sender, System::EventArgs^ e) 
