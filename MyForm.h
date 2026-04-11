@@ -94,6 +94,7 @@ namespace BloodBank
 			this->leftPanel->Location = System::Drawing::Point(0, 0);
 			this->leftPanel->Name = L"leftPanel";
 			this->leftPanel->Size = System::Drawing::Size(950, 800);
+          this->leftPanel->TabStop = true;
 			this->leftPanel->TabIndex = 0;
 			// 
 			// lblStatus
@@ -312,6 +313,7 @@ namespace BloodBank
 			this->Text = L"Blood Bank Management System";
 			this->WindowState = System::Windows::Forms::FormWindowState::Maximized;
            this->Load += gcnew System::EventHandler(this, &MyForm::MyForm_Load);
+           this->Shown += gcnew System::EventHandler(this, &MyForm::MyForm_Shown);
 			this->Resize += gcnew System::EventHandler(this, &MyForm::MyForm_Resize);
 			this->leftPanel->ResumeLayout(false);
 			this->leftPanel->PerformLayout();
@@ -351,6 +353,20 @@ namespace BloodBank
 	private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e)
 	{
 		ArrangeLeftPanelControls();
+       this->ActiveControl = nullptr;
+		this->Focus();
+	}
+
+	private: System::Void MyForm_Shown(System::Object^ sender, System::EventArgs^ e)
+	{
+		this->BeginInvoke(gcnew MethodInvoker(this, &MyForm::ClearInitialFocus));
+	}
+
+	private: System::Void ClearInitialFocus()
+	{
+		this->ActiveControl = leftPanel;
+		leftPanel->Select();
+		leftPanel->Focus();
 	}
 
 	private: System::Void MyForm_Resize(System::Object^ sender, System::EventArgs^ e)
