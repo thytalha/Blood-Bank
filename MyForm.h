@@ -385,7 +385,7 @@ namespace BloodBank
      linePassword->Left = x;
 		linePassword->Width = fieldWidth;
 		btnTogglePassword->Left = x + fieldWidth - btnTogglePassword->Width;
-		btnTogglePassword->Top = txtPassword->Top - 5;
+		btnTogglePassword->Top = txtPassword->Top - 0;
 		txtPassword->Width = fieldWidth - btnTogglePassword->Width - 8;
 		btnLogin->Left = x;
         btnLogin->Width = fieldWidth;
