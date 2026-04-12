@@ -214,7 +214,7 @@ namespace BloodBank
 			this->btnTogglePassword->FlatAppearance->MouseDownBackColor = System::Drawing::Color::FromArgb(238, 241, 247);
 			this->btnTogglePassword->Font = (gcnew System::Drawing::Font(L"Segoe MDL2 Assets", 12));
 			this->btnTogglePassword->ForeColor = System::Drawing::Color::FromArgb(150, 160, 175);
-			this->btnTogglePassword->Text = L"\xE70F";
+          this->btnTogglePassword->Text = L"\xE18B";
 			this->btnTogglePassword->Size = System::Drawing::Size(30, 30);
 			this->btnTogglePassword->Click += gcnew System::EventHandler(this, &MyForm::btnTogglePassword_Click);
 			// 
@@ -434,9 +434,11 @@ namespace BloodBank
 	private: System::Void txtPassword_Leave(System::Object^ sender, System::EventArgs^ e)
 	{
 		if (String::IsNullOrWhiteSpace(txtPassword->Text)) {
+         isPasswordVisible = false;
 			txtPassword->UseSystemPasswordChar = false;
 			txtPassword->Text = L"••••••••";
 			txtPassword->ForeColor = System::Drawing::Color::Gray;
+           btnTogglePassword->Text = L"\xE18B";
 		}
 	}
 
@@ -445,6 +447,7 @@ namespace BloodBank
 		if (txtPassword->Text != L"••••••••") {
 			isPasswordVisible = !isPasswordVisible;
 			txtPassword->UseSystemPasswordChar = !isPasswordVisible;
+           btnTogglePassword->Text = isPasswordVisible ? L"\xED1A" : L"\xE18B";
 		}
 	}
 
@@ -487,10 +490,10 @@ namespace BloodBank
 		e->Graphics->FillPath(glassBrush, path1);
 		e->Graphics->DrawPath(glassBorder, path1);
 
-		System::Drawing::Font^ f1Small = gcnew System::Drawing::Font(L"Calisto MT", 8);
-		System::Drawing::Font^ f1Large = gcnew System::Drawing::Font(L"Calisto MT", 12, System::Drawing::FontStyle::Bold);
-		e->Graphics->DrawString(L"LIVE STATUS", f1Small, Brushes::WhiteSmoke, card1.X + 60, card1.Y + 20);
-		e->Graphics->DrawString(L"System Active", f1Large, Brushes::White, card1.X + 60, card1.Y + 35);
+      System::Drawing::Font^ f1Small = gcnew System::Drawing::Font(L"Segoe UI", 10, System::Drawing::FontStyle::Bold);
+		System::Drawing::Font^ f1Large = gcnew System::Drawing::Font(L"Segoe UI Black", 14, System::Drawing::FontStyle::Bold);
+		e->Graphics->DrawString(L"LIVE STATUS", f1Small, Brushes::WhiteSmoke, card1.X + 58, card1.Y + 20);
+		e->Graphics->DrawString(L"System Active", f1Large, Brushes::White, card1.X + 58, card1.Y + 35);
 
 		// 2. Center Top Icon Card (Heart)
 		Rectangle card2 = Rectangle(rightPanel->Width / 2 - 40, 200, 80, 80);
@@ -503,13 +506,23 @@ namespace BloodBank
 		GraphicsPath^ path3 = GetRoundedRect(card3, 15);
 		e->Graphics->FillPath(glassBrush, path3);
 		e->Graphics->DrawPath(glassBorder, path3);
+		SolidBrush^ donationBubble = gcnew SolidBrush(Color::FromArgb(105, 178, 34, 74));
+		e->Graphics->FillEllipse(donationBubble, card3.X + 18, card3.Y + 14, 52, 52);
+		System::Drawing::Font^ dropFont = gcnew System::Drawing::Font(L"Segoe UI Symbol", 16);
+		SolidBrush^ dropBrush = gcnew SolidBrush(Color::FromArgb(248, 255, 194, 214));
+		e->Graphics->DrawString(L"\xD83D\xDCA7", dropFont, dropBrush, static_cast<float>(card3.X + 30), static_cast<float>(card3.Y + 25));
 
-		e->Graphics->DrawString(L"TOTAL DONATIONS", f1Small, Brushes::WhiteSmoke, card3.X + 70, card3.Y + 20);
-		e->Graphics->DrawString(L"12,450 units", f1Large, Brushes::White, card3.X + 70, card3.Y + 35);
+		e->Graphics->DrawString(L"TOTAL DONATIONS", f1Small, Brushes::WhiteSmoke, card3.X + 78, card3.Y + 20);
+		e->Graphics->DrawString(L"12,450", f1Large, Brushes::White, card3.X + 80, card3.Y + 42);
+		System::Drawing::Font^ unitsFont = gcnew System::Drawing::Font(L"Segoe UI Black", 12, System::Drawing::FontStyle::Bold);
+		SolidBrush^ unitsBrush = gcnew SolidBrush(Color::FromArgb(245, 86, 120));
+		e->Graphics->DrawString(L"units", unitsFont, unitsBrush, static_cast<float>(card3.X + 145), static_cast<float>(card3.Y + 45));
 
 		// Cleanup GDI Objects
 		delete bgBrush; delete glassBrush; delete glassBorder;
 		delete path1; delete path2; delete path3;
+     delete donationBubble; delete dropFont; delete dropBrush;
+		delete unitsFont; delete unitsBrush;
 		delete f1Small; delete f1Large;
 	}
 
