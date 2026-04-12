@@ -117,10 +117,11 @@ namespace BloodBank
 			// 
 			this->lblLogo->BackColor = System::Drawing::Color::FromArgb(255, 230, 235);
 			this->lblLogo->ForeColor = System::Drawing::Color::FromArgb(232, 15, 59);
-			this->lblLogo->Font = (gcnew System::Drawing::Font(L"Segoe UI", 16, System::Drawing::FontStyle::Bold));
+            this->lblLogo->Font = (gcnew System::Drawing::Font(L"Segoe UI Symbol", 16));
+         this->lblLogo->Padding = System::Windows::Forms::Padding(3, 0, 0, 0);
 			this->lblLogo->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			this->lblLogo->Size = System::Drawing::Size(40, 40);
-			this->lblLogo->Text = L"O";
+           this->lblLogo->Text = L"\xD83D\xDCA7";
 			// 
 			// lblBrandName
 			// 
@@ -312,6 +313,9 @@ namespace BloodBank
 
 		lblLogo->Location = System::Drawing::Point(xOffset, 50);
 		lblBrandName->Location = System::Drawing::Point(xOffset + 50, 55);
+		GraphicsPath^ logoBox = GetRoundedRect(Rectangle(0, 0, lblLogo->Width - 1, lblLogo->Height - 1), 10);
+		lblLogo->Region = gcnew System::Drawing::Region(logoBox);
+		delete logoBox;
 
 		lblLoginTitle->Location = System::Drawing::Point(xOffset - 5, yStart);
 		lblLoginSubTitle->Location = System::Drawing::Point(xOffset, yStart + 55);
