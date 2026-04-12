@@ -29,17 +29,24 @@ namespace BloodBank
 
 	private: System::Windows::Forms::Panel^ leftPanel;
 	private: System::Windows::Forms::Panel^ rightPanel;
+	private: System::Windows::Forms::Label^ lblLogo;
+	private: System::Windows::Forms::Label^ lblBrandName;
 	private: System::Windows::Forms::Label^ lblLoginTitle;
 	private: System::Windows::Forms::Label^ lblLoginSubTitle;
 	private: System::Windows::Forms::Label^ lblUsername;
+  private: System::Windows::Forms::Label^ lblUserIcon;
 	private: System::Windows::Forms::TextBox^ txtUsername;
 	private: System::Windows::Forms::Label^ lblPassword;
+  private: System::Windows::Forms::Label^ lblLockIcon;
 	private: System::Windows::Forms::TextBox^ txtPassword;
 	private: System::Windows::Forms::Button^ btnLogin;
 	private: System::Windows::Forms::Label^ lblNoAccount;
-	private: System::Windows::Forms::Button^ btnSignup;
+	private: System::Windows::Forms::LinkLabel^ linkSignup;
+	private: System::Windows::Forms::CheckBox^ chkRememberMe;
+	private: System::Windows::Forms::LinkLabel^ linkForgotPassword;
 	private: System::Windows::Forms::Label^ lblStatus;
 	private: System::Windows::Forms::Label^ lblWelcome;
+	private: System::Windows::Forms::Label^ lblWelcomeDesc;
 	private: System::Windows::Forms::Panel^ lineUsername;
 	private: System::Windows::Forms::Panel^ linePassword;
 	private: System::Windows::Forms::Button^ btnTogglePassword;
@@ -52,18 +59,25 @@ namespace BloodBank
 		void InitializeComponent(void)
 		{
 			this->leftPanel = (gcnew System::Windows::Forms::Panel());
+			this->lblLogo = (gcnew System::Windows::Forms::Label());
+			this->lblBrandName = (gcnew System::Windows::Forms::Label());
 			this->lblStatus = (gcnew System::Windows::Forms::Label());
-			this->btnSignup = (gcnew System::Windows::Forms::Button());
+			this->linkSignup = (gcnew System::Windows::Forms::LinkLabel());
 			this->lblNoAccount = (gcnew System::Windows::Forms::Label());
 			this->btnLogin = (gcnew System::Windows::Forms::Button());
+			this->chkRememberMe = (gcnew System::Windows::Forms::CheckBox());
+			this->linkForgotPassword = (gcnew System::Windows::Forms::LinkLabel());
 			this->txtPassword = (gcnew System::Windows::Forms::TextBox());
 			this->lblPassword = (gcnew System::Windows::Forms::Label());
+          this->lblLockIcon = (gcnew System::Windows::Forms::Label());
 			this->txtUsername = (gcnew System::Windows::Forms::TextBox());
 			this->lblUsername = (gcnew System::Windows::Forms::Label());
+           this->lblUserIcon = (gcnew System::Windows::Forms::Label());
 			this->lblLoginSubTitle = (gcnew System::Windows::Forms::Label());
 			this->lblLoginTitle = (gcnew System::Windows::Forms::Label());
 			this->rightPanel = (gcnew System::Windows::Forms::Panel());
 			this->lblWelcome = (gcnew System::Windows::Forms::Label());
+			this->lblWelcomeDesc = (gcnew System::Windows::Forms::Label());
 			this->lineUsername = (gcnew System::Windows::Forms::Panel());
 			this->linePassword = (gcnew System::Windows::Forms::Panel());
 			this->btnTogglePassword = (gcnew System::Windows::Forms::Button());
@@ -73,395 +87,350 @@ namespace BloodBank
 			// 
 			// leftPanel
 			// 
-         this->leftPanel->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(245)), static_cast<System::Int32>(static_cast<System::Byte>(248)),
-				static_cast<System::Int32>(static_cast<System::Byte>(255)));
+			this->leftPanel->BackColor = System::Drawing::Color::White;
+			this->leftPanel->Controls->Add(this->lblLogo);
+			this->leftPanel->Controls->Add(this->lblBrandName);
 			this->leftPanel->Controls->Add(this->lblStatus);
-			this->leftPanel->Controls->Add(this->btnSignup);
+			this->leftPanel->Controls->Add(this->linkSignup);
 			this->leftPanel->Controls->Add(this->lblNoAccount);
 			this->leftPanel->Controls->Add(this->btnLogin);
+			this->leftPanel->Controls->Add(this->chkRememberMe);
+			this->leftPanel->Controls->Add(this->linkForgotPassword);
 			this->leftPanel->Controls->Add(this->btnTogglePassword);
 			this->leftPanel->Controls->Add(this->linePassword);
 			this->leftPanel->Controls->Add(this->lineUsername);
 			this->leftPanel->Controls->Add(this->txtPassword);
+          this->leftPanel->Controls->Add(this->lblLockIcon);
 			this->leftPanel->Controls->Add(this->lblPassword);
 			this->leftPanel->Controls->Add(this->txtUsername);
+          this->leftPanel->Controls->Add(this->lblUserIcon);
 			this->leftPanel->Controls->Add(this->lblUsername);
 			this->leftPanel->Controls->Add(this->lblLoginSubTitle);
 			this->leftPanel->Controls->Add(this->lblLoginTitle);
 			this->leftPanel->Dock = System::Windows::Forms::DockStyle::Left;
 			this->leftPanel->Location = System::Drawing::Point(0, 0);
 			this->leftPanel->Name = L"leftPanel";
-			this->leftPanel->Size = System::Drawing::Size(950, 800);
-			this->leftPanel->TabStop = true;
+			this->leftPanel->Size = System::Drawing::Size(600, 800);
 			this->leftPanel->TabIndex = 0;
 			// 
-			// lblStatus
+			// lblLogo (Placeholder for actual image)
 			// 
-			this->lblStatus->AutoSize = true;
-			this->lblStatus->Font = (gcnew System::Drawing::Font(L"Calisto MT", 12));
-			this->lblStatus->ForeColor = System::Drawing::Color::OrangeRed;
-            this->lblStatus->Location = System::Drawing::Point(70, 597);
-			this->lblStatus->Name = L"lblStatus";
-			this->lblStatus->Size = System::Drawing::Size(0, 20);
-			this->lblStatus->TabIndex = 9;
+			this->lblLogo->BackColor = System::Drawing::Color::FromArgb(255, 230, 235);
+			this->lblLogo->ForeColor = System::Drawing::Color::FromArgb(232, 15, 59);
+			this->lblLogo->Font = (gcnew System::Drawing::Font(L"Segoe UI", 16, System::Drawing::FontStyle::Bold));
+			this->lblLogo->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
+			this->lblLogo->Size = System::Drawing::Size(40, 40);
+			this->lblLogo->Text = L"O";
 			// 
-			// btnSignup
+			// lblBrandName
 			// 
-			this->btnSignup->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(221)), static_cast<System::Int32>(static_cast<System::Byte>(229)),
-				static_cast<System::Int32>(static_cast<System::Byte>(245)));
-			this->btnSignup->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->btnSignup->FlatAppearance->BorderSize = 0;
-			this->btnSignup->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->btnSignup->Font = (gcnew System::Drawing::Font(L"Calisto MT", 13));
-			this->btnSignup->ForeColor = System::Drawing::Color::FromArgb(0, 0, 0);
-			this->btnSignup->Location = System::Drawing::Point(285, 685);
-			this->btnSignup->Name = L"btnSignup";
-			this->btnSignup->Size = System::Drawing::Size(120, 42);
-			this->btnSignup->TabIndex = 8;
-			this->btnSignup->Text = L"Sign up";
-			this->btnSignup->UseVisualStyleBackColor = false;
-			this->btnSignup->Click += gcnew System::EventHandler(this, &MyForm::btnSignup_Click);
+			this->lblBrandName->AutoSize = true;
+			this->lblBrandName->Font = (gcnew System::Drawing::Font(L"Segoe UI", 16, System::Drawing::FontStyle::Bold));
+			this->lblBrandName->ForeColor = System::Drawing::Color::Black;
+			this->lblBrandName->Text = L"LifeBlood";
 			// 
-			// lblNoAccount
+			// lblLoginTitle
 			// 
-			this->lblNoAccount->AutoSize = true;
-            this->lblNoAccount->Font = (gcnew System::Drawing::Font(L"Calisto MT", 13));
-			this->lblNoAccount->ForeColor = System::Drawing::Color::FromArgb(0, 0, 0);
-			this->lblNoAccount->Location = System::Drawing::Point(70, 693);
-			this->lblNoAccount->Name = L"lblNoAccount";
-			this->lblNoAccount->Size = System::Drawing::Size(171, 20);
-			this->lblNoAccount->TabIndex = 7;
-			this->lblNoAccount->Text = L"Don\'t have an account?";
-			// 
-			// btnLogin
-			// 
-			this->btnLogin->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(220)), static_cast<System::Int32>(static_cast<System::Byte>(20)),
-				static_cast<System::Int32>(static_cast<System::Byte>(60)));
-			this->btnLogin->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->btnLogin->FlatAppearance->BorderSize = 0;
-			this->btnLogin->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->btnLogin->Font = (gcnew System::Drawing::Font(L"Calisto MT", 15));
-			this->btnLogin->ForeColor = System::Drawing::Color::White;
-			this->btnLogin->Location = System::Drawing::Point(70, 527);
-			this->btnLogin->Name = L"btnLogin";
-			this->btnLogin->Size = System::Drawing::Size(540, 50);
-			this->btnLogin->TabIndex = 6;
-			this->btnLogin->Text = L"Login";
-			this->btnLogin->UseVisualStyleBackColor = false;
-			this->btnLogin->Click += gcnew System::EventHandler(this, &MyForm::btnLogin_Click);
-			// 
-			// txtPassword
-			// 
-			this->txtPassword->BackColor = System::Drawing::Color::White;
-			this->txtPassword->BorderStyle = System::Windows::Forms::BorderStyle::None;
-			this->txtPassword->Font = (gcnew System::Drawing::Font(L"Calisto MT", 13));
-			this->txtPassword->ForeColor = System::Drawing::Color::Silver;
-			this->txtPassword->Location = System::Drawing::Point(70, 449);
-			this->txtPassword->Name = L"txtPassword";
-			this->txtPassword->AutoSize = false;
-			this->txtPassword->Multiline = false;
-			this->txtPassword->Size = System::Drawing::Size(540, 40);
-			this->txtPassword->TabIndex = 5;
-			this->txtPassword->Text = L"Password";
-			this->txtPassword->Enter += gcnew System::EventHandler(this, &MyForm::txtPassword_Enter);
-			this->txtPassword->Leave += gcnew System::EventHandler(this, &MyForm::txtPassword_Leave);
-			// 
-			// lblPassword
-			// 
-			this->lblPassword->AutoSize = true;
-			this->lblPassword->Font = (gcnew System::Drawing::Font(L"Calisto MT", 13));
-			this->lblPassword->ForeColor = System::Drawing::Color::LightGray;
-			this->lblPassword->Location = System::Drawing::Point(70, 419);
-			this->lblPassword->Name = L"lblPassword";
-			this->lblPassword->Size = System::Drawing::Size(70, 20);
-			this->lblPassword->TabIndex = 4;
-			this->lblPassword->Text = L"Password";
-			this->lblPassword->Visible = false;
-			// 
-			// txtUsername
-			// 
-			this->txtUsername->BackColor = System::Drawing::Color::White;
-			this->txtUsername->BorderStyle = System::Windows::Forms::BorderStyle::None;
-			this->txtUsername->Font = (gcnew System::Drawing::Font(L"Calisto MT", 13));
-			this->txtUsername->ForeColor = System::Drawing::Color::Silver;
-			this->txtUsername->Location = System::Drawing::Point(70, 364);
-			this->txtUsername->Name = L"txtUsername";
-			this->txtUsername->AutoSize = false;
-			this->txtUsername->Multiline = false;
-			this->txtUsername->Size = System::Drawing::Size(540, 40);
-
-			this->txtUsername->TabIndex = 3;
-			this->txtUsername->Text = L"Username";
-			this->txtUsername->Enter += gcnew System::EventHandler(this, &MyForm::txtUsername_Enter);
-			this->txtUsername->Leave += gcnew System::EventHandler(this, &MyForm::txtUsername_Leave);
-			// 
-			// lblUsername
-			// 
-			this->lblUsername->AutoSize = true;
-			this->lblUsername->Font = (gcnew System::Drawing::Font(L"Calisto MT", 13));
-			this->lblUsername->ForeColor = System::Drawing::Color::LightGray;
-			this->lblUsername->Location = System::Drawing::Point(70, 334);
-			this->lblUsername->Name = L"lblUsername";
-			this->lblUsername->Size = System::Drawing::Size(184, 20);
-			this->lblUsername->TabIndex = 2;
-			this->lblUsername->Text = L"Username";
-			this->lblUsername->Visible = false;
+			this->lblLoginTitle->AutoSize = true;
+			this->lblLoginTitle->Font = (gcnew System::Drawing::Font(L"Segoe UI", 28, System::Drawing::FontStyle::Bold));
+			this->lblLoginTitle->ForeColor = System::Drawing::Color::Black;
+			this->lblLoginTitle->Text = L"Login to your account";
 			// 
 			// lblLoginSubTitle
 			// 
 			this->lblLoginSubTitle->AutoSize = true;
-			this->lblLoginSubTitle->Font = (gcnew System::Drawing::Font(L"Calisto MT", 13));
-			this->lblLoginSubTitle->ForeColor = System::Drawing::Color::FromArgb(0, 0, 0);
-			this->lblLoginSubTitle->Location = System::Drawing::Point(70, 225);
-			this->lblLoginSubTitle->Name = L"lblLoginSubTitle";
-			this->lblLoginSubTitle->Size = System::Drawing::Size(158, 20);
-			this->lblLoginSubTitle->TabIndex = 1;
-			this->lblLoginSubTitle->Text = L"Enter your account details";
+			this->lblLoginSubTitle->Font = (gcnew System::Drawing::Font(L"Segoe UI", 11));
+			this->lblLoginSubTitle->ForeColor = System::Drawing::Color::Gray;
+			this->lblLoginSubTitle->Text = L"Enter your account details below to proceed";
 			// 
-			// lblLoginTitle
+			// lblUsername
 			// 
-			this->lblLoginTitle->AutoSize = false;
-			this->lblLoginTitle->Font = (gcnew System::Drawing::Font(L"Calisto MT", 36, System::Drawing::FontStyle::Bold));
-			this->lblLoginTitle->ForeColor = System::Drawing::Color::FromArgb(0, 0, 0);
-			this->lblLoginTitle->Location = System::Drawing::Point(62, 140);
-			this->lblLoginTitle->Name = L"lblLoginTitle";
-            this->lblLoginTitle->Size = System::Drawing::Size(700, 90);
-			this->lblLoginTitle->TabIndex = 0;
-			this->lblLoginTitle->Text = L"Login to your account";
-			this->lblLoginTitle->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
-			this->lblLoginTitle->UseCompatibleTextRendering = true;
+			this->lblUsername->AutoSize = true;
+			this->lblUsername->Font = (gcnew System::Drawing::Font(L"Segoe UI", 10, System::Drawing::FontStyle::Bold));
+			this->lblUsername->ForeColor = System::Drawing::Color::FromArgb(64, 64, 64);
+			this->lblUsername->Text = L"Username";
+			// 
+			// txtUsername
+			// 
+			this->txtUsername->BorderStyle = System::Windows::Forms::BorderStyle::None;
+           this->txtUsername->BackColor = System::Drawing::Color::FromArgb(245, 247, 250);
+			this->txtUsername->Font = (gcnew System::Drawing::Font(L"Segoe UI", 12));
+			this->txtUsername->ForeColor = System::Drawing::Color::Gray;
+			this->txtUsername->Text = L"Enter your username";
+			this->txtUsername->Enter += gcnew System::EventHandler(this, &MyForm::txtUsername_Enter);
+			this->txtUsername->Leave += gcnew System::EventHandler(this, &MyForm::txtUsername_Leave);
+			// 
+			// lineUsername
+			// 
+          this->lineUsername->BackColor = System::Drawing::Color::FromArgb(245, 247, 250);
+         this->lineUsername->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->lineUsername->Size = System::Drawing::Size(400, 56);
+			// 
+			// lblPassword
+			// 
+			this->lblPassword->AutoSize = true;
+			this->lblPassword->Font = (gcnew System::Drawing::Font(L"Segoe UI", 10, System::Drawing::FontStyle::Bold));
+			this->lblPassword->ForeColor = System::Drawing::Color::FromArgb(64, 64, 64);
+			this->lblPassword->Text = L"Password";
+			// 
+			// txtPassword
+			// 
+			this->txtPassword->BorderStyle = System::Windows::Forms::BorderStyle::None;
+           this->txtPassword->BackColor = System::Drawing::Color::FromArgb(245, 247, 250);
+			this->txtPassword->Font = (gcnew System::Drawing::Font(L"Segoe UI", 12));
+			this->txtPassword->ForeColor = System::Drawing::Color::Gray;
+			this->txtPassword->Text = L"••••••••";
+			this->txtPassword->Enter += gcnew System::EventHandler(this, &MyForm::txtPassword_Enter);
+			this->txtPassword->Leave += gcnew System::EventHandler(this, &MyForm::txtPassword_Leave);
+         // 
+			// lblLockIcon
+			// 
+			this->lblLockIcon->AutoSize = true;
+			this->lblLockIcon->BackColor = System::Drawing::Color::Transparent;
+			this->lblLockIcon->Font = (gcnew System::Drawing::Font(L"Segoe MDL2 Assets", 14));
+			this->lblLockIcon->ForeColor = System::Drawing::Color::FromArgb(150, 160, 175);
+			this->lblLockIcon->Text = L"\xE72E";
+			// 
+			// linePassword
+			// 
+          this->linePassword->BackColor = System::Drawing::Color::FromArgb(245, 247, 250);
+         this->linePassword->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->linePassword->Size = System::Drawing::Size(400, 56);
+			// 
+			// btnTogglePassword
+			// 
+			this->btnTogglePassword->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->btnTogglePassword->FlatAppearance->BorderSize = 0;
+         this->btnTogglePassword->FlatAppearance->MouseOverBackColor = System::Drawing::Color::FromArgb(245, 247, 250);
+			this->btnTogglePassword->FlatAppearance->MouseDownBackColor = System::Drawing::Color::FromArgb(238, 241, 247);
+			this->btnTogglePassword->Font = (gcnew System::Drawing::Font(L"Segoe MDL2 Assets", 12));
+			this->btnTogglePassword->ForeColor = System::Drawing::Color::FromArgb(150, 160, 175);
+			this->btnTogglePassword->Text = L"\xE70F";
+			this->btnTogglePassword->Size = System::Drawing::Size(30, 30);
+			this->btnTogglePassword->Click += gcnew System::EventHandler(this, &MyForm::btnTogglePassword_Click);
+			// 
+			// chkRememberMe
+			// 
+			this->chkRememberMe->AutoSize = true;
+			this->chkRememberMe->Font = (gcnew System::Drawing::Font(L"Segoe UI", 10));
+			this->chkRememberMe->ForeColor = System::Drawing::Color::FromArgb(64, 64, 64);
+			this->chkRememberMe->Text = L"Remember me";
+			// 
+			// linkForgotPassword
+			// 
+			this->linkForgotPassword->AutoSize = true;
+			this->linkForgotPassword->Font = (gcnew System::Drawing::Font(L"Segoe UI", 10, System::Drawing::FontStyle::Bold));
+			this->linkForgotPassword->LinkColor = System::Drawing::Color::FromArgb(232, 15, 59);
+			this->linkForgotPassword->LinkBehavior = System::Windows::Forms::LinkBehavior::NeverUnderline;
+			this->linkForgotPassword->Text = L"Forgot password?";
+			// 
+			// btnLogin
+			// 
+			this->btnLogin->BackColor = System::Drawing::Color::FromArgb(232, 15, 59);
+			this->btnLogin->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->btnLogin->FlatAppearance->BorderSize = 0;
+			this->btnLogin->Font = (gcnew System::Drawing::Font(L"Segoe UI", 12, System::Drawing::FontStyle::Bold));
+			this->btnLogin->ForeColor = System::Drawing::Color::White;
+			this->btnLogin->Text = L"Login to Dashboard";
+			this->btnLogin->Size = System::Drawing::Size(400, 45);
+			this->btnLogin->Cursor = System::Windows::Forms::Cursors::Hand;
+			this->btnLogin->Click += gcnew System::EventHandler(this, &MyForm::btnLogin_Click);
+			// 
+			// lblNoAccount
+			// 
+			this->lblNoAccount->AutoSize = true;
+			this->lblNoAccount->Font = (gcnew System::Drawing::Font(L"Segoe UI", 10));
+			this->lblNoAccount->ForeColor = System::Drawing::Color::Gray;
+			this->lblNoAccount->Text = L"Don't have an account?";
+			// 
+			// linkSignup
+			// 
+			this->linkSignup->AutoSize = true;
+			this->linkSignup->Font = (gcnew System::Drawing::Font(L"Segoe UI", 10, System::Drawing::FontStyle::Bold));
+			this->linkSignup->LinkColor = System::Drawing::Color::FromArgb(232, 15, 59);
+			this->linkSignup->LinkBehavior = System::Windows::Forms::LinkBehavior::NeverUnderline;
+			this->linkSignup->Text = L"Sign up";
+			this->linkSignup->Click += gcnew System::EventHandler(this, &MyForm::btnSignup_Click);
+			// 
+			// lblStatus
+			// 
+			this->lblStatus->AutoSize = true;
+			this->lblStatus->ForeColor = System::Drawing::Color::Red;
 			// 
 			// rightPanel
 			// 
-          this->rightPanel->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(186)), static_cast<System::Int32>(static_cast<System::Byte>(30)),
-				static_cast<System::Int32>(static_cast<System::Byte>(46)));
-			this->rightPanel->Controls->Add(this->lblWelcome);
 			this->rightPanel->Dock = System::Windows::Forms::DockStyle::Fill;
-			this->rightPanel->Location = System::Drawing::Point(950, 0);
-			this->rightPanel->Name = L"rightPanel";
-			this->rightPanel->Size = System::Drawing::Size(740, 800);
-			this->rightPanel->TabIndex = 1;
+			this->rightPanel->Controls->Add(this->lblWelcome);
+			this->rightPanel->Controls->Add(this->lblWelcomeDesc);
 			this->rightPanel->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MyForm::rightPanel_Paint);
 			// 
 			// lblWelcome
 			// 
-			this->lblWelcome->AutoSize = false;
-            this->lblWelcome->BackColor = System::Drawing::Color::Transparent;
-			this->lblWelcome->Font = (gcnew System::Drawing::Font(L"Calisto MT", 36, System::Drawing::FontStyle::Bold));
+			this->lblWelcome->BackColor = System::Drawing::Color::Transparent;
+			this->lblWelcome->Font = (gcnew System::Drawing::Font(L"Segoe UI Black", 42, System::Drawing::FontStyle::Bold));
 			this->lblWelcome->ForeColor = System::Drawing::Color::White;
-			this->lblWelcome->Location = System::Drawing::Point(80, 195);
-			this->lblWelcome->Name = L"lblWelcome";
-            this->lblWelcome->Size = System::Drawing::Size(900, 100);
-			this->lblWelcome->TabIndex = 0;
-			this->lblWelcome->Text = L"Welcome to LifeBlood MMS";
-			this->lblWelcome->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
-			this->lblWelcome->UseCompatibleTextRendering = true;
+			this->lblWelcome->Text = L"Welcome to\nLifeBlood MMS";
+			this->lblWelcome->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			// 
-			// lineUsername
+			// lblWelcomeDesc
 			// 
-			this->lineUsername->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(180)), static_cast<System::Int32>(static_cast<System::Byte>(191)),
-				static_cast<System::Int32>(static_cast<System::Byte>(216)));
-			this->lineUsername->Location = System::Drawing::Point(70, 401);
-			this->lineUsername->Name = L"lineUsername";
-			this->lineUsername->Size = System::Drawing::Size(540, 2);
-			this->lineUsername->TabIndex = 10;
-			// 
-			// linePassword
-			// 
-			this->linePassword->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(180)), static_cast<System::Int32>(static_cast<System::Byte>(191)),
-				static_cast<System::Int32>(static_cast<System::Byte>(216)));
-			this->linePassword->Location = System::Drawing::Point(70, 486);
-			this->linePassword->Name = L"linePassword";
-			this->linePassword->Size = System::Drawing::Size(540, 2);
-			this->linePassword->TabIndex = 11;
-			// 
-			// btnTogglePassword
-			// 
-			this->btnTogglePassword->BackColor = System::Drawing::Color::Transparent;
-			this->btnTogglePassword->Cursor = System::Windows::Forms::Cursors::Hand;
-            this->btnTogglePassword->FlatAppearance->MouseDownBackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(24)), static_cast<System::Int32>(static_cast<System::Byte>(26)),
-				static_cast<System::Int32>(static_cast<System::Byte>(36)));
-			this->btnTogglePassword->FlatAppearance->MouseOverBackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(24)), static_cast<System::Int32>(static_cast<System::Byte>(26)),
-				static_cast<System::Int32>(static_cast<System::Byte>(36)));
-			this->btnTogglePassword->FlatAppearance->BorderSize = 0;
-			this->btnTogglePassword->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-         this->btnTogglePassword->Font = (gcnew System::Drawing::Font(L"Segoe MDL2 Assets", 12));
-            this->btnTogglePassword->ForeColor = System::Drawing::Color::FromArgb(72, 86, 118);
-           this->btnTogglePassword->Location = System::Drawing::Point(536, 455);
-			this->btnTogglePassword->Name = L"btnTogglePassword";
-          this->btnTogglePassword->Size = System::Drawing::Size(28, 22);
-			this->btnTogglePassword->TabIndex = 12;
-          this->btnTogglePassword->TabStop = false;
-        this->btnTogglePassword->Text = L"\xE18B";
-			this->btnTogglePassword->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
-			this->btnTogglePassword->UseVisualStyleBackColor = false;
-			this->btnTogglePassword->Click += gcnew System::EventHandler(this, &MyForm::btnTogglePassword_Click);
-         this->btnTogglePassword->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MyForm::btnTogglePassword_Paint);
+			this->lblWelcomeDesc->BackColor = System::Drawing::Color::Transparent;
+			this->lblWelcomeDesc->Font = (gcnew System::Drawing::Font(L"Segoe UI", 14));
+			this->lblWelcomeDesc->ForeColor = System::Drawing::Color::FromArgb(230, 230, 230);
+			this->lblWelcomeDesc->Text = L"Streamlining the connection between generous donors\nand critical needs. Every drop counts in saving lives.";
+			this->lblWelcomeDesc->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			// 
 			// MyForm
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
-			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(1200, 800);
 			this->Controls->Add(this->rightPanel);
 			this->Controls->Add(this->leftPanel);
-			this->Name = L"MyForm";
-			this->Text = L"Blood Bank Management System";
+			this->Text = L"LifeBlood MMS Login";
 			this->WindowState = System::Windows::Forms::FormWindowState::Maximized;
-           this->Load += gcnew System::EventHandler(this, &MyForm::MyForm_Load);
-           this->Shown += gcnew System::EventHandler(this, &MyForm::MyForm_Shown);
+			this->Load += gcnew System::EventHandler(this, &MyForm::MyForm_Load);
 			this->Resize += gcnew System::EventHandler(this, &MyForm::MyForm_Resize);
 			this->leftPanel->ResumeLayout(false);
 			this->leftPanel->PerformLayout();
 			this->rightPanel->ResumeLayout(false);
-			this->rightPanel->PerformLayout();
 			this->ResumeLayout(false);
-
 		}
 #pragma endregion
 
 	private: System::Void ArrangeLeftPanelControls()
 	{
-		int fieldWidth = txtUsername->Width;
-     int x = System::Math::Max(20, ((leftPanel->ClientSize.Width - fieldWidth) / 2) - 75);
+		int xOffset = 100; // Left alignment margin based on the image
+		int yStart = 150;
+		int fieldWidth = 400;
 
-		lblLoginTitle->Left = x;
-     lblLoginTitle->Width = fieldWidth + 220;
-	 lblLoginSubTitle->Left = x + 3;
-		lblUsername->Left = x;
-		txtUsername->Left = x;
-      lineUsername->Left = x;
-		lineUsername->Width = fieldWidth;
-		lblPassword->Left = x;
-		txtPassword->Left = x;
-     linePassword->Left = x;
-		linePassword->Width = fieldWidth;
-		btnTogglePassword->Left = x + fieldWidth - btnTogglePassword->Width;
-      btnTogglePassword->Left = x + fieldWidth - btnTogglePassword->Width - 6;
-		btnTogglePassword->Top = txtPassword->Top + ((txtPassword->Height - btnTogglePassword->Height) / 2);
-		txtPassword->Width = fieldWidth;
-		btnLogin->Left = x;
-        btnLogin->Width = fieldWidth;
-		lblStatus->Left = x;
+		lblLogo->Location = System::Drawing::Point(xOffset, 50);
+		lblBrandName->Location = System::Drawing::Point(xOffset + 50, 55);
 
-		lblNoAccount->Left = x;
-        btnSignup->Left = lblNoAccount->Right + 50;
-		btnSignup->Top = lblNoAccount->Top - ((btnSignup->Height - lblNoAccount->Height) / 2);
+		lblLoginTitle->Location = System::Drawing::Point(xOffset - 5, yStart);
+		lblLoginSubTitle->Location = System::Drawing::Point(xOffset, yStart + 55);
+
+		lblUsername->Location = System::Drawing::Point(xOffset, yStart + 120);
+      lineUsername->Location = System::Drawing::Point(xOffset, yStart + 145);
+		lineUsername->Size = System::Drawing::Size(fieldWidth, 56);
+		lblUserIcon->Location = System::Drawing::Point(xOffset + 16, yStart + 162);
+		txtUsername->Location = System::Drawing::Point(xOffset + 52, yStart + 162);
+		txtUsername->Width = fieldWidth - 68;
+
+		lblPassword->Location = System::Drawing::Point(xOffset, yStart + 210);
+      linePassword->Location = System::Drawing::Point(xOffset, yStart + 235);
+		linePassword->Size = System::Drawing::Size(fieldWidth, 56);
+		lblLockIcon->Location = System::Drawing::Point(xOffset + 16, yStart + 252);
+		txtPassword->Location = System::Drawing::Point(xOffset + 52, yStart + 252);
+		txtPassword->Width = fieldWidth - 100;
+		btnTogglePassword->Location = System::Drawing::Point(xOffset + fieldWidth - 38, yStart + 248);
+
+		GraphicsPath^ userBox = GetRoundedRect(Rectangle(0, 0, lineUsername->Width - 1, lineUsername->Height - 1), 16);
+		lineUsername->Region = gcnew System::Drawing::Region(userBox);
+		delete userBox;
+		GraphicsPath^ passBox = GetRoundedRect(Rectangle(0, 0, linePassword->Width - 1, linePassword->Height - 1), 16);
+		linePassword->Region = gcnew System::Drawing::Region(passBox);
+		delete passBox;
+
+		lineUsername->SendToBack();
+		linePassword->SendToBack();
+		txtUsername->BringToFront();
+		txtPassword->BringToFront();
+		lblUserIcon->BringToFront();
+		lblLockIcon->BringToFront();
+		btnTogglePassword->BringToFront();
+
+		chkRememberMe->Location = System::Drawing::Point(xOffset, yStart + 290);
+		linkForgotPassword->Location = System::Drawing::Point(xOffset + fieldWidth - linkForgotPassword->Width, yStart + 290);
+
+		btnLogin->Location = System::Drawing::Point(xOffset, yStart + 350);
+		btnLogin->Width = fieldWidth;
+
+		lblNoAccount->Location = System::Drawing::Point(xOffset + 100, yStart + 430);
+		linkSignup->Location = System::Drawing::Point(lblNoAccount->Right + 5, yStart + 430);
+
+		lblStatus->Location = System::Drawing::Point(xOffset, yStart + 470);
+	}
+
+	private: System::Void ArrangeRightPanelControls()
+	{
+		lblWelcome->Width = rightPanel->Width;
+		lblWelcome->Height = 150;
+		lblWelcome->Location = System::Drawing::Point(0, (rightPanel->Height / 2) - 80);
+
+		lblWelcomeDesc->Width = rightPanel->Width;
+		lblWelcomeDesc->Height = 80;
+		lblWelcomeDesc->Location = System::Drawing::Point(0, lblWelcome->Bottom + 10);
 	}
 
 	private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e)
 	{
 		ArrangeLeftPanelControls();
-       this->ActiveControl = nullptr;
-		this->Focus();
-	}
-
-	private: System::Void MyForm_Shown(System::Object^ sender, System::EventArgs^ e)
-	{
-		this->BeginInvoke(gcnew MethodInvoker(this, &MyForm::ClearInitialFocus));
-	}
-
-	private: System::Void ClearInitialFocus()
-	{
-		this->ActiveControl = leftPanel;
-		leftPanel->Select();
-		leftPanel->Focus();
+		ArrangeRightPanelControls();
+     this->ActiveControl = nullptr;
 	}
 
 	private: System::Void MyForm_Resize(System::Object^ sender, System::EventArgs^ e)
 	{
+		leftPanel->Width = this->Width / 2; // Split 50/50 exactly like the image
 		ArrangeLeftPanelControls();
+		ArrangeRightPanelControls();
+		rightPanel->Invalidate(); // Force redraw of custom graphics
 	}
 
 	private: System::Void txtUsername_Enter(System::Object^ sender, System::EventArgs^ e)
 	{
-		if (txtUsername->Text == L"Username")
-		{
+		if (txtUsername->Text == L"Enter your username") {
 			txtUsername->Text = L"";
-         txtUsername->ForeColor = System::Drawing::Color::FromArgb(44, 62, 100);
+			txtUsername->ForeColor = System::Drawing::Color::Black;
 		}
 	}
 
 	private: System::Void txtUsername_Leave(System::Object^ sender, System::EventArgs^ e)
 	{
-		if (String::IsNullOrWhiteSpace(txtUsername->Text))
-		{
-			txtUsername->Text = L"Username";
-           txtUsername->ForeColor = System::Drawing::Color::Silver;
+		if (String::IsNullOrWhiteSpace(txtUsername->Text)) {
+			txtUsername->Text = L"Enter your username";
+			txtUsername->ForeColor = System::Drawing::Color::Gray;
 		}
 	}
 
 	private: System::Void txtPassword_Enter(System::Object^ sender, System::EventArgs^ e)
 	{
-       if (txtPassword->Text == L"Password")
-		{
+		if (txtPassword->Text == L"••••••••") {
 			txtPassword->Text = L"";
-         txtPassword->ForeColor = System::Drawing::Color::FromArgb(44, 62, 100);
+			txtPassword->ForeColor = System::Drawing::Color::Black;
 			txtPassword->UseSystemPasswordChar = !isPasswordVisible;
 		}
 	}
 
 	private: System::Void txtPassword_Leave(System::Object^ sender, System::EventArgs^ e)
 	{
-		if (String::IsNullOrWhiteSpace(txtPassword->Text))
-		{
+		if (String::IsNullOrWhiteSpace(txtPassword->Text)) {
 			txtPassword->UseSystemPasswordChar = false;
-            isPasswordVisible = false;
-			txtPassword->Text = L"Password";
-           txtPassword->ForeColor = System::Drawing::Color::Silver;
-          btnTogglePassword->Text = L"\xE18B";
-			btnTogglePassword->Invalidate();
+			txtPassword->Text = L"••••••••";
+			txtPassword->ForeColor = System::Drawing::Color::Gray;
 		}
 	}
 
 	private: System::Void btnTogglePassword_Click(System::Object^ sender, System::EventArgs^ e)
 	{
-       if (txtPassword->Text == L"Password")
-		{
-			return;
+		if (txtPassword->Text != L"••••••••") {
+			isPasswordVisible = !isPasswordVisible;
+			txtPassword->UseSystemPasswordChar = !isPasswordVisible;
 		}
-
-		isPasswordVisible = !isPasswordVisible;
-		txtPassword->UseSystemPasswordChar = !isPasswordVisible;
-        btnTogglePassword->Text = L"\xE18B";
-		btnTogglePassword->Invalidate();
 	}
 
-	private: System::Void btnTogglePassword_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e)
-	{
-		if (!isPasswordVisible)
-		{
-			return;
-		}
-
-		e->Graphics->SmoothingMode = System::Drawing::Drawing2D::SmoothingMode::AntiAlias;
-        Pen^ slashPen = gcnew Pen(System::Drawing::Color::FromArgb(72, 86, 118), 2.2f);
-		e->Graphics->DrawLine(slashPen, 4, btnTogglePassword->Height - 4, btnTogglePassword->Width - 4, 4);
-	}
-
-	private: GraphicsPath^ CreateRoundedPath(Rectangle rect, int radius)
+		   // Helper to draw rounded rectangles for the glassmorphism effect
+	private: GraphicsPath^ GetRoundedRect(Rectangle bounds, int radius)
 	{
 		GraphicsPath^ path = gcnew GraphicsPath();
-		int d = radius * 2;
-		path->AddArc(rect.X, rect.Y, d, d, 180, 90);
-		path->AddArc(rect.Right - d, rect.Y, d, d, 270, 90);
-		path->AddArc(rect.Right - d, rect.Bottom - d, d, d, 0, 90);
-		path->AddArc(rect.X, rect.Bottom - d, d, d, 90, 90);
-		path->CloseFigure();
-		return path;
-	}
-
-	private: GraphicsPath^ CreateRightRoundedPath(Rectangle rect, int radius)
-	{
-		GraphicsPath^ path = gcnew GraphicsPath();
-		int d = radius * 2;
-		path->StartFigure();
-		path->AddLine(rect.X, rect.Y, rect.Right - d, rect.Y);
-		path->AddArc(rect.Right - d, rect.Y, d, d, 270, 90);
-		path->AddLine(rect.Right, rect.Y + d, rect.Right, rect.Bottom - d);
-		path->AddArc(rect.Right - d, rect.Bottom - d, d, d, 0, 90);
-		path->AddLine(rect.Right - d, rect.Bottom, rect.X, rect.Bottom);
-		path->AddLine(rect.X, rect.Bottom, rect.X, rect.Y);
+		int diameter = radius * 2;
+		Rectangle arc = Rectangle(bounds.Location, System::Drawing::Size(diameter, diameter));
+		path->AddArc(arc, 180, 90);
+		arc.X = bounds.Right - diameter;
+		path->AddArc(arc, 270, 90);
+		arc.Y = bounds.Bottom - diameter;
+		path->AddArc(arc, 0, 90);
+		arc.X = bounds.Left;
+		path->AddArc(arc, 90, 90);
 		path->CloseFigure();
 		return path;
 	}
@@ -470,114 +439,67 @@ namespace BloodBank
 	{
 		e->Graphics->SmoothingMode = SmoothingMode::AntiAlias;
 
-     Rectangle card = Rectangle(0, 18, rightPanel->Width - 26, rightPanel->Height - 58);
-		Rectangle shadowRect = Rectangle(card.X + 10, card.Y + 14, card.Width, card.Height);
+		// Main Background Gradient
+		Rectangle rect = rightPanel->ClientRectangle;
+		LinearGradientBrush^ bgBrush = gcnew LinearGradientBrush(rect,
+			Color::FromArgb(210, 10, 45),   // Top Left Dark Red
+			Color::FromArgb(60, 20, 35),    // Bottom Right Deep Burgundy
+			LinearGradientMode::ForwardDiagonal);
+		e->Graphics->FillRectangle(bgBrush, rect);
 
-       GraphicsPath^ shadowPath = CreateRightRoundedPath(shadowRect, 28);
-      SolidBrush^ shadowBrush = gcnew SolidBrush(Color::FromArgb(35, 80, 30, 45));
-		e->Graphics->FillPath(shadowBrush, shadowPath);
+		// Drawing the Translucent "Glass" Cards
+		SolidBrush^ glassBrush = gcnew SolidBrush(Color::FromArgb(30, 255, 255, 255)); // Very faint white
+		Pen^ glassBorder = gcnew Pen(Color::FromArgb(50, 255, 255, 255), 1);         // Subtle border
 
-       GraphicsPath^ cardPath = CreateRightRoundedPath(card, 28);
-        LinearGradientBrush^ cardBrush = gcnew LinearGradientBrush(card,
-			Color::FromArgb(236, 176, 22, 38),
-			Color::FromArgb(228, 120, 10, 24),
-			LinearGradientMode::Vertical);
-		e->Graphics->FillPath(cardBrush, cardPath);
+		// 1. Top Left Card (Live Status)
+		Rectangle card1 = Rectangle(50, 150, 200, 80);
+		GraphicsPath^ path1 = GetRoundedRect(card1, 15);
+		e->Graphics->FillPath(glassBrush, path1);
+		e->Graphics->DrawPath(glassBorder, path1);
 
-       Pen^ cardEdge = gcnew Pen(Color::FromArgb(110, 255, 210, 210), 1.4f);
-		e->Graphics->DrawPath(cardEdge, cardPath);
+     System::Drawing::Font^ f1Small = gcnew System::Drawing::Font(L"Calisto MT", 8);
+		System::Drawing::Font^ f1Large = gcnew System::Drawing::Font(L"Calisto MT", 12, System::Drawing::FontStyle::Bold);
+		e->Graphics->DrawString(L"LIVE STATUS", f1Small, Brushes::WhiteSmoke, card1.X + 60, card1.Y + 20);
+		e->Graphics->DrawString(L"System Active", f1Large, Brushes::White, card1.X + 60, card1.Y + 35);
 
+		// 2. Center Top Icon Card (Heart)
+		Rectangle card2 = Rectangle(rightPanel->Width / 2 - 40, 200, 80, 80);
+		GraphicsPath^ path2 = GetRoundedRect(card2, 15);
+		e->Graphics->FillPath(glassBrush, path2);
+		e->Graphics->DrawPath(glassBorder, path2);
 
-		SolidBrush^ bubbleA = gcnew SolidBrush(Color::FromArgb(38, 255, 255, 255));
-		SolidBrush^ bubbleB = gcnew SolidBrush(Color::FromArgb(26, 255, 255, 255));
-		SolidBrush^ bubbleC = gcnew SolidBrush(Color::FromArgb(18, 255, 255, 255));
+		// 3. Bottom Right Card (Total Donations)
+		Rectangle card3 = Rectangle(rightPanel->Width - 280, rightPanel->Height - 150, 220, 80);
+		GraphicsPath^ path3 = GetRoundedRect(card3, 15);
+		e->Graphics->FillPath(glassBrush, path3);
+		e->Graphics->DrawPath(glassBorder, path3);
 
-		array<Point>^ blob1 = gcnew array<Point>{ Point(card.X - 90, card.Y + 220), Point(card.X + 40, card.Y + 120), Point(card.X + 170, card.Y + 200), Point(card.X + 135, card.Y + 355), Point(card.X - 30, card.Y + 350) };
-		array<Point>^ blob2 = gcnew array<Point>{ Point(card.X + 180, card.Y - 20), Point(card.X + 295, card.Y - 10), Point(card.X + 345, card.Y + 85), Point(card.X + 250, card.Y + 170), Point(card.X + 150, card.Y + 115) };
-		array<Point>^ blob3 = gcnew array<Point>{ Point(card.Right - 240, card.Y + 40), Point(card.Right - 120, card.Y + 5), Point(card.Right - 20, card.Y + 80), Point(card.Right - 55, card.Y + 220), Point(card.Right - 195, card.Y + 200) };
-		array<Point>^ blob4 = gcnew array<Point>{ Point(card.Right - 265, card.Bottom - 155), Point(card.Right - 120, card.Bottom - 220), Point(card.Right + 8, card.Bottom - 120), Point(card.Right - 40, card.Bottom + 5), Point(card.Right - 190, card.Bottom + 12) };
-		array<Point>^ blob5 = gcnew array<Point>{ Point(card.X - 80, card.Bottom - 210), Point(card.X + 40, card.Bottom - 255), Point(card.X + 135, card.Bottom - 170), Point(card.X + 90, card.Bottom - 55), Point(card.X - 35, card.Bottom - 80) };
-		array<Point>^ blob6 = gcnew array<Point>{ Point(card.X + 300, card.Y + 245), Point(card.X + 430, card.Y + 205), Point(card.X + 515, card.Y + 295), Point(card.X + 480, card.Y + 410), Point(card.X + 340, card.Y + 385) };
-		array<Point>^ blob7 = gcnew array<Point>{ Point(card.X + 65, card.Y + 28), Point(card.X + 135, card.Y + 12), Point(card.X + 200, card.Y + 44), Point(card.X + 180, card.Y + 98), Point(card.X + 90, card.Y + 92) };
-		array<Point>^ blob8 = gcnew array<Point>{ Point(card.Right - 120, card.Y + 250), Point(card.Right - 32, card.Y + 248), Point(card.Right + 6, card.Y + 320), Point(card.Right - 48, card.Y + 380), Point(card.Right - 130, card.Y + 350) };
-		array<Point>^ blob9 = gcnew array<Point>{ Point(card.X + 210, card.Bottom - 120), Point(card.X + 305, card.Bottom - 170), Point(card.X + 405, card.Bottom - 130), Point(card.X + 395, card.Bottom - 48), Point(card.X + 270, card.Bottom - 40) };
-		array<Point>^ blob10 = gcnew array<Point>{ Point(card.X + 460, card.Y + 118), Point(card.X + 560, card.Y + 98), Point(card.X + 610, card.Y + 162), Point(card.X + 570, card.Y + 228), Point(card.X + 478, card.Y + 205) };
+		e->Graphics->DrawString(L"TOTAL DONATIONS", f1Small, Brushes::WhiteSmoke, card3.X + 70, card3.Y + 20);
+		e->Graphics->DrawString(L"12,450 units", f1Large, Brushes::White, card3.X + 70, card3.Y + 35);
 
-		e->Graphics->FillClosedCurve(bubbleA, blob1, FillMode::Winding, 0.45f);
-		e->Graphics->FillClosedCurve(bubbleB, blob2, FillMode::Winding, 0.45f);
-		e->Graphics->FillClosedCurve(bubbleA, blob3, FillMode::Winding, 0.45f);
-		e->Graphics->FillClosedCurve(bubbleB, blob4, FillMode::Winding, 0.45f);
-		e->Graphics->FillClosedCurve(bubbleB, blob5, FillMode::Winding, 0.45f);
-		e->Graphics->FillClosedCurve(bubbleA, blob6, FillMode::Winding, 0.45f);
-		e->Graphics->FillClosedCurve(bubbleC, blob7, FillMode::Winding, 0.40f);
-		e->Graphics->FillClosedCurve(bubbleC, blob8, FillMode::Winding, 0.40f);
-		e->Graphics->FillClosedCurve(bubbleB, blob9, FillMode::Winding, 0.40f);
-		e->Graphics->FillClosedCurve(bubbleC, blob10, FillMode::Winding, 0.40f);
-
-		e->Graphics->FillEllipse(bubbleC, card.X + 28, card.Y + 148, 36, 26);
-		e->Graphics->FillEllipse(bubbleC, card.X + 420, card.Y + 66, 28, 20);
-		e->Graphics->FillEllipse(bubbleC, card.X + 510, card.Bottom - 88, 32, 24);
-		e->Graphics->FillEllipse(bubbleC, card.X + 150, card.Bottom - 56, 24, 18);
-
-		delete bubbleA;
-		delete bubbleB;
-       delete bubbleC;
-		delete cardEdge;
-		delete cardBrush;
-		delete shadowBrush;
-		delete cardPath;
-		delete shadowPath;
+		// Cleanup GDI Objects
+		delete bgBrush; delete glassBrush; delete glassBorder;
+		delete path1; delete path2; delete path3;
+		delete f1Small; delete f1Large;
 	}
 
 	private: System::Void btnLogin_Click(System::Object^ sender, System::EventArgs^ e)
 	{
-		String^ username = txtUsername->Text->Trim();
-		String^ password = txtPassword->Text;
+		// Basic validation logic
+		if (String::IsNullOrWhiteSpace(txtUsername->Text) || txtUsername->Text == L"Enter your username" ||
+			String::IsNullOrWhiteSpace(txtPassword->Text) || txtPassword->Text == L"••••••••")
+		{
+			lblStatus->Text = L"Please enter valid credentials.";
+			return;
+		}
+
 		lblStatus->Text = L"";
-
-		if (username == L"Username") username = L"";
-		if (password == L"Password" && txtPassword->ForeColor == System::Drawing::Color::Silver) password = L"";
-
-		if (String::IsNullOrWhiteSpace(username) || String::IsNullOrWhiteSpace(password))
-		{
-			lblStatus->ForeColor = System::Drawing::Color::OrangeRed;
-			lblStatus->Text = L"Please enter username and password.";
-			return;
-		}
-
-		if (username->Equals(L"ADMIN", StringComparison::Ordinal))
-		{
-			if (password->Equals(L"admin123", StringComparison::Ordinal))
-			{
-				MessageBox::Show(L"Admin verified. Welcome, ADMIN.", L"Access Granted",
-					MessageBoxButtons::OK, MessageBoxIcon::Information);
-			}
-			else
-			{
-				lblStatus->ForeColor = System::Drawing::Color::OrangeRed;
-				lblStatus->Text = L"Invalid admin password.";
-			}
-			return;
-		}
-
-		for each (wchar_t ch in username)
-		{
-			if (Char::IsLetter(ch) && !Char::IsLower(ch))
-			{
-				lblStatus->ForeColor = System::Drawing::Color::OrangeRed;
-				lblStatus->Text = L"Users must enter username in lowercase letters.";
-				return;
-			}
-		}
-
-		MessageBox::Show(L"User login successful.", L"Login",
-			MessageBoxButtons::OK, MessageBoxIcon::Information);
+		MessageBox::Show(L"Login attempting...", L"System", MessageBoxButtons::OK, MessageBoxIcon::Information);
 	}
 
 	private: System::Void btnSignup_Click(System::Object^ sender, System::EventArgs^ e)
 	{
-		MessageBox::Show(L"Signup is for new users. Registration form will open here.", L"Sign Up",
-			MessageBoxButtons::OK, MessageBoxIcon::Information);
+		MessageBox::Show(L"Redirecting to registration...", L"Sign Up", MessageBoxButtons::OK, MessageBoxIcon::Information);
 	}
 	};
 }
