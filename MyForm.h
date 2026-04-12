@@ -40,8 +40,6 @@ namespace BloodBank
 	private: System::Windows::Forms::Button^ btnSignup;
 	private: System::Windows::Forms::Label^ lblStatus;
 	private: System::Windows::Forms::Label^ lblWelcome;
-	private: System::Windows::Forms::Label^ lblPortal;
-   private: System::Windows::Forms::Label^ lblPortalSub;
 	private: System::Windows::Forms::Panel^ lineUsername;
 	private: System::Windows::Forms::Panel^ linePassword;
 	private: System::Windows::Forms::Button^ btnTogglePassword;
@@ -65,8 +63,6 @@ namespace BloodBank
 			this->lblLoginSubTitle = (gcnew System::Windows::Forms::Label());
 			this->lblLoginTitle = (gcnew System::Windows::Forms::Label());
 			this->rightPanel = (gcnew System::Windows::Forms::Panel());
-			this->lblPortal = (gcnew System::Windows::Forms::Label());
-         this->lblPortalSub = (gcnew System::Windows::Forms::Label());
 			this->lblWelcome = (gcnew System::Windows::Forms::Label());
            this->lineUsername = (gcnew System::Windows::Forms::Panel());
 			this->linePassword = (gcnew System::Windows::Forms::Panel());
@@ -163,13 +159,8 @@ namespace BloodBank
 			this->txtPassword->ForeColor = System::Drawing::Color::Silver;
 			this->txtPassword->Location = System::Drawing::Point(70, 449);
 			this->txtPassword->Name = L"txtPassword";
-			// 1. Unlock the height
-			this->txtPassword->Multiline = true;
-
-			// 2. Stop it from jumping to the next line (forces horizontal scrolling)
-			this->txtPassword->WordWrap = false;
-
-			// 3. Set your new Size
+         this->txtPassword->AutoSize = false;
+			this->txtPassword->Multiline = false;
 			this->txtPassword->Size = System::Drawing::Size(500, 35);
 
 			this->txtPassword->TabIndex = 5;
@@ -198,14 +189,8 @@ namespace BloodBank
            this->txtUsername->ForeColor = System::Drawing::Color::Silver;
           this->txtUsername->Location = System::Drawing::Point(70, 364);
 			this->txtUsername->Name = L"txtUsername";
-
-			// 1. Unlock the height
-			this->txtUsername->Multiline = true;
-
-			// 2. Stop it from jumping to the next line (forces horizontal scrolling)
-			this->txtUsername->WordWrap = false;
-
-			// 3. Set your new Size
+			this->txtUsername->AutoSize = false;
+			this->txtUsername->Multiline = false;
 			this->txtUsername->Size = System::Drawing::Size(500, 35);
 
 			this->txtUsername->TabIndex = 3;
@@ -253,8 +238,6 @@ namespace BloodBank
 			// 
            this->rightPanel->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(170)), static_cast<System::Int32>(static_cast<System::Byte>(30)),
 				static_cast<System::Int32>(static_cast<System::Byte>(50)));
-           this->rightPanel->Controls->Add(this->lblPortalSub);
-			this->rightPanel->Controls->Add(this->lblPortal);
 			this->rightPanel->Controls->Add(this->lblWelcome);
 			this->rightPanel->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->rightPanel->Location = System::Drawing::Point(950, 0);
@@ -263,45 +246,17 @@ namespace BloodBank
 			this->rightPanel->TabIndex = 1;
          this->rightPanel->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MyForm::rightPanel_Paint);
 			// 
-			// lblPortal
-			// 
-           this->lblPortal->AutoSize = false;
-            this->lblPortal->BackColor = System::Drawing::Color::Transparent;
-		 this->lblPortal->Font = (gcnew System::Drawing::Font(L"Calisto MT", 38));
-			this->lblPortal->ForeColor = System::Drawing::Color::White;
-            this->lblPortal->Location = System::Drawing::Point(80, 275);
-			this->lblPortal->Name = L"lblPortal";
-            this->lblPortal->Size = System::Drawing::Size(580, 100);
-			this->lblPortal->TabIndex = 1;
-			this->lblPortal->Text = L"login portal";
-         this->lblPortal->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
-			this->lblPortal->UseCompatibleTextRendering = true;
-			// 
-           // lblPortalSub
-			// 
-			this->lblPortalSub->AutoSize = false;
-			this->lblPortalSub->BackColor = System::Drawing::Color::Transparent;
-			this->lblPortalSub->Font = (gcnew System::Drawing::Font(L"Calisto MT", 14));
-			this->lblPortalSub->ForeColor = System::Drawing::Color::Gainsboro;
-			this->lblPortalSub->Location = System::Drawing::Point(80, 350);
-			this->lblPortalSub->Name = L"lblPortalSub";
-			this->lblPortalSub->Size = System::Drawing::Size(420, 36);
-			this->lblPortalSub->TabIndex = 2;
-			this->lblPortalSub->Text = L"login to access your account";
-			this->lblPortalSub->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
-			this->lblPortalSub->UseCompatibleTextRendering = true;
-			// 
 			// lblWelcome
 			// 
           this->lblWelcome->AutoSize = false;
             this->lblWelcome->BackColor = System::Drawing::Color::Transparent;
-		 this->lblWelcome->Font = (gcnew System::Drawing::Font(L"Calisto MT", 44, System::Drawing::FontStyle::Bold));
+        this->lblWelcome->Font = (gcnew System::Drawing::Font(L"Calisto MT", 36, System::Drawing::FontStyle::Bold));
 			this->lblWelcome->ForeColor = System::Drawing::Color::White;
            this->lblWelcome->Location = System::Drawing::Point(80, 195);
 			this->lblWelcome->Name = L"lblWelcome";
-           this->lblWelcome->Size = System::Drawing::Size(590, 115);
+            this->lblWelcome->Size = System::Drawing::Size(650, 100);
 			this->lblWelcome->TabIndex = 0;
-			this->lblWelcome->Text = L"Welcome to";
+         this->lblWelcome->Text = L"Welcome to login portal";
          this->lblWelcome->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
 			this->lblWelcome->UseCompatibleTextRendering = true;
          // 
@@ -335,12 +290,12 @@ namespace BloodBank
 			this->btnTogglePassword->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
          this->btnTogglePassword->Font = (gcnew System::Drawing::Font(L"Segoe MDL2 Assets", 12));
 			this->btnTogglePassword->ForeColor = System::Drawing::Color::Silver;
-			this->btnTogglePassword->Location = System::Drawing::Point(334, 444);
+           this->btnTogglePassword->Location = System::Drawing::Point(536, 455);
 			this->btnTogglePassword->Name = L"btnTogglePassword";
-          this->btnTogglePassword->Size = System::Drawing::Size(44, 32);
+          this->btnTogglePassword->Size = System::Drawing::Size(28, 22);
 			this->btnTogglePassword->TabIndex = 12;
           this->btnTogglePassword->TabStop = false;
-          this->btnTogglePassword->Text = L"";
+        this->btnTogglePassword->Text = L"\xE18B";
 			this->btnTogglePassword->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			this->btnTogglePassword->UseVisualStyleBackColor = false;
 			this->btnTogglePassword->Click += gcnew System::EventHandler(this, &MyForm::btnTogglePassword_Click);
@@ -385,14 +340,15 @@ namespace BloodBank
      linePassword->Left = x;
 		linePassword->Width = fieldWidth;
 		btnTogglePassword->Left = x + fieldWidth - btnTogglePassword->Width;
-		btnTogglePassword->Top = txtPassword->Top - 0;
-		txtPassword->Width = fieldWidth - btnTogglePassword->Width - 8;
+      btnTogglePassword->Left = x + fieldWidth - btnTogglePassword->Width - 6;
+		btnTogglePassword->Top = txtPassword->Top + ((txtPassword->Height - btnTogglePassword->Height) / 2);
+		txtPassword->Width = fieldWidth;
 		btnLogin->Left = x;
         btnLogin->Width = fieldWidth;
 		lblStatus->Left = x;
 
 		lblNoAccount->Left = x;
-        btnSignup->Left = lblNoAccount->Right + 14;
+        btnSignup->Left = lblNoAccount->Right + 50;
 		btnSignup->Top = lblNoAccount->Top - ((btnSignup->Height - lblNoAccount->Height) / 2);
 	}
 
@@ -456,7 +412,8 @@ namespace BloodBank
             isPasswordVisible = false;
 			txtPassword->Text = L"Password";
 			txtPassword->ForeColor = System::Drawing::Color::Silver;
-          btnTogglePassword->Invalidate();
+          btnTogglePassword->Text = L"\xE18B";
+			btnTogglePassword->Invalidate();
 		}
 	}
 
@@ -469,24 +426,20 @@ namespace BloodBank
 
 		isPasswordVisible = !isPasswordVisible;
 		txtPassword->UseSystemPasswordChar = !isPasswordVisible;
-        btnTogglePassword->Invalidate();
+        btnTogglePassword->Text = L"\xE18B";
+		btnTogglePassword->Invalidate();
 	}
 
 	private: System::Void btnTogglePassword_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e)
 	{
-		e->Graphics->SmoothingMode = System::Drawing::Drawing2D::SmoothingMode::AntiAlias;
-		e->Graphics->Clear(System::Drawing::Color::FromArgb(24, 26, 36));
-
-		Pen^ pen = gcnew Pen(System::Drawing::Color::Silver, 1.7f);
-		Rectangle eye = Rectangle(8, 10, btnTogglePassword->Width - 16, 12);
-		e->Graphics->DrawArc(pen, eye, 0, 180);
-		e->Graphics->DrawArc(pen, eye, 180, 180);
-		e->Graphics->FillEllipse(System::Drawing::Brushes::Silver, btnTogglePassword->Width / 2 - 2, btnTogglePassword->Height / 2 - 2, 4, 4);
-
-		if (isPasswordVisible)
+		if (!isPasswordVisible)
 		{
-			e->Graphics->DrawLine(pen, 7, btnTogglePassword->Height - 7, btnTogglePassword->Width - 7, 7);
+			return;
 		}
+
+		e->Graphics->SmoothingMode = System::Drawing::Drawing2D::SmoothingMode::AntiAlias;
+        Pen^ slashPen = gcnew Pen(System::Drawing::Color::Silver, 2.2f);
+		e->Graphics->DrawLine(slashPen, 4, btnTogglePassword->Height - 4, btnTogglePassword->Width - 4, 4);
 	}
 
 	private: GraphicsPath^ CreateRoundedPath(Rectangle rect, int radius)
