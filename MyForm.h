@@ -307,28 +307,28 @@ namespace BloodBank
 
 	private: System::Void ArrangeLeftPanelControls()
 	{
-		int xOffset = 100; // Left alignment margin based on the image
+		int xStart = 100; // Left alignment margin based on the image
 		int yStart = 150;
 		int fieldWidth = 400;
 
-		lblLogo->Location = System::Drawing::Point(xOffset, 50);
-		lblBrandName->Location = System::Drawing::Point(xOffset + 50, 55);
+		lblLogo->Location = System::Drawing::Point(xStart, 50);
+		lblBrandName->Location = System::Drawing::Point(xStart + 50, 55);
 		GraphicsPath^ logoBox = GetRoundedRect(Rectangle(0, 0, lblLogo->Width - 1, lblLogo->Height - 1), 10);
 		lblLogo->Region = gcnew System::Drawing::Region(logoBox);
 		delete logoBox;
 
-		lblLoginTitle->Location = System::Drawing::Point(xOffset - 5, yStart);
-		lblLoginSubTitle->Location = System::Drawing::Point(xOffset, yStart + 55);
+		lblLoginTitle->Location = System::Drawing::Point(xStart - 5, yStart);
+		lblLoginSubTitle->Location = System::Drawing::Point(xStart, yStart + 55);
 
-		lblUsername->Location = System::Drawing::Point(xOffset, yStart + 120);
-      lineUsername->Location = System::Drawing::Point(xOffset, yStart + 145);
+		lblUsername->Location = System::Drawing::Point(xStart, yStart + 120);
+      lineUsername->Location = System::Drawing::Point(xStart, yStart + 145);
 		lineUsername->Size = System::Drawing::Size(fieldWidth, 56);
      lblUserIcon->Location = System::Drawing::Point(16, 17);
 		txtUsername->Location = System::Drawing::Point(52, 17);
 		txtUsername->Width = fieldWidth - 68;
 
-		lblPassword->Location = System::Drawing::Point(xOffset, yStart + 210);
-      linePassword->Location = System::Drawing::Point(xOffset, yStart + 235);
+      lblPassword->Location = System::Drawing::Point(xStart, yStart + 225);
+		linePassword->Location = System::Drawing::Point(xStart, yStart + 250);
 		linePassword->Size = System::Drawing::Size(fieldWidth, 56);
      lblLockIcon->Location = System::Drawing::Point(16, 17);
 		txtPassword->Location = System::Drawing::Point(52, 17);
@@ -347,16 +347,19 @@ namespace BloodBank
         lineUsername->BringToFront();
 		linePassword->BringToFront();
 
-		chkRememberMe->Location = System::Drawing::Point(xOffset, yStart + 290);
-		linkForgotPassword->Location = System::Drawing::Point(xOffset + fieldWidth - linkForgotPassword->Width, yStart + 290);
+        chkRememberMe->Location = System::Drawing::Point(xStart, yStart + 340);
+		linkForgotPassword->Location = System::Drawing::Point(xStart + fieldWidth - linkForgotPassword->Width, yStart + 340);
 
-		btnLogin->Location = System::Drawing::Point(xOffset, yStart + 350);
+		btnLogin->Location = System::Drawing::Point(xStart, yStart + 380);
 		btnLogin->Width = fieldWidth;
+		GraphicsPath^ loginBox = GetRoundedRect(Rectangle(0, 0, btnLogin->Width - 1, btnLogin->Height - 1), 14);
+		btnLogin->Region = gcnew System::Drawing::Region(loginBox);
+		delete loginBox;
 
-		lblNoAccount->Location = System::Drawing::Point(xOffset + 100, yStart + 430);
-		linkSignup->Location = System::Drawing::Point(lblNoAccount->Right + 5, yStart + 430);
+		lblNoAccount->Location = System::Drawing::Point(xStart + 100, yStart + 440);
+		linkSignup->Location = System::Drawing::Point(lblNoAccount->Right + 5, yStart + 440);
 
-		lblStatus->Location = System::Drawing::Point(xOffset, yStart + 470);
+		lblStatus->Location = System::Drawing::Point(xStart, yStart + 470);
 	}
 
 	private: System::Void ArrangeRightPanelControls()
@@ -484,7 +487,7 @@ namespace BloodBank
 		e->Graphics->FillPath(glassBrush, path1);
 		e->Graphics->DrawPath(glassBorder, path1);
 
-     System::Drawing::Font^ f1Small = gcnew System::Drawing::Font(L"Calisto MT", 8);
+		System::Drawing::Font^ f1Small = gcnew System::Drawing::Font(L"Calisto MT", 8);
 		System::Drawing::Font^ f1Large = gcnew System::Drawing::Font(L"Calisto MT", 12, System::Drawing::FontStyle::Bold);
 		e->Graphics->DrawString(L"LIVE STATUS", f1Small, Brushes::WhiteSmoke, card1.X + 60, card1.Y + 20);
 		e->Graphics->DrawString(L"System Active", f1Large, Brushes::White, card1.X + 60, card1.Y + 35);
