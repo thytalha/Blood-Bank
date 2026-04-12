@@ -468,6 +468,62 @@ namespace BloodBank
 		return path;
 	}
 
+	private: System::Void DrawHeartbeatIcon(Graphics^ g, Rectangle bounds)
+	{
+		g->SmoothingMode = SmoothingMode::AntiAlias;
+
+		Pen^ iconPen = gcnew Pen(Color::FromArgb(255, 205, 214), 4.4f);
+		iconPen->LineJoin = LineJoin::Round;
+		iconPen->StartCap = LineCap::Round;
+		iconPen->EndCap = LineCap::Round;
+
+		GraphicsPath^ heart = gcnew GraphicsPath();
+		int w = bounds.Width;
+		int h = bounds.Height;
+		int x = bounds.X;
+		int y = bounds.Y;
+
+		Point pTop = Point(x + w / 2, y + static_cast<int>(h * 0.28f));
+		Point pBottom = Point(x + w / 2, y + h - 4);
+
+		heart->StartFigure();
+		heart->AddBezier(
+			pTop,
+			Point(x + static_cast<int>(w * 0.18f), y - 2),
+			Point(x - 2, y + static_cast<int>(h * 0.38f)),
+			Point(x + static_cast<int>(w * 0.24f), y + static_cast<int>(h * 0.60f)));
+		heart->AddBezier(
+			Point(x + static_cast<int>(w * 0.24f), y + static_cast<int>(h * 0.60f)),
+			Point(x + static_cast<int>(w * 0.34f), y + static_cast<int>(h * 0.74f)),
+			Point(x + static_cast<int>(w * 0.43f), y + static_cast<int>(h * 0.88f)),
+			pBottom);
+		heart->AddBezier(
+			pBottom,
+			Point(x + static_cast<int>(w * 0.57f), y + static_cast<int>(h * 0.88f)),
+			Point(x + static_cast<int>(w * 0.66f), y + static_cast<int>(h * 0.74f)),
+			Point(x + static_cast<int>(w * 0.76f), y + static_cast<int>(h * 0.60f)));
+		heart->AddBezier(
+			Point(x + static_cast<int>(w * 0.76f), y + static_cast<int>(h * 0.60f)),
+			Point(x + w + 2, y + static_cast<int>(h * 0.38f)),
+			Point(x + static_cast<int>(w * 0.82f), y - 2),
+			pTop);
+
+		g->DrawPath(iconPen, heart);
+
+		array<Point>^ ekgPoints = {
+			Point(x + static_cast<int>(w * 0.16f), y + static_cast<int>(h * 0.52f)),
+			Point(x + static_cast<int>(w * 0.35f), y + static_cast<int>(h * 0.52f)),
+			Point(x + static_cast<int>(w * 0.44f), y + static_cast<int>(h * 0.38f)),
+			Point(x + static_cast<int>(w * 0.53f), y + static_cast<int>(h * 0.70f)),
+			Point(x + static_cast<int>(w * 0.64f), y + static_cast<int>(h * 0.50f)),
+			Point(x + static_cast<int>(w * 0.83f), y + static_cast<int>(h * 0.50f))
+		};
+		g->DrawLines(iconPen, ekgPoints);
+
+		delete heart;
+		delete iconPen;
+	}
+
 	private: System::Void rightPanel_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e)
 	{
 		e->Graphics->SmoothingMode = SmoothingMode::AntiAlias;
@@ -500,6 +556,7 @@ namespace BloodBank
 		GraphicsPath^ path2 = GetRoundedRect(card2, 15);
 		e->Graphics->FillPath(glassBrush, path2);
 		e->Graphics->DrawPath(glassBorder, path2);
+        DrawHeartbeatIcon(e->Graphics, Rectangle(card2.X + 5, card2.Y + 10, 70, 60));
 
 		// 3. Bottom Right Card (Total Donations)
 		Rectangle card3 = Rectangle(rightPanel->Width - 280, rightPanel->Height - 150, 220, 80);
