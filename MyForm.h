@@ -149,6 +149,14 @@ namespace BloodBank
 			this->lblUsername->Font = (gcnew System::Drawing::Font(L"Segoe UI", 10, System::Drawing::FontStyle::Bold));
 			this->lblUsername->ForeColor = System::Drawing::Color::FromArgb(64, 64, 64);
 			this->lblUsername->Text = L"Username";
+         // 
+			// lblUserIcon
+			// 
+			this->lblUserIcon->AutoSize = true;
+			this->lblUserIcon->BackColor = System::Drawing::Color::Transparent;
+			this->lblUserIcon->Font = (gcnew System::Drawing::Font(L"Segoe MDL2 Assets", 14));
+			this->lblUserIcon->ForeColor = System::Drawing::Color::FromArgb(150, 160, 175);
+			this->lblUserIcon->Text = L"\xE77B";
 			// 
 			// txtUsername
 			// 
@@ -311,17 +319,17 @@ namespace BloodBank
 		lblUsername->Location = System::Drawing::Point(xOffset, yStart + 120);
       lineUsername->Location = System::Drawing::Point(xOffset, yStart + 145);
 		lineUsername->Size = System::Drawing::Size(fieldWidth, 56);
-		lblUserIcon->Location = System::Drawing::Point(xOffset + 16, yStart + 162);
-		txtUsername->Location = System::Drawing::Point(xOffset + 52, yStart + 162);
+     lblUserIcon->Location = System::Drawing::Point(16, 17);
+		txtUsername->Location = System::Drawing::Point(52, 17);
 		txtUsername->Width = fieldWidth - 68;
 
 		lblPassword->Location = System::Drawing::Point(xOffset, yStart + 210);
       linePassword->Location = System::Drawing::Point(xOffset, yStart + 235);
 		linePassword->Size = System::Drawing::Size(fieldWidth, 56);
-		lblLockIcon->Location = System::Drawing::Point(xOffset + 16, yStart + 252);
-		txtPassword->Location = System::Drawing::Point(xOffset + 52, yStart + 252);
+     lblLockIcon->Location = System::Drawing::Point(16, 17);
+		txtPassword->Location = System::Drawing::Point(52, 17);
 		txtPassword->Width = fieldWidth - 100;
-		btnTogglePassword->Location = System::Drawing::Point(xOffset + fieldWidth - 38, yStart + 248);
+      btnTogglePassword->Location = System::Drawing::Point(fieldWidth - 38, 13);
 
 		GraphicsPath^ userBox = GetRoundedRect(Rectangle(0, 0, lineUsername->Width - 1, lineUsername->Height - 1), 16);
 		lineUsername->Region = gcnew System::Drawing::Region(userBox);
@@ -332,11 +340,8 @@ namespace BloodBank
 
 		lineUsername->SendToBack();
 		linePassword->SendToBack();
-		txtUsername->BringToFront();
-		txtPassword->BringToFront();
-		lblUserIcon->BringToFront();
-		lblLockIcon->BringToFront();
-		btnTogglePassword->BringToFront();
+        lineUsername->BringToFront();
+		linePassword->BringToFront();
 
 		chkRememberMe->Location = System::Drawing::Point(xOffset, yStart + 290);
 		linkForgotPassword->Location = System::Drawing::Point(xOffset + fieldWidth - linkForgotPassword->Width, yStart + 290);
@@ -363,6 +368,24 @@ namespace BloodBank
 
 	private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e)
 	{
+     if (txtUsername->Parent != lineUsername)
+		{
+			leftPanel->Controls->Remove(lblUserIcon);
+			leftPanel->Controls->Remove(txtUsername);
+			lineUsername->Controls->Add(lblUserIcon);
+			lineUsername->Controls->Add(txtUsername);
+		}
+
+		if (txtPassword->Parent != linePassword)
+		{
+			leftPanel->Controls->Remove(lblLockIcon);
+			leftPanel->Controls->Remove(txtPassword);
+			leftPanel->Controls->Remove(btnTogglePassword);
+			linePassword->Controls->Add(lblLockIcon);
+			linePassword->Controls->Add(txtPassword);
+			linePassword->Controls->Add(btnTogglePassword);
+		}
+
 		ArrangeLeftPanelControls();
 		ArrangeRightPanelControls();
      this->ActiveControl = nullptr;
