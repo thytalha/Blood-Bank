@@ -254,7 +254,7 @@ namespace BloodBank
 			this->lblWelcome->ForeColor = System::Drawing::Color::White;
            this->lblWelcome->Location = System::Drawing::Point(80, 195);
 			this->lblWelcome->Name = L"lblWelcome";
-            this->lblWelcome->Size = System::Drawing::Size(650, 100);
+            this->lblWelcome->Size = System::Drawing::Size(750, 100);
 			this->lblWelcome->TabIndex = 0;
          this->lblWelcome->Text = L"Welcome to login portal";
          this->lblWelcome->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
