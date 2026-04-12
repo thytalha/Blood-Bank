@@ -73,8 +73,8 @@ namespace BloodBank
 			// 
 			// leftPanel
 			// 
-			this->leftPanel->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(16)), static_cast<System::Int32>(static_cast<System::Byte>(18)),
-				static_cast<System::Int32>(static_cast<System::Byte>(27)));
+         this->leftPanel->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(245)), static_cast<System::Int32>(static_cast<System::Byte>(248)),
+				static_cast<System::Int32>(static_cast<System::Byte>(255)));
 			this->leftPanel->Controls->Add(this->lblStatus);
 			this->leftPanel->Controls->Add(this->btnSignup);
 			this->leftPanel->Controls->Add(this->lblNoAccount);
@@ -107,13 +107,13 @@ namespace BloodBank
 			// 
 			// btnSignup
 			// 
-			this->btnSignup->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(34)), static_cast<System::Int32>(static_cast<System::Byte>(37)),
-				static_cast<System::Int32>(static_cast<System::Byte>(49)));
+         this->btnSignup->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(221)), static_cast<System::Int32>(static_cast<System::Byte>(229)),
+				static_cast<System::Int32>(static_cast<System::Byte>(245)));
 			this->btnSignup->Cursor = System::Windows::Forms::Cursors::Hand;
 			this->btnSignup->FlatAppearance->BorderSize = 0;
 			this->btnSignup->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 			this->btnSignup->Font = (gcnew System::Drawing::Font(L"Calisto MT", 12));
-			this->btnSignup->ForeColor = System::Drawing::Color::White;
+         this->btnSignup->ForeColor = System::Drawing::Color::FromArgb(44, 62, 100);
            this->btnSignup->Location = System::Drawing::Point(285, 685);
 			this->btnSignup->Name = L"btnSignup";
 			this->btnSignup->Size = System::Drawing::Size(110, 38);
@@ -126,7 +126,7 @@ namespace BloodBank
 			// 
 			this->lblNoAccount->AutoSize = true;
 			this->lblNoAccount->Font = (gcnew System::Drawing::Font(L"Calisto MT", 12));
-			this->lblNoAccount->ForeColor = System::Drawing::Color::Silver;
+         this->lblNoAccount->ForeColor = System::Drawing::Color::FromArgb(88, 102, 130);
          this->lblNoAccount->Location = System::Drawing::Point(70, 693);
 			this->lblNoAccount->Name = L"lblNoAccount";
 			this->lblNoAccount->Size = System::Drawing::Size(171, 20);
@@ -152,8 +152,7 @@ namespace BloodBank
 			// 
 			// txtPassword
 			// 
-			this->txtPassword->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(24)), static_cast<System::Int32>(static_cast<System::Byte>(26)),
-				static_cast<System::Int32>(static_cast<System::Byte>(36)));
+           this->txtPassword->BackColor = System::Drawing::Color::White;
 			this->txtPassword->BorderStyle = System::Windows::Forms::BorderStyle::None;
 			this->txtPassword->Font = (gcnew System::Drawing::Font(L"Calisto MT", 12));
 			this->txtPassword->ForeColor = System::Drawing::Color::Silver;
@@ -182,8 +181,7 @@ namespace BloodBank
 			// 
 			// txtUsername
 			// 
-			this->txtUsername->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(24)), static_cast<System::Int32>(static_cast<System::Byte>(26)),
-				static_cast<System::Int32>(static_cast<System::Byte>(36)));
+           this->txtUsername->BackColor = System::Drawing::Color::White;
           this->txtUsername->BorderStyle = System::Windows::Forms::BorderStyle::None;
             this->txtUsername->Font = (gcnew System::Drawing::Font(L"Calisto MT", 12));
            this->txtUsername->ForeColor = System::Drawing::Color::Silver;
@@ -214,7 +212,7 @@ namespace BloodBank
 			// 
 			this->lblLoginSubTitle->AutoSize = true;
            this->lblLoginSubTitle->Font = (gcnew System::Drawing::Font(L"Calisto MT", 12));
-			this->lblLoginSubTitle->ForeColor = System::Drawing::Color::Silver;
+         this->lblLoginSubTitle->ForeColor = System::Drawing::Color::FromArgb(105, 118, 145);
          this->lblLoginSubTitle->Location = System::Drawing::Point(70, 225);
 			this->lblLoginSubTitle->Name = L"lblLoginSubTitle";
 			this->lblLoginSubTitle->Size = System::Drawing::Size(158, 20);
@@ -225,7 +223,7 @@ namespace BloodBank
 			// 
            this->lblLoginTitle->AutoSize = false;
           this->lblLoginTitle->Font = (gcnew System::Drawing::Font(L"Calisto MT", 32, System::Drawing::FontStyle::Bold));
-			this->lblLoginTitle->ForeColor = System::Drawing::Color::White;
+         this->lblLoginTitle->ForeColor = System::Drawing::Color::FromArgb(35, 47, 78);
 			this->lblLoginTitle->Location = System::Drawing::Point(62, 140);
 			this->lblLoginTitle->Name = L"lblLoginTitle";
          this->lblLoginTitle->Size = System::Drawing::Size(640, 82);
@@ -236,8 +234,8 @@ namespace BloodBank
 			// 
 			// rightPanel
 			// 
-           this->rightPanel->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(170)), static_cast<System::Int32>(static_cast<System::Byte>(30)),
-				static_cast<System::Int32>(static_cast<System::Byte>(50)));
+            this->rightPanel->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(255)), static_cast<System::Int32>(static_cast<System::Byte>(202)),
+				static_cast<System::Int32>(static_cast<System::Byte>(214)));
 			this->rightPanel->Controls->Add(this->lblWelcome);
 			this->rightPanel->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->rightPanel->Location = System::Drawing::Point(950, 0);
@@ -262,8 +260,8 @@ namespace BloodBank
          // 
 			// lineUsername
 			// 
-			this->lineUsername->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(90)), static_cast<System::Int32>(static_cast<System::Byte>(95)),
-				static_cast<System::Int32>(static_cast<System::Byte>(110)));
+          this->lineUsername->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(180)), static_cast<System::Int32>(static_cast<System::Byte>(191)),
+				static_cast<System::Int32>(static_cast<System::Byte>(216)));
 			this->lineUsername->Location = System::Drawing::Point(70, 401);
 			this->lineUsername->Name = L"lineUsername";
             this->lineUsername->Size = System::Drawing::Size(500, 2);
@@ -271,8 +269,8 @@ namespace BloodBank
 			// 
 			// linePassword
 			// 
-			this->linePassword->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(90)), static_cast<System::Int32>(static_cast<System::Byte>(95)),
-				static_cast<System::Int32>(static_cast<System::Byte>(110)));
+          this->linePassword->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(180)), static_cast<System::Int32>(static_cast<System::Byte>(191)),
+				static_cast<System::Int32>(static_cast<System::Byte>(216)));
 			this->linePassword->Location = System::Drawing::Point(70, 486);
 			this->linePassword->Name = L"linePassword";
             this->linePassword->Size = System::Drawing::Size(500, 2);
@@ -289,7 +287,7 @@ namespace BloodBank
 			this->btnTogglePassword->FlatAppearance->BorderSize = 0;
 			this->btnTogglePassword->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
          this->btnTogglePassword->Font = (gcnew System::Drawing::Font(L"Segoe MDL2 Assets", 12));
-			this->btnTogglePassword->ForeColor = System::Drawing::Color::Silver;
+            this->btnTogglePassword->ForeColor = System::Drawing::Color::FromArgb(72, 86, 118);
            this->btnTogglePassword->Location = System::Drawing::Point(536, 455);
 			this->btnTogglePassword->Name = L"btnTogglePassword";
           this->btnTogglePassword->Size = System::Drawing::Size(28, 22);
@@ -381,7 +379,7 @@ namespace BloodBank
 		if (txtUsername->Text == L"Username")
 		{
 			txtUsername->Text = L"";
-			txtUsername->ForeColor = System::Drawing::Color::White;
+         txtUsername->ForeColor = System::Drawing::Color::FromArgb(44, 62, 100);
 		}
 	}
 
@@ -390,16 +388,16 @@ namespace BloodBank
 		if (String::IsNullOrWhiteSpace(txtUsername->Text))
 		{
 			txtUsername->Text = L"Username";
-			txtUsername->ForeColor = System::Drawing::Color::Silver;
+            txtUsername->ForeColor = System::Drawing::Color::FromArgb(130, 140, 160);
 		}
 	}
 
 	private: System::Void txtPassword_Enter(System::Object^ sender, System::EventArgs^ e)
 	{
-		if (txtPassword->Text == L"Password" && txtPassword->ForeColor == System::Drawing::Color::Silver)
+       if (txtPassword->Text == L"Password")
 		{
 			txtPassword->Text = L"";
-			txtPassword->ForeColor = System::Drawing::Color::White;
+         txtPassword->ForeColor = System::Drawing::Color::FromArgb(44, 62, 100);
 			txtPassword->UseSystemPasswordChar = !isPasswordVisible;
 		}
 	}
@@ -411,7 +409,7 @@ namespace BloodBank
 			txtPassword->UseSystemPasswordChar = false;
             isPasswordVisible = false;
 			txtPassword->Text = L"Password";
-			txtPassword->ForeColor = System::Drawing::Color::Silver;
+            txtPassword->ForeColor = System::Drawing::Color::FromArgb(130, 140, 160);
           btnTogglePassword->Text = L"\xE18B";
 			btnTogglePassword->Invalidate();
 		}
@@ -419,7 +417,7 @@ namespace BloodBank
 
 	private: System::Void btnTogglePassword_Click(System::Object^ sender, System::EventArgs^ e)
 	{
-		if (txtPassword->Text == L"Password" && txtPassword->ForeColor == System::Drawing::Color::Silver)
+       if (txtPassword->Text == L"Password")
 		{
 			return;
 		}
@@ -438,7 +436,7 @@ namespace BloodBank
 		}
 
 		e->Graphics->SmoothingMode = System::Drawing::Drawing2D::SmoothingMode::AntiAlias;
-        Pen^ slashPen = gcnew Pen(System::Drawing::Color::Silver, 2.2f);
+        Pen^ slashPen = gcnew Pen(System::Drawing::Color::FromArgb(72, 86, 118), 2.2f);
 		e->Graphics->DrawLine(slashPen, 4, btnTogglePassword->Height - 4, btnTogglePassword->Width - 4, 4);
 	}
 
@@ -477,17 +475,17 @@ namespace BloodBank
 		Rectangle shadowRect = Rectangle(card.X + 10, card.Y + 14, card.Width, card.Height);
 
        GraphicsPath^ shadowPath = CreateRightRoundedPath(shadowRect, 28);
-		SolidBrush^ shadowBrush = gcnew SolidBrush(Color::FromArgb(95, 35, 0, 0));
+      SolidBrush^ shadowBrush = gcnew SolidBrush(Color::FromArgb(35, 80, 30, 45));
 		e->Graphics->FillPath(shadowBrush, shadowPath);
 
        GraphicsPath^ cardPath = CreateRightRoundedPath(card, 28);
 		LinearGradientBrush^ cardBrush = gcnew LinearGradientBrush(card,
-			Color::FromArgb(225, 210, 56, 76),
-			Color::FromArgb(215, 155, 32, 52),
+          Color::FromArgb(235, 255, 135, 165),
+			Color::FromArgb(225, 255, 95, 135),
 			LinearGradientMode::Vertical);
 		e->Graphics->FillPath(cardBrush, cardPath);
 
-		Pen^ cardEdge = gcnew Pen(Color::FromArgb(90, 255, 220, 220), 1.4f);
+        Pen^ cardEdge = gcnew Pen(Color::FromArgb(130, 255, 255, 255), 1.4f);
 		e->Graphics->DrawPath(cardEdge, cardPath);
 
 
