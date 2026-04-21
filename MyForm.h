@@ -15,6 +15,7 @@ namespace BloodBank
 		MyForm(void)
 		{
 			InitializeComponent();
+			isPasswordVisible = false; // Initialize the password visibility state
 		}
 
 	protected:
@@ -407,6 +408,17 @@ namespace BloodBank
 			this->rightPanel->ResumeLayout(false);
 			this->ResumeLayout(false);
 
+			// In InitializeComponent(), add these handlers (after controls are created)
+			this->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::ClearFocusOnBackgroundClick);
+			this->leftPanel->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::ClearFocusOnBackgroundClick);
+			this->rightPanel->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::ClearFocusOnBackgroundClick);
+
+			// optional (recommended): labels also receive clicks, not panel background
+			this->lblLoginTitle->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::ClearFocusOnBackgroundClick);
+			this->lblLoginSubTitle->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::ClearFocusOnBackgroundClick);
+			this->lblBrandName->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::ClearFocusOnBackgroundClick);
+			this->lblWelcome->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::ClearFocusOnBackgroundClick);
+			this->lblWelcomeDesc->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::ClearFocusOnBackgroundClick);
 		}
 #pragma endregion
 
@@ -447,10 +459,10 @@ namespace BloodBank
 
 		lineUsername->SendToBack();
 		linePassword->SendToBack();
-        lineUsername->BringToFront();
+		lineUsername->BringToFront();
 		linePassword->BringToFront();
 
-        chkRememberMe->Location = System::Drawing::Point(100, 490);
+		chkRememberMe->Location = System::Drawing::Point(100, 490);
 		linkForgotPassword->Location = System::Drawing::Point(100 + fieldWidth - linkForgotPassword->Width, 490);
 
 		btnLogin->Location = System::Drawing::Point(100, 530);
@@ -478,7 +490,7 @@ namespace BloodBank
 
 	private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e)
 	{
-     if (txtUsername->Parent != lineUsername)
+		if (txtUsername->Parent != lineUsername)
 		{
 			leftPanel->Controls->Remove(lblUserIcon);
 			leftPanel->Controls->Remove(txtUsername);
@@ -498,7 +510,7 @@ namespace BloodBank
 
 		ArrangeLeftPanelControls();
 		ArrangeRightPanelControls();
-     this->ActiveControl = nullptr;
+		this->ActiveControl = nullptr;
 	}
 
 	private: System::Void MyForm_Resize(System::Object^ sender, System::EventArgs^ e)
@@ -521,7 +533,7 @@ namespace BloodBank
 	{
 		if (String::IsNullOrWhiteSpace(txtUsername->Text)) {
 			txtUsername->Text = L"Enter your username";
-			txtUsername->ForeColor = System::Drawing::Color::Gray;
+		 txtUsername->ForeColor = System::Drawing::Color::Gray;
 		}
 	}
 
@@ -639,32 +651,22 @@ namespace BloodBank
 			LinearGradientMode::ForwardDiagonal);
 		e->Graphics->FillRectangle(bgBrush, rect);
 
-		// Drawing the Translucent "Glass" Cards
-		SolidBrush^ glassBrush = gcnew SolidBrush(Color::FromArgb(30, 255, 255, 255)); // Very faint white
-		Pen^ glassBorder = gcnew Pen(Color::FromArgb(50, 255, 255, 255), 1);            // Subtle border
+		// Translucent card style
+		SolidBrush^ glassBrush = gcnew SolidBrush(Color::FromArgb(30, 255, 255, 255));
+		Pen^ glassBorder = gcnew Pen(Color::FromArgb(50, 255, 255, 255), 1);
 
-		// 1. Top Left Card (Live Status)
-		Rectangle card1 = Rectangle(50, 150, 200, 80);
-		GraphicsPath^ path1 = GetRoundedRect(card1, 15);
-		e->Graphics->FillPath(glassBrush, path1);
-		e->Graphics->DrawPath(glassBorder, path1);
-
-		System::Drawing::Font^ f1Small = gcnew System::Drawing::Font(L"Segoe UI", 10, System::Drawing::FontStyle::Bold);
-		System::Drawing::Font^ f1Large = gcnew System::Drawing::Font(L"Segoe UI Black", 14, System::Drawing::FontStyle::Bold);
-		e->Graphics->DrawString(L"LIVE STATUS", f1Small, Brushes::WhiteSmoke, card1.X + 58, card1.Y + 20);
-		e->Graphics->DrawString(L"System Active", f1Large, Brushes::White, card1.X + 58, card1.Y + 35);
-
-		// 2. Center Top Icon Card (Heart)
+		// Center Top Icon Card (Heart) only
 		Rectangle card2 = Rectangle(rightPanel->Width / 2 - 40, 200, 80, 80);
 		GraphicsPath^ path2 = GetRoundedRect(card2, 15);
 		e->Graphics->FillPath(glassBrush, path2);
 		e->Graphics->DrawPath(glassBorder, path2);
-        DrawHeartbeatIcon(e->Graphics, Rectangle(card2.X + 5, card2.Y + 10, 70, 60));
+		DrawHeartbeatIcon(e->Graphics, Rectangle(card2.X + 5, card2.Y + 10, 70, 60));
 
-		// Cleanup GDI Objects
-		delete bgBrush; delete glassBrush; delete glassBorder;
-		delete path1; delete path2;
-		delete f1Small; delete f1Large;
+		// Cleanup
+		delete bgBrush;
+		delete glassBrush;
+		delete glassBorder;
+		delete path2;
 	}
 
 	private: System::Void btnLogin_Click(System::Object^ sender, System::EventArgs^ e)
@@ -687,5 +689,9 @@ namespace BloodBank
 	}
 	private: System::Void leftPanel_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
 	}
-};
+	private: System::Void ClearFocusOnBackgroundClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e)
+	{
+		this->ActiveControl = nullptr;
+	}
+	};
 }
