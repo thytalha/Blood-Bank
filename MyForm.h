@@ -641,7 +641,7 @@ namespace BloodBank
 
 		// Drawing the Translucent "Glass" Cards
 		SolidBrush^ glassBrush = gcnew SolidBrush(Color::FromArgb(30, 255, 255, 255)); // Very faint white
-		Pen^ glassBorder = gcnew Pen(Color::FromArgb(50, 255, 255, 255), 1);         // Subtle border
+		Pen^ glassBorder = gcnew Pen(Color::FromArgb(50, 255, 255, 255), 1);            // Subtle border
 
 		// 1. Top Left Card (Live Status)
 		Rectangle card1 = Rectangle(50, 150, 200, 80);
@@ -661,28 +661,9 @@ namespace BloodBank
 		e->Graphics->DrawPath(glassBorder, path2);
         DrawHeartbeatIcon(e->Graphics, Rectangle(card2.X + 5, card2.Y + 10, 70, 60));
 
-		// 3. Bottom Right Card (Total Donations)
-		Rectangle card3 = Rectangle(rightPanel->Width - 280, rightPanel->Height - 150, 220, 80);
-		GraphicsPath^ path3 = GetRoundedRect(card3, 15);
-		e->Graphics->FillPath(glassBrush, path3);
-		e->Graphics->DrawPath(glassBorder, path3);
-		SolidBrush^ donationBubble = gcnew SolidBrush(Color::FromArgb(105, 178, 34, 74));
-		e->Graphics->FillEllipse(donationBubble, card3.X + 18, card3.Y + 14, 52, 52);
-		System::Drawing::Font^ dropFont = gcnew System::Drawing::Font(L"Segoe UI Symbol", 16);
-		SolidBrush^ dropBrush = gcnew SolidBrush(Color::FromArgb(248, 255, 194, 214));
-		e->Graphics->DrawString(L"\xD83D\xDCA7", dropFont, dropBrush, static_cast<float>(card3.X + 30), static_cast<float>(card3.Y + 25));
-
-		e->Graphics->DrawString(L"TOTAL DONATIONS", f1Small, Brushes::WhiteSmoke, card3.X + 78, card3.Y + 20);
-		e->Graphics->DrawString(L"12,450", f1Large, Brushes::White, card3.X + 80, card3.Y + 42);
-		System::Drawing::Font^ unitsFont = gcnew System::Drawing::Font(L"Segoe UI Black", 12, System::Drawing::FontStyle::Bold);
-		SolidBrush^ unitsBrush = gcnew SolidBrush(Color::FromArgb(245, 86, 120));
-		e->Graphics->DrawString(L"units", unitsFont, unitsBrush, static_cast<float>(card3.X + 145), static_cast<float>(card3.Y + 45));
-
 		// Cleanup GDI Objects
 		delete bgBrush; delete glassBrush; delete glassBorder;
-		delete path1; delete path2; delete path3;
-		delete donationBubble; delete dropFont; delete dropBrush;
-		delete unitsFont; delete unitsBrush;
+		delete path1; delete path2;
 		delete f1Small; delete f1Large;
 	}
 
