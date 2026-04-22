@@ -695,5 +695,3 @@ namespace BloodBank
 	}
 	};
 }
-// hello
-//maryam
