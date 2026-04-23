@@ -424,26 +424,32 @@ namespace BloodBank
 
 	private: System::Void ArrangeLeftPanelControls()
 	{
-		int fieldWidth = 400;
+		int W = this->ClientSize.Width;
+		int H = this->ClientSize.Height;
+		int leftW = W / 2;
 
-		lblLogo->Location = System::Drawing::Point(100, 50);
-		lblBrandName->Location = System::Drawing::Point(150, 55);
+		// Calculate proportional margins and widths based on screen width
+		int cx = static_cast<int>(leftW * 0.166);
+		int fieldWidth = static_cast<int>(leftW * 0.666);
+
+		lblLogo->Location = System::Drawing::Point(cx, static_cast<int>(H * 0.0625));
+		lblBrandName->Location = System::Drawing::Point(cx + 50, static_cast<int>(H * 0.068));
 		GraphicsPath^ logoBox = GetRoundedRect(Rectangle(0, 0, lblLogo->Width - 1, lblLogo->Height - 1), 10);
 		lblLogo->Region = gcnew System::Drawing::Region(logoBox);
 		delete logoBox;
 
-		lblLoginTitle->Location = System::Drawing::Point(95, 150);
-		lblLoginSubTitle->Location = System::Drawing::Point(100, 205);
+		lblLoginTitle->Location = System::Drawing::Point(cx - 5, static_cast<int>(H * 0.1875));
+		lblLoginSubTitle->Location = System::Drawing::Point(cx, static_cast<int>(H * 0.256));
 
-		lblUsername->Location = System::Drawing::Point(100, 270);
-		lineUsername->Location = System::Drawing::Point(100, 295);
+		lblUsername->Location = System::Drawing::Point(cx, static_cast<int>(H * 0.3375));
+		lineUsername->Location = System::Drawing::Point(cx, static_cast<int>(H * 0.368));
 		lineUsername->Size = System::Drawing::Size(fieldWidth, 56);
 		lblUserIcon->Location = System::Drawing::Point(16, 17);
 		txtUsername->Location = System::Drawing::Point(52, 17);
 		txtUsername->Width = fieldWidth - 68;
 
-		lblPassword->Location = System::Drawing::Point(100, 375);
-		linePassword->Location = System::Drawing::Point(100, 400);
+		lblPassword->Location = System::Drawing::Point(cx, static_cast<int>(H * 0.468));
+		linePassword->Location = System::Drawing::Point(cx, static_cast<int>(H * 0.5));
 		linePassword->Size = System::Drawing::Size(fieldWidth, 56);
 		lblLockIcon->Location = System::Drawing::Point(16, 17);
 		txtPassword->Location = System::Drawing::Point(52, 17);
@@ -462,26 +468,28 @@ namespace BloodBank
 		lineUsername->BringToFront();
 		linePassword->BringToFront();
 
-		chkRememberMe->Location = System::Drawing::Point(100, 490);
-		linkForgotPassword->Location = System::Drawing::Point(100 + fieldWidth - linkForgotPassword->Width, 490);
+		chkRememberMe->Location = System::Drawing::Point(cx, static_cast<int>(H * 0.6125));
+		linkForgotPassword->Location = System::Drawing::Point(cx + fieldWidth - linkForgotPassword->Width, static_cast<int>(H * 0.6125));
 
-		btnLogin->Location = System::Drawing::Point(100, 530);
+		btnLogin->Location = System::Drawing::Point(cx, static_cast<int>(H * 0.6625));
 		btnLogin->Width = fieldWidth;
 		GraphicsPath^ loginBox = GetRoundedRect(Rectangle(0, 0, btnLogin->Width - 1, btnLogin->Height - 1), 14);
 		btnLogin->Region = gcnew System::Drawing::Region(loginBox);
 		delete loginBox;
 
-		lblNoAccount->Location = System::Drawing::Point(100 + 100, 590);
-		linkSignup->Location = System::Drawing::Point(lblNoAccount->Right + 5, 590);
+		lblNoAccount->Location = System::Drawing::Point(cx + static_cast<int>(fieldWidth * 0.25), static_cast<int>(H * 0.7375));
+		linkSignup->Location = System::Drawing::Point(lblNoAccount->Right + 5, static_cast<int>(H * 0.7375));
 
-		lblStatus->Location = System::Drawing::Point(100, 620);
+		lblStatus->Location = System::Drawing::Point(cx, static_cast<int>(H * 0.775));
 	}
 
 	private: System::Void ArrangeRightPanelControls()
 	{
+		int H = this->ClientSize.Height;
+
 		lblWelcome->Width = rightPanel->Width;
 		lblWelcome->Height = 150;
-		lblWelcome->Location = System::Drawing::Point(0, (rightPanel->Height / 2) - 80);
+		lblWelcome->Location = System::Drawing::Point(0, static_cast<int>((H / 2) - 80));
 
 		lblWelcomeDesc->Width = rightPanel->Width;
 		lblWelcomeDesc->Height = 80;
@@ -515,7 +523,8 @@ namespace BloodBank
 
 	private: System::Void loginForm_Resize(System::Object^ sender, System::EventArgs^ e)
 	{
-		leftPanel->Width = this->Width / 2; // Split 50/50 exactly like the image
+		if (this->ClientSize.Width == 0 || this->ClientSize.Height == 0) return; // Prevent crash when minimized
+		leftPanel->Width = this->ClientSize.Width / 2; // Split 50/50 relative to current window
 		ArrangeLeftPanelControls();
 		ArrangeRightPanelControls();
 		rightPanel->Invalidate(); // Force redraw of custom graphics
@@ -533,7 +542,7 @@ namespace BloodBank
 	{
 		if (String::IsNullOrWhiteSpace(txtUsername->Text)) {
 			txtUsername->Text = L"Enter your username";
-		 txtUsername->ForeColor = System::Drawing::Color::Gray;
+			txtUsername->ForeColor = System::Drawing::Color::Gray;
 		}
 	}
 
@@ -655,8 +664,8 @@ namespace BloodBank
 		SolidBrush^ glassBrush = gcnew SolidBrush(Color::FromArgb(30, 255, 255, 255));
 		Pen^ glassBorder = gcnew Pen(Color::FromArgb(50, 255, 255, 255), 1);
 
-		// Center Top Icon Card (Heart) only
-		Rectangle card2 = Rectangle(rightPanel->Width / 2 - 40, 200, 80, 80);
+		// Center Top Icon Card (Heart) positioned dynamically based on ClientSize.Height
+		Rectangle card2 = Rectangle(rightPanel->Width / 2 - 40, static_cast<int>(this->ClientSize.Height * 0.25), 80, 80);
 		GraphicsPath^ path2 = GetRoundedRect(card2, 15);
 		e->Graphics->FillPath(glassBrush, path2);
 		e->Graphics->DrawPath(glassBorder, path2);
@@ -695,4 +704,3 @@ namespace BloodBank
 	}
 	};
 }
-//	Latest code by Talha: 01:13 PM 23/04/2026
