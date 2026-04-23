@@ -9,17 +9,17 @@ namespace BloodBank
 	using namespace System::Drawing;
 	using namespace System::Drawing::Drawing2D;
 
-	public ref class MyForm : public System::Windows::Forms::Form
+	public ref class loginForm : public System::Windows::Forms::Form
 	{
 	public:
-		MyForm(void)
+		loginForm(void)
 		{
 			InitializeComponent();
 			isPasswordVisible = false; // Initialize the password visibility state
 		}
 
 	protected:
-		~MyForm()
+		~loginForm()
 		{
 			if (components)
 			{
@@ -112,7 +112,7 @@ namespace BloodBank
 			this->leftPanel->Name = L"leftPanel";
 			this->leftPanel->Size = System::Drawing::Size(600, 800);
 			this->leftPanel->TabIndex = 0;
-			this->leftPanel->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MyForm::leftPanel_Paint);
+			this->leftPanel->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &loginForm::leftPanel_Paint);
 			// 
 			// lblLogo
 			// 
@@ -162,7 +162,7 @@ namespace BloodBank
 			this->linkSignup->TabIndex = 3;
 			this->linkSignup->TabStop = true;
 			this->linkSignup->Text = L"Sign up";
-			this->linkSignup->Click += gcnew System::EventHandler(this, &MyForm::btnSignup_Click);
+			this->linkSignup->Click += gcnew System::EventHandler(this, &loginForm::btnSignup_Click);
 			// 
 			// lblNoAccount
 			// 
@@ -190,7 +190,7 @@ namespace BloodBank
 			this->btnLogin->TabIndex = 5;
 			this->btnLogin->Text = L"Login to Dashboard";
 			this->btnLogin->UseVisualStyleBackColor = false;
-			this->btnLogin->Click += gcnew System::EventHandler(this, &MyForm::btnLogin_Click);
+			this->btnLogin->Click += gcnew System::EventHandler(this, &loginForm::btnLogin_Click);
 			// 
 			// chkRememberMe
 			// 
@@ -234,7 +234,7 @@ namespace BloodBank
 			this->btnTogglePassword->Size = System::Drawing::Size(30, 30);
 			this->btnTogglePassword->TabIndex = 8;
 			this->btnTogglePassword->Text = L"";
-			this->btnTogglePassword->Click += gcnew System::EventHandler(this, &MyForm::btnTogglePassword_Click);
+			this->btnTogglePassword->Click += gcnew System::EventHandler(this, &loginForm::btnTogglePassword_Click);
 			// 
 			// linePassword
 			// 
@@ -266,8 +266,8 @@ namespace BloodBank
 			this->txtPassword->Size = System::Drawing::Size(100, 27);
 			this->txtPassword->TabIndex = 11;
 			this->txtPassword->Text = L"••••••••";
-			this->txtPassword->Enter += gcnew System::EventHandler(this, &MyForm::txtPassword_Enter);
-			this->txtPassword->Leave += gcnew System::EventHandler(this, &MyForm::txtPassword_Leave);
+			this->txtPassword->Enter += gcnew System::EventHandler(this, &loginForm::txtPassword_Enter);
+			this->txtPassword->Leave += gcnew System::EventHandler(this, &loginForm::txtPassword_Leave);
 			// 
 			// lblLockIcon
 			// 
@@ -306,8 +306,8 @@ namespace BloodBank
 			this->txtUsername->Size = System::Drawing::Size(100, 27);
 			this->txtUsername->TabIndex = 14;
 			this->txtUsername->Text = L"Enter your username";
-			this->txtUsername->Enter += gcnew System::EventHandler(this, &MyForm::txtUsername_Enter);
-			this->txtUsername->Leave += gcnew System::EventHandler(this, &MyForm::txtUsername_Leave);
+			this->txtUsername->Enter += gcnew System::EventHandler(this, &loginForm::txtUsername_Enter);
+			this->txtUsername->Leave += gcnew System::EventHandler(this, &loginForm::txtUsername_Leave);
 			// 
 			// lblUserIcon
 			// 
@@ -365,7 +365,7 @@ namespace BloodBank
 			this->rightPanel->Name = L"rightPanel";
 			this->rightPanel->Size = System::Drawing::Size(600, 800);
 			this->rightPanel->TabIndex = 0;
-			this->rightPanel->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MyForm::rightPanel_Paint);
+			this->rightPanel->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &loginForm::rightPanel_Paint);
 			// 
 			// lblWelcome
 			// 
@@ -393,32 +393,32 @@ namespace BloodBank
 				L"p counts in saving lives.";
 			this->lblWelcomeDesc->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			// 
-			// MyForm
+			// loginForm
 			// 
 			this->ClientSize = System::Drawing::Size(1200, 800);
 			this->Controls->Add(this->rightPanel);
 			this->Controls->Add(this->leftPanel);
-			this->Name = L"MyForm";
+			this->Name = L"loginForm";
 			this->Text = L"LifeBlood MMS Login";
 			this->WindowState = System::Windows::Forms::FormWindowState::Maximized;
-			this->Load += gcnew System::EventHandler(this, &MyForm::MyForm_Load);
-			this->Resize += gcnew System::EventHandler(this, &MyForm::MyForm_Resize);
+			this->Load += gcnew System::EventHandler(this, &loginForm::loginForm_Load);
+			this->Resize += gcnew System::EventHandler(this, &loginForm::loginForm_Resize);
 			this->leftPanel->ResumeLayout(false);
 			this->leftPanel->PerformLayout();
 			this->rightPanel->ResumeLayout(false);
 			this->ResumeLayout(false);
 
 			// In InitializeComponent(), add these handlers (after controls are created)
-			this->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::ClearFocusOnBackgroundClick);
-			this->leftPanel->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::ClearFocusOnBackgroundClick);
-			this->rightPanel->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::ClearFocusOnBackgroundClick);
+			this->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &loginForm::ClearFocusOnBackgroundClick);
+			this->leftPanel->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &loginForm::ClearFocusOnBackgroundClick);
+			this->rightPanel->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &loginForm::ClearFocusOnBackgroundClick);
 
 			// optional (recommended): labels also receive clicks, not panel background
-			this->lblLoginTitle->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::ClearFocusOnBackgroundClick);
-			this->lblLoginSubTitle->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::ClearFocusOnBackgroundClick);
-			this->lblBrandName->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::ClearFocusOnBackgroundClick);
-			this->lblWelcome->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::ClearFocusOnBackgroundClick);
-			this->lblWelcomeDesc->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::ClearFocusOnBackgroundClick);
+			this->lblLoginTitle->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &loginForm::ClearFocusOnBackgroundClick);
+			this->lblLoginSubTitle->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &loginForm::ClearFocusOnBackgroundClick);
+			this->lblBrandName->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &loginForm::ClearFocusOnBackgroundClick);
+			this->lblWelcome->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &loginForm::ClearFocusOnBackgroundClick);
+			this->lblWelcomeDesc->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &loginForm::ClearFocusOnBackgroundClick);
 		}
 #pragma endregion
 
@@ -488,7 +488,7 @@ namespace BloodBank
 		lblWelcomeDesc->Location = System::Drawing::Point(0, lblWelcome->Bottom + 10);
 	}
 
-	private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e)
+	private: System::Void loginForm_Load(System::Object^ sender, System::EventArgs^ e)
 	{
 		if (txtUsername->Parent != lineUsername)
 		{
@@ -513,7 +513,7 @@ namespace BloodBank
 		this->ActiveControl = nullptr;
 	}
 
-	private: System::Void MyForm_Resize(System::Object^ sender, System::EventArgs^ e)
+	private: System::Void loginForm_Resize(System::Object^ sender, System::EventArgs^ e)
 	{
 		leftPanel->Width = this->Width / 2; // Split 50/50 exactly like the image
 		ArrangeLeftPanelControls();
