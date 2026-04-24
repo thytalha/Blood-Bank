@@ -6,6 +6,7 @@ namespace BloodBank
 	using namespace System::Collections;
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
+    using namespace System::Data::SqlClient;
 	using namespace System::Drawing;
 	using namespace System::Drawing::Drawing2D;
 
@@ -16,6 +17,7 @@ namespace BloodBank
 		{
 			InitializeComponent();
 			isPasswordVisible = false; // Initialize the password visibility state
+           connectionString = L"Data Source=TALHA\\SQLEXPRESS;Initial Catalog=bloobbank_db;Integrated Security=True;Encrypt=False;TrustServerCertificate=True";
 		}
 
 	protected:
@@ -51,6 +53,7 @@ namespace BloodBank
 	private: System::Windows::Forms::Panel^ linePassword;
 	private: System::Windows::Forms::Button^ btnTogglePassword;
 	private: bool isPasswordVisible;
+	private: String^ connectionString;
 
 	private:
 		System::ComponentModel::Container^ components;
@@ -688,8 +691,49 @@ namespace BloodBank
 			return;
 		}
 
-		lblStatus->Text = L"";
-		MessageBox::Show(L"Login attempting...", L"System", MessageBoxButtons::OK, MessageBoxIcon::Information);
+      lblStatus->Text = L"";
+		String^ role = nullptr;
+
+		if (ValidateUser(txtUsername->Text->Trim(), txtPassword->Text, role))
+		{
+			MessageBox::Show(L"Login successful. Role: " + role, L"System", MessageBoxButtons::OK, MessageBoxIcon::Information);
+		}
+		else
+		{
+			lblStatus->Text = L"Invalid username or password.";
+		}
+	}
+
+	private: bool ValidateUser(String^ username, String^ password, String^% role)
+	{
+		role = nullptr;
+
+		try
+		{
+			SqlConnection^ conn = gcnew SqlConnection(connectionString);
+			conn->Open();
+
+			String^ query = L"SELECT TOP 1 UserRole FROM Users WHERE Username = @Username AND PasswordHash = @PasswordHash";
+			SqlCommand^ cmd = gcnew SqlCommand(query, conn);
+			cmd->Parameters->AddWithValue(L"@Username", username);
+			cmd->Parameters->AddWithValue(L"@PasswordHash", password);
+
+			Object^ result = cmd->ExecuteScalar();
+			conn->Close();
+
+			if (result != nullptr && result != DBNull::Value)
+			{
+				role = result->ToString();
+				return true;
+			}
+
+			return false;
+		}
+		catch (Exception^ ex)
+		{
+			lblStatus->Text = L"Database error: " + ex->Message;
+			return false;
+		}
 	}
 
 	private: System::Void btnSignup_Click(System::Object^ sender, System::EventArgs^ e)
