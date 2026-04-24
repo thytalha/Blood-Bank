@@ -1,14 +1,17 @@
-#include "loginForm.h"
 #include "homeForm.h"
+
 using namespace System;
 using namespace System::Windows::Forms;
+
 [STAThreadAttribute]
-int main(array<String^>^ args) 
+int homeFormEntry(array<String^>^ args)
 {
     Application::EnableVisualStyles();
     Application::SetCompatibleTextRenderingDefault(false);
-    BloodBank::homeForm form;
-    Application::Run(% form);
+
+    // Launch the animated home form
+    BloodBank::homeForm home;
+    Application::Run(% home);
+
     return 0;
 }
-    //code updated by Talha
