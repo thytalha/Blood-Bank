@@ -48,6 +48,8 @@ namespace BloodBank {
 	private: System::Windows::Forms::Label^ lblNavHome;
 
 	private: System::Windows::Forms::Panel^ leftContentPanel;
+	private: System::Windows::Forms::Panel^ logoBadge;
+	private: System::Windows::Forms::Label^ lblLeftBrand;
 	private: System::Windows::Forms::Label^ lblMainHeading;
 	private: System::Windows::Forms::Label^ lblSubHeading;
 	private: System::Windows::Forms::Button^ btnDashboard;
@@ -79,6 +81,8 @@ namespace BloodBank {
 			this->lblNavLogin = (gcnew System::Windows::Forms::Label());
 			this->lblNavHome = (gcnew System::Windows::Forms::Label());
 			this->leftContentPanel = (gcnew System::Windows::Forms::Panel());
+			this->logoBadge = (gcnew System::Windows::Forms::Panel());
+			this->lblLeftBrand = (gcnew System::Windows::Forms::Label());
 			this->lblStatsHospitals = (gcnew System::Windows::Forms::Label());
 			this->lblStatsUnits = (gcnew System::Windows::Forms::Label());
 			this->btnLearnMore = (gcnew System::Windows::Forms::Button());
@@ -141,7 +145,7 @@ namespace BloodBank {
 			// rightAnimPanel
 			this->rightAnimPanel->Controls->Add(this->lblRightDesc);
 			this->rightAnimPanel->Controls->Add(this->lblRightWelcome);
-			this->rightAnimPanel->Dock = System::Windows::Forms::DockStyle::Right;
+         this->rightAnimPanel->Dock = System::Windows::Forms::DockStyle::Right;
 			this->rightAnimPanel->Location = System::Drawing::Point(600, 80);
 			this->rightAnimPanel->Name = L"rightAnimPanel";
 			this->rightAnimPanel->Size = System::Drawing::Size(600, 500);
@@ -152,7 +156,7 @@ namespace BloodBank {
 			this->lblRightWelcome->BackColor = System::Drawing::Color::Transparent;
 			this->lblRightWelcome->Font = (gcnew System::Drawing::Font(L"Segoe UI", 20, System::Drawing::FontStyle::Bold));
 			this->lblRightWelcome->ForeColor = System::Drawing::Color::White;
-			this->lblRightWelcome->Text = L"Welcome to LifeBlood MMS";
+          this->lblRightWelcome->Text = L"Welcome to LifeBlood MS";
 
 			this->lblRightDesc->AutoSize = true;
 			this->lblRightDesc->BackColor = System::Drawing::Color::Transparent;
@@ -162,6 +166,8 @@ namespace BloodBank {
 
 			// leftContentPanel
 			this->leftContentPanel->BackColor = System::Drawing::Color::White;
+         this->leftContentPanel->Controls->Add(this->lblLeftBrand);
+			this->leftContentPanel->Controls->Add(this->logoBadge);
 			this->leftContentPanel->Controls->Add(this->lblStatsHospitals);
 			this->leftContentPanel->Controls->Add(this->lblStatsUnits);
 			this->leftContentPanel->Controls->Add(this->btnLearnMore);
@@ -174,34 +180,55 @@ namespace BloodBank {
 			this->leftContentPanel->Size = System::Drawing::Size(600, 500);
 			this->leftContentPanel->TabIndex = 1;
 
+			this->logoBadge->BackColor = System::Drawing::Color::Transparent;
+			this->logoBadge->Name = L"logoBadge";
+			this->logoBadge->Size = System::Drawing::Size(52, 52);
+			this->logoBadge->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &homeForm::logoBadge_Paint);
+
+			this->lblLeftBrand->AutoSize = true;
+			this->lblLeftBrand->Font = (gcnew System::Drawing::Font(L"Calisto MT", 24, System::Drawing::FontStyle::Bold));
+			this->lblLeftBrand->ForeColor = System::Drawing::Color::Black;
+			this->lblLeftBrand->Text = L"LifeBlood";
+
 			this->lblMainHeading->AutoSize = true;
-			this->lblMainHeading->Font = (gcnew System::Drawing::Font(L"Segoe UI", 42, System::Drawing::FontStyle::Bold));
+          this->lblMainHeading->Font = (gcnew System::Drawing::Font(L"Calisto MT", 30, System::Drawing::FontStyle::Bold));
 			this->lblMainHeading->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(161)), static_cast<System::Int32>(static_cast<System::Byte>(30)), static_cast<System::Int32>(static_cast<System::Byte>(50)));
 			this->lblMainHeading->Text = L"Saving Lives,\nOne Donation at a Time.";
 
 			this->lblSubHeading->AutoSize = true;
 			this->lblSubHeading->Font = (gcnew System::Drawing::Font(L"Segoe UI", 12));
 			this->lblSubHeading->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(100)), static_cast<System::Int32>(static_cast<System::Byte>(100)), static_cast<System::Int32>(static_cast<System::Byte>(100)));
-			this->lblSubHeading->Text = L"MMS streamlines the connection between generous\ncritical needs. Manage inventory, track donations, and\ns — all in one unified platform built for hospitals,\nand the communities they serve.";
+           this->lblSubHeading->Text = L"MS streamlines the connection between generous\ncritical needs. Manage inventory, track donations all\nin one unified platform built for hospitals,\nand the communities they serve.";
 
 			this->btnDashboard->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(232)), static_cast<System::Int32>(static_cast<System::Byte>(15)), static_cast<System::Int32>(static_cast<System::Byte>(59)));
 			this->btnDashboard->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 			this->btnDashboard->FlatAppearance->BorderSize = 0;
-			this->btnDashboard->Font = (gcnew System::Drawing::Font(L"Segoe UI", 11, System::Drawing::FontStyle::Bold));
+            this->btnDashboard->Font = (gcnew System::Drawing::Font(L"Calisto MT", 11, System::Drawing::FontStyle::Bold));
 			this->btnDashboard->ForeColor = System::Drawing::Color::White;
 			this->btnDashboard->Size = System::Drawing::Size(150, 45);
 			this->btnDashboard->Text = L"Dashboard";
 			this->btnDashboard->Cursor = System::Windows::Forms::Cursors::Hand;
+          this->btnDashboard->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &homeForm::btnDashboard_Paint);
+			this->btnDashboard->MouseEnter += gcnew System::EventHandler(this, &homeForm::ButtonHover_Invalidate);
+			this->btnDashboard->MouseLeave += gcnew System::EventHandler(this, &homeForm::ButtonHover_Invalidate);
 			this->btnDashboard->Click += gcnew System::EventHandler(this, &homeForm::GoToLogin_Click);
 
 			this->btnLearnMore->BackColor = System::Drawing::Color::White;
 			this->btnLearnMore->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 			this->btnLearnMore->FlatAppearance->BorderColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(200)), static_cast<System::Int32>(static_cast<System::Byte>(200)), static_cast<System::Int32>(static_cast<System::Byte>(200)));
-			this->btnLearnMore->Font = (gcnew System::Drawing::Font(L"Segoe UI", 11, System::Drawing::FontStyle::Bold));
+            this->btnLearnMore->FlatAppearance->BorderSize = 0;
+			this->btnLearnMore->Font = (gcnew System::Drawing::Font(L"Calisto MT", 11, System::Drawing::FontStyle::Bold));
 			this->btnLearnMore->ForeColor = System::Drawing::Color::Black;
 			this->btnLearnMore->Size = System::Drawing::Size(150, 45);
 			this->btnLearnMore->Text = L"Learn More";
 			this->btnLearnMore->Cursor = System::Windows::Forms::Cursors::Hand;
+			this->btnLearnMore->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &homeForm::btnLearnMore_Paint);
+			this->btnLearnMore->MouseEnter += gcnew System::EventHandler(this, &homeForm::ButtonHover_Invalidate);
+			this->btnLearnMore->MouseLeave += gcnew System::EventHandler(this, &homeForm::ButtonHover_Invalidate);
+
+			this->lblSubHeading->Visible = false;
+			this->btnDashboard->Visible = false;
+			this->btnLearnMore->Visible = false;
 
 			this->lblStatsUnits->AutoSize = true;
 			this->lblStatsUnits->Font = (gcnew System::Drawing::Font(L"Segoe UI", 20, System::Drawing::FontStyle::Bold));
@@ -236,7 +263,7 @@ namespace BloodBank {
 			this->Controls->Add(this->bottomPanel);
 			this->Controls->Add(this->topNavPanel);
 			this->Name = L"homeForm";
-			this->Text = L"LifeBlood MMS Home";
+         this->Text = L"LifeBlood MS Home";
 			this->WindowState = System::Windows::Forms::FormWindowState::Maximized;
 			this->BackColor = System::Drawing::Color::White;
 			this->Resize += gcnew System::EventHandler(this, &homeForm::homeForm_Resize);
@@ -287,7 +314,7 @@ namespace BloodBank {
 		lblNavLogin->Location = System::Drawing::Point(lblNavAbout->Left - lblNavLogin->Width - 30, 30);
 		lblNavHome->Location = System::Drawing::Point(lblNavLogin->Left - lblNavHome->Width - 30, 30);
 
-		// Layout Splitting
+     // Layout Splitting
 		rightAnimPanel->Width = static_cast<int>(W * 0.45);
 
 		// Right Panel Text
@@ -296,18 +323,16 @@ namespace BloodBank {
 
 		// Left Content Panel Formatting
 		int leftCx = 50;
-		int contentStartY = static_cast<int>(H * 0.15);
+     int brandY = static_cast<int>(H * 0.12);
+		logoBadge->Location = System::Drawing::Point(leftCx + 5, brandY);
+		lblLeftBrand->Location = System::Drawing::Point(logoBadge->Right + 14, brandY + 7);
+
+		int contentStartY = lblLeftBrand->Bottom + 28;
 		lblMainHeading->Location = System::Drawing::Point(leftCx, contentStartY);
-		lblSubHeading->Location = System::Drawing::Point(leftCx + 5, lblMainHeading->Bottom + 20);
 
-		btnDashboard->Location = System::Drawing::Point(leftCx + 5, lblSubHeading->Bottom + 30);
-		btnLearnMore->Location = System::Drawing::Point(btnDashboard->Right + 20, lblSubHeading->Bottom + 30);
-		RoundControl(btnDashboard, 10);
-		RoundControl(btnLearnMore, 10);
-
-		lblStatsUnits->Location = System::Drawing::Point(leftCx + 5, btnDashboard->Bottom + 50);
+        lblStatsUnits->Location = System::Drawing::Point(leftCx + 5, lblMainHeading->Bottom + 45);
 		lblStatsUnits->Font = gcnew System::Drawing::Font(L"Segoe UI", 12);
-		lblStatsHospitals->Location = System::Drawing::Point(lblStatsUnits->Right + 80, btnDashboard->Bottom + 50);
+		lblStatsHospitals->Location = System::Drawing::Point(lblStatsUnits->Right + 80, lblMainHeading->Bottom + 45);
 		lblStatsHospitals->Font = gcnew System::Drawing::Font(L"Segoe UI", 12);
 
 		// Bottom Cards
@@ -328,17 +353,25 @@ namespace BloodBank {
 
 		// Adjust custom rounded shape for right panel
 		GraphicsPath^ rightBox = gcnew GraphicsPath();
-		rightBox->AddArc(Rectangle(0, 0, 80, 80), 180, 90);
-		rightBox->AddLine(40, 0, rightAnimPanel->Width, 0);
-		rightBox->AddLine(rightAnimPanel->Width, 0, rightAnimPanel->Width, rightAnimPanel->Height);
-		rightBox->AddArc(Rectangle(0, rightAnimPanel->Height - 80, 80, 80), 90, 90);
+		int cornerRadius = 40;
+		int diameter = cornerRadius * 2;
+		int panelW = rightAnimPanel->Width;
+		int panelH = rightAnimPanel->Height;
+     int rightInset = 24;
+		int boxW = panelW - rightInset;
+
+		rightBox->AddArc(Rectangle(0, 0, diameter, diameter), 180, 90); // top-left
+        rightBox->AddArc(Rectangle(boxW - diameter, 0, diameter, diameter), 270, 90); // top-right
+		rightBox->AddArc(Rectangle(boxW - diameter, panelH - diameter, diameter, diameter), 0, 90); // bottom-right
+		rightBox->AddArc(Rectangle(0, panelH - diameter, diameter, diameter), 90, 90); // bottom-left
 		rightBox->CloseFigure();
 		rightAnimPanel->Region = gcnew System::Drawing::Region(rightBox);
+       delete rightBox;
 	}
 
 	private: System::Void SetupCard(Panel^ pnl, String^ title, String^ desc)
 	{
-     pnl->BackColor = System::Drawing::Color::Transparent;
+		pnl->BackColor = System::Drawing::Color::Transparent;
 		pnl->Cursor = System::Windows::Forms::Cursors::Hand;
 		pnl->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &homeForm::Card_Paint);
 
@@ -451,6 +484,136 @@ namespace BloodBank {
 		delete path;
 	}
 
+	private: System::Void logoBadge_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e)
+	{
+		Panel^ pnl = safe_cast<Panel^>(sender);
+		e->Graphics->SmoothingMode = SmoothingMode::AntiAlias;
+
+		Rectangle rect = Rectangle(0, 0, pnl->Width - 1, pnl->Height - 1);
+		GraphicsPath^ bgPath = gcnew GraphicsPath();
+		int r = 12;
+		int d = r * 2;
+		Rectangle arc = Rectangle(rect.X, rect.Y, d, d);
+		bgPath->AddArc(arc, 180, 90);
+		arc.X = rect.Right - d;
+		bgPath->AddArc(arc, 270, 90);
+		arc.Y = rect.Bottom - d;
+		bgPath->AddArc(arc, 0, 90);
+		arc.X = rect.X;
+		bgPath->AddArc(arc, 90, 90);
+		bgPath->CloseFigure();
+
+		SolidBrush^ bgBrush = gcnew SolidBrush(Color::FromArgb(245, 232, 236));
+		e->Graphics->FillPath(bgBrush, bgPath);
+
+		GraphicsPath^ drop = gcnew GraphicsPath();
+		int cx = pnl->Width / 2;
+		int cy = pnl->Height / 2 + 2;
+		int s = 13;
+		Point pTop = Point(cx, cy - s);
+		Point pBottom = Point(cx, cy + static_cast<int>(s * 0.72f));
+		drop->StartFigure();
+		drop->AddBezier(
+			pTop,
+			Point(cx + static_cast<int>(s * 0.50f), cy - static_cast<int>(s * 0.54f)),
+			Point(cx + static_cast<int>(s * 0.76f), pBottom.Y),
+			pBottom
+		);
+		drop->AddBezier(
+			pBottom,
+			Point(cx - static_cast<int>(s * 0.76f), pBottom.Y),
+			Point(cx - static_cast<int>(s * 0.50f), cy - static_cast<int>(s * 0.54f)),
+			pTop
+		);
+		drop->CloseFigure();
+
+		SolidBrush^ dropBrush = gcnew SolidBrush(Color::FromArgb(232, 15, 59));
+		e->Graphics->FillPath(dropBrush, drop);
+
+		delete dropBrush;
+		delete drop;
+		delete bgBrush;
+		delete bgPath;
+	}
+
+	private: GraphicsPath^ CreateRoundedButtonPath(Rectangle rect, int radius)
+	{
+		GraphicsPath^ path = gcnew GraphicsPath();
+		int d = radius * 2;
+		Rectangle arc = Rectangle(rect.X, rect.Y, d, d);
+		path->AddArc(arc, 180, 90);
+		arc.X = rect.Right - d;
+		path->AddArc(arc, 270, 90);
+		arc.Y = rect.Bottom - d;
+		path->AddArc(arc, 0, 90);
+		arc.X = rect.X;
+		path->AddArc(arc, 90, 90);
+		path->CloseFigure();
+		return path;
+	}
+
+	private: System::Void DrawGlassButton(System::Windows::Forms::Button^ btn, System::Windows::Forms::PaintEventArgs^ e,
+		Color topColor, Color bottomColor, Color borderColor, Color shineColor, Color textColor)
+	{
+		e->Graphics->SmoothingMode = SmoothingMode::AntiAlias;
+		Rectangle rect = Rectangle(0, 0, btn->Width - 1, btn->Height - 1);
+		if (rect.Width <= 0 || rect.Height <= 0) return;
+
+		GraphicsPath^ path = CreateRoundedButtonPath(rect, 10);
+		LinearGradientBrush^ fill = gcnew LinearGradientBrush(rect, topColor, bottomColor, LinearGradientMode::Vertical);
+		e->Graphics->FillPath(fill, path);
+
+		Rectangle shineRect = Rectangle(rect.X + 2, rect.Y + 2, rect.Width - 4, rect.Height / 2);
+		GraphicsPath^ shinePath = CreateRoundedButtonPath(shineRect, 8);
+		SolidBrush^ shineBrush = gcnew SolidBrush(shineColor);
+		e->Graphics->FillPath(shineBrush, shinePath);
+
+		Pen^ borderPen = gcnew Pen(borderColor, 1.2f);
+		e->Graphics->DrawPath(borderPen, path);
+
+		TextRenderer::DrawText(
+			e->Graphics,
+			btn->Text,
+			btn->Font,
+			rect,
+			textColor,
+			TextFormatFlags::HorizontalCenter | TextFormatFlags::VerticalCenter
+		);
+
+		delete borderPen;
+		delete shineBrush;
+		delete shinePath;
+		delete fill;
+		delete path;
+	}
+
+	private: System::Void ButtonHover_Invalidate(System::Object^ sender, System::EventArgs^ e)
+	{
+		safe_cast<Button^>(sender)->Invalidate();
+	}
+
+	private: System::Void btnDashboard_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e)
+	{
+		Button^ btn = safe_cast<Button^>(sender);
+		bool isHover = btn->ClientRectangle.Contains(btn->PointToClient(Control::MousePosition));
+		Color topColor = isHover ? Color::FromArgb(240, 255, 95, 135) : Color::FromArgb(228, 245, 55, 105);
+		Color bottomColor = isHover ? Color::FromArgb(212, 200, 20, 70) : Color::FromArgb(196, 170, 8, 55);
+		Color borderColor = Color::FromArgb(185, 255, 180, 200);
+		Color shineColor = Color::FromArgb(70, 255, 255, 255);
+		DrawGlassButton(btn, e, topColor, bottomColor, borderColor, shineColor, Color::White);
+	}
+
+	private: System::Void btnLearnMore_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e)
+	{
+		Button^ btn = safe_cast<Button^>(sender);
+		bool isHover = btn->ClientRectangle.Contains(btn->PointToClient(Control::MousePosition));
+		Color topColor = isHover ? Color::FromArgb(230, 255, 255, 255) : Color::FromArgb(210, 255, 255, 255);
+		Color bottomColor = isHover ? Color::FromArgb(205, 236, 236, 236) : Color::FromArgb(190, 228, 228, 228);
+		Color borderColor = Color::FromArgb(170, 190, 190, 190);
+		Color shineColor = Color::FromArgb(85, 255, 255, 255);
+		DrawGlassButton(btn, e, topColor, bottomColor, borderColor, shineColor, Color::Black);
+	}
+
 	private: System::Void RoundControl(Control^ ctrl, int radius)
 	{
 		GraphicsPath^ path = gcnew GraphicsPath();
@@ -498,7 +661,7 @@ namespace BloodBank {
 		int cy = rightAnimPanel->Height / 2 - 40;
 
 		// 1. Draw Main Big Blood Drop
-		DrawBloodDrop(e->Graphics, cx, cy, 140, Color::White, 4.0f);
+        DrawBloodDrop(e->Graphics, cx, cy, 140, Color::White, 4.0f);
 
 		// 2. Draw Orbiting Blood Types
 		int orbitRadius = 180;
@@ -512,25 +675,29 @@ namespace BloodBank {
 	private: System::Void DrawBloodDrop(Graphics^ g, int cx, int cy, int size, Color color, float thickness)
 	{
 		Pen^ pen = gcnew Pen(color, thickness);
+      pen->LineJoin = LineJoin::Round;
+		pen->StartCap = LineCap::Round;
+		pen->EndCap = LineCap::Round;
 		GraphicsPath^ path = gcnew GraphicsPath();
 
-		int topY = cy - size;
-		int bottomY = cy + (size / 2);
+        Point pTop = Point(cx, cy - size);
+		Point pBottom = Point(cx, cy + static_cast<int>(size * 0.72f));
 
 		path->StartFigure();
-		// Curved drop shape using Bezier
 		path->AddBezier(
-			Point(cx, topY),
-			Point(cx + (static_cast<int>(size / 1.5)), cy),
-			Point(cx + (static_cast<int>(size / 1.5)), bottomY),
-			Point(cx, bottomY + (size / 3))
+			pTop,
+            Point(cx + static_cast<int>(size * 0.55f), cy - static_cast<int>(size * 0.58f)),
+			Point(cx + static_cast<int>(size * 0.79f), pBottom.Y),
+			pBottom
 		);
+
 		path->AddBezier(
-			Point(cx, bottomY + (size / 3)),
-			Point(cx - (static_cast<int>(size / 1.5)), bottomY),
-			Point(cx - (static_cast<int>(size / 1.5)), cy),
-			Point(cx, topY)
+          pBottom,
+			Point(cx - static_cast<int>(size * 0.79f), pBottom.Y),
+			Point(cx - static_cast<int>(size * 0.55f), cy - static_cast<int>(size * 0.58f)),
+			pTop
 		);
+
 		path->CloseFigure();
 		g->DrawPath(pen, path);
 		delete pen;
