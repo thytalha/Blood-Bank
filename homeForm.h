@@ -181,7 +181,7 @@ namespace BloodBank {
 			this->lblMainHeading->AutoSize = true;
 			this->lblMainHeading->Font = (gcnew System::Drawing::Font(L"Calisto MT", 30, System::Drawing::FontStyle::Bold));
 			this->lblMainHeading->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(161)), static_cast<System::Int32>(static_cast<System::Byte>(30)), static_cast<System::Int32>(static_cast<System::Byte>(50)));
-			this->lblMainHeading->Text = L"Saving Lives,\nOne Donation at a Time.";
+			this->lblMainHeading->Text = L"\n\nSaving Lives,\nOne Donation at a Time.";
 
 
 			// bottomPanel
@@ -279,9 +279,9 @@ namespace BloodBank {
 		// Bottom Cards
 		int cardWidth = (W - 200) / 3;
 		int cardSpacing = 50;
-		cardManagement->Size = System::Drawing::Size(cardWidth, 160);
-		cardInventory->Size = System::Drawing::Size(cardWidth, 160);
-		cardRequests->Size = System::Drawing::Size(cardWidth, 160);
+		cardManagement->Size = System::Drawing::Size(cardWidth, 175);
+		cardInventory->Size = System::Drawing::Size(cardWidth, 175);
+		cardRequests->Size = System::Drawing::Size(cardWidth, 175);
 
 		// Ensure Y position defaults to 30 for hover logic
 		cardManagement->Location = System::Drawing::Point(50, 30);
@@ -329,16 +329,16 @@ namespace BloodBank {
 		Label^ lblTitle = gcnew Label();
 		lblTitle->Text = title;
         lblTitle->BackColor = System::Drawing::Color::Transparent;
-		lblTitle->Font = gcnew System::Drawing::Font(L"Calisto MT", 14, System::Drawing::FontStyle::Bold);
+		lblTitle->Font = gcnew System::Drawing::Font(L"Calisto MT", 18, System::Drawing::FontStyle::Bold);
 		lblTitle->Location = System::Drawing::Point(20, 60);
 		lblTitle->AutoSize = true;
 
 		Label^ lblDesc = gcnew Label();
 		lblDesc->Text = desc;
-       lblDesc->BackColor = System::Drawing::Color::Transparent;
-		lblDesc->Font = gcnew System::Drawing::Font(L"Calisto MT", 10);
+		lblDesc->BackColor = System::Drawing::Color::Transparent;
+		lblDesc->Font = gcnew System::Drawing::Font(L"Calisto MT", 13);
 		lblDesc->ForeColor = System::Drawing::Color::Gray;
-		lblDesc->Location = System::Drawing::Point(20, 90);
+		lblDesc->Location = System::Drawing::Point(20, 100);
 		lblDesc->Size = System::Drawing::Size(280, 50);
 
 		pnl->Controls->Add(lblTitle);
