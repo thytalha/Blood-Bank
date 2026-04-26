@@ -44,7 +44,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v145</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CLRSupport>true</CLRSupport>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -122,18 +122,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Bloodrequestform.cpp" />
     <ClCompile Include="homeForm.cpp" />
     <ClCompile Include="loginForm.cpp" />
+    <ClCompile Include="RecipientForm.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bloodrequestform.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="homeForm.h" />
     <ClInclude Include="loginForm.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="RecipientForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="loginForm.resx">
       <DependentUpon>loginForm.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RecipientForm.resx">
+      <DependentUpon>RecipientForm.h</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
