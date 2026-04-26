@@ -108,7 +108,7 @@ namespace BloodBank {
 			this->topNavPanel->TabIndex = 0;
 
 			// Nav Labels
-			System::Drawing::Font^ navFont = gcnew System::Drawing::Font(L"Calisto MT", 11, System::Drawing::FontStyle::Bold);
+			System::Drawing::Font^ navFont = gcnew System::Drawing::Font(L"Calisto MT", 12, System::Drawing::FontStyle::Bold);
 
 			this->lblNavContact->AutoSize = true;
 			this->lblNavContact->Font = navFont;
@@ -147,13 +147,13 @@ namespace BloodBank {
 
 			this->lblRightWelcome->AutoSize = true;
 			this->lblRightWelcome->BackColor = System::Drawing::Color::Transparent;
-			this->lblRightWelcome->Font = (gcnew System::Drawing::Font(L"Calisto MT", 20, System::Drawing::FontStyle::Bold));
+			this->lblRightWelcome->Font = (gcnew System::Drawing::Font(L"Calisto MT", 22, System::Drawing::FontStyle::Bold));
 			this->lblRightWelcome->ForeColor = System::Drawing::Color::White;
 			this->lblRightWelcome->Text = L"Welcome to LifeBlood MS";
 
 			this->lblRightDesc->AutoSize = true;
 			this->lblRightDesc->BackColor = System::Drawing::Color::Transparent;
-			this->lblRightDesc->Font = (gcnew System::Drawing::Font(L"Calisto MT", 12));
+			this->lblRightDesc->Font = (gcnew System::Drawing::Font(L"Calisto MT", 13));
 			this->lblRightDesc->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(240)), static_cast<System::Int32>(static_cast<System::Byte>(240)), static_cast<System::Int32>(static_cast<System::Byte>(240)));
 			this->lblRightDesc->Text = L"Streamlining the connection between generous donors and critical needs.";
 
@@ -170,18 +170,18 @@ namespace BloodBank {
 
 			this->logoBadge->BackColor = System::Drawing::Color::Transparent;
 			this->logoBadge->Name = L"logoBadge";
-			this->logoBadge->Size = System::Drawing::Size(52, 52);
+			this->logoBadge->Size = System::Drawing::Size(60, 60);
 			this->logoBadge->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &homeForm::logoBadge_Paint);
 
 			this->lblLeftBrand->AutoSize = true;
-			this->lblLeftBrand->Font = (gcnew System::Drawing::Font(L"Calisto MT", 24, System::Drawing::FontStyle::Bold));
+			this->lblLeftBrand->Font = (gcnew System::Drawing::Font(L"Calisto MT", 36, System::Drawing::FontStyle::Bold));
 			this->lblLeftBrand->ForeColor = System::Drawing::Color::Black;
 			this->lblLeftBrand->Text = L"LifeBlood";
 
 			this->lblMainHeading->AutoSize = true;
 			this->lblMainHeading->Font = (gcnew System::Drawing::Font(L"Calisto MT", 30, System::Drawing::FontStyle::Bold));
 			this->lblMainHeading->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(161)), static_cast<System::Int32>(static_cast<System::Byte>(30)), static_cast<System::Int32>(static_cast<System::Byte>(50)));
-			this->lblMainHeading->Text = L"\n\nSaving Lives,\nOne Donation at a Time.";
+			this->lblMainHeading->Text = L"Saving Lives,\nOne Donation at a Time.";
 
 
 			// bottomPanel
@@ -198,7 +198,7 @@ namespace BloodBank {
 			// Initialize Cards
 			SetupCard(this->cardManagement, L"Donor Management", L"Manage donors, track eligibility, and maintain comprehensive health histories.");
 			SetupCard(this->cardInventory, L"Safe Inventory", L"Real-time blood unit tracking with automated expiry alerts across all 8 blood groups.");
-			SetupCard(this->cardRequests, L"Life-Saving Requests", L"Hospitals and patients request blood; admins approve with a single click — inventory auto-updates.");
+			SetupCard(this->cardRequests, L"Life-Saving Requests", L"Hospitals and patients request blood; admins approve with a single click inventory auto-updates.");
 
 			// Form
 			this->ClientSize = System::Drawing::Size(1200, 800);
@@ -258,22 +258,22 @@ namespace BloodBank {
 		lblNavLogin->Location = System::Drawing::Point(lblNavAbout->Left - lblNavLogin->Width - 30, 30);
 		lblNavHome->Location = System::Drawing::Point(lblNavLogin->Left - lblNavHome->Width - 30, 30);
 
-     // Layout Splitting
+		// Layout Splitting
 		rightAnimPanel->Width = static_cast<int>(W * 0.49f);
 		Rectangle rightBoxRect = GetRightPanelBoxRect();
 
 		// Right Panel Text
-       lblRightWelcome->Location = System::Drawing::Point(45, rightBoxRect.Bottom - 110);
+		lblRightWelcome->Location = System::Drawing::Point(45, rightBoxRect.Bottom - 110);
 		lblRightDesc->Location = System::Drawing::Point(45, rightBoxRect.Bottom - 62);
 
 		// Left Content Panel Formatting
 		int leftCx = 50;
-     int brandY = static_cast<int>(H * 0.12);
-		logoBadge->Location = System::Drawing::Point(leftCx + 5, brandY);
-		lblLeftBrand->Location = System::Drawing::Point(logoBadge->Right + 14, brandY + 7);
+		int brandY = static_cast<int>(H * 0.12);
+		logoBadge->Location = System::Drawing::Point(leftCx + 25, brandY - 50);
+		lblLeftBrand->Location = System::Drawing::Point(logoBadge->Right + 14, brandY - 40);
 
 		int contentStartY = lblLeftBrand->Bottom + 28;
-		lblMainHeading->Location = System::Drawing::Point(leftCx, contentStartY);
+		lblMainHeading->Location = System::Drawing::Point(leftCx, contentStartY + 50);
 
 
 		// Bottom Cards
@@ -330,7 +330,7 @@ namespace BloodBank {
 		lblTitle->Text = title;
         lblTitle->BackColor = System::Drawing::Color::Transparent;
 		lblTitle->Font = gcnew System::Drawing::Font(L"Calisto MT", 18, System::Drawing::FontStyle::Bold);
-		lblTitle->Location = System::Drawing::Point(20, 60);
+		lblTitle->Location = System::Drawing::Point(20, 30);
 		lblTitle->AutoSize = true;
 
 		Label^ lblDesc = gcnew Label();
@@ -338,8 +338,8 @@ namespace BloodBank {
 		lblDesc->BackColor = System::Drawing::Color::Transparent;
 		lblDesc->Font = gcnew System::Drawing::Font(L"Calisto MT", 13);
 		lblDesc->ForeColor = System::Drawing::Color::Gray;
-		lblDesc->Location = System::Drawing::Point(20, 100);
-		lblDesc->Size = System::Drawing::Size(280, 50);
+		lblDesc->Location = System::Drawing::Point(20, 75);
+		lblDesc->Size = System::Drawing::Size(280, 75);
 
 		pnl->Controls->Add(lblTitle);
 		pnl->Controls->Add(lblDesc);
