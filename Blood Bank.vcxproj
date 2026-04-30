@@ -126,6 +126,7 @@
     <ClCompile Include="homeForm.cpp" />
     <ClCompile Include="loginForm.cpp" />
     <ClCompile Include="RecipientForm.cpp" />
+    <ClCompile Include="UpdateStock1.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bloodrequestform.h">
@@ -138,6 +139,9 @@
     <ClInclude Include="RecipientForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="UpdateStock1.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="loginForm.resx">
@@ -145,6 +149,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="RecipientForm.resx">
       <DependentUpon>RecipientForm.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UpdateStock1.resx">
+      <DependentUpon>UpdateStock1.h</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

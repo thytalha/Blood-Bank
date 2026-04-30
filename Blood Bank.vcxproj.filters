@@ -21,12 +21,30 @@
     <ClCompile Include="homeForm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Bloodrequestform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RecipientForm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UpdateStock1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="loginForm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="homeForm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Bloodrequestform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RecipientForm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UpdateStock1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
