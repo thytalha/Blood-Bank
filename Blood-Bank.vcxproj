@@ -119,6 +119,7 @@
     <ClInclude Include="LandingPage.h" />
     <ClInclude Include="LoginForm.h" />
     <ClInclude Include="RecipientDashboard.h" />
+    <ClInclude Include="SignupForm.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
