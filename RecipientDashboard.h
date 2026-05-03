@@ -848,7 +848,7 @@ namespace BloodBank {
 
             // ── Total requests submitted by THIS recipient ────────
             SqlCommand^ cmdTotal = gcnew SqlCommand(
-                "SELECT COUNT(*) FROM BloodRequests WHERE UserID = @id");
+                "SELECT COUNT(*) FROM BloodRequests WHERE RecipientID = @id");
             cmdTotal->Parameters->AddWithValue("@id", _recipientID);
             Object^ tObj = db->ExecuteScalar(cmdTotal);
             if (lblMetricTotal != nullptr && tObj != nullptr)
@@ -857,7 +857,7 @@ namespace BloodBank {
             // ── Pending requests for THIS recipient ───────────────
             SqlCommand^ cmdPending = gcnew SqlCommand(
                 "SELECT COUNT(*) FROM BloodRequests "
-                "WHERE  UserID = @id AND RequestStatus = 'Pending'");
+                "WHERE  RecipientID = @id AND RequestStatus = 'Pending'");
             cmdPending->Parameters->AddWithValue("@id", _recipientID);
             Object^ pObj = db->ExecuteScalar(cmdPending);
             if (lblMetricPending != nullptr && pObj != nullptr)
@@ -877,7 +877,7 @@ namespace BloodBank {
                 "       RequestStatus      AS [Status], "
                 "       RequestDate        AS [Request Date] "
                 "FROM   BloodRequests "
-                "WHERE  UserID = @id "
+                "WHERE  RecipientID = @id "
                 "ORDER BY RequestDate DESC, RequestID DESC");
             cmd->Parameters->AddWithValue("@id", _recipientID);
 
@@ -1007,7 +1007,7 @@ namespace BloodBank {
             // RequestStatus defaults to 'Pending' for admin review
             SqlCommand^ cmd = gcnew SqlCommand(
                 "INSERT INTO BloodRequests "
-                "       (UserID, BloodGroup, QuantityRequested, RequestDate, RequestStatus) "
+                "       (RecipientID, BloodGroup, QuantityRequested, RequestDate, RequestStatus) "
                 "VALUES (@id, @bg, @qty, CAST(GETDATE() AS DATE), 'Pending')");
             cmd->Parameters->AddWithValue("@id", _recipientID);
             cmd->Parameters->AddWithValue("@bg", bg);
