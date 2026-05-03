@@ -128,7 +128,7 @@ namespace BloodBank {
     private:
         void InitializeComponent()
         {
-            this->Text = "Admin Dashboard  —  LifeLine Blood Bank";
+            this->Text = "Admin Dashboard   -   LifeLine Blood Bank";
             this->WindowState = FormWindowState::Maximized;
             this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::None;
             this->BackColor = CLR_BG_FORM;
@@ -585,6 +585,9 @@ namespace BloodBank {
 
             dgvRequests = MakeStyledGrid();
             dgvRequests->Dock = DockStyle::Fill; // Fills perfectly inside the padding!
+            dgvRequests->CellContentClick += gcnew DataGridViewCellEventHandler(this, &AdminDashboard::OnRequestActionClick);
+            dgvRequests->CellFormatting += gcnew DataGridViewCellFormattingEventHandler(this, &AdminDashboard::OnRequestCellFormatting);
+
 
             pnlGridBox->Controls->Add(dgvRequests);
 
@@ -702,11 +705,15 @@ namespace BloodBank {
 
             if (dgvQuickOverview != nullptr)
             {
+                // UPDATED: Dynamic calculation from Donations table
                 DataTable^ dt = db->FillDataTable(
-                    "SELECT BloodGroup    AS [Blood Group], "
-                    "       QuantityUnits AS [Units Available] "
-                    "FROM   BloodInventory "
-                    "ORDER BY BloodGroup");
+                    "SELECT bg.GroupName AS [Blood Group], "
+                    "       ISNULL(SUM(d.Quantity), 0) AS [Units Available] "
+                    "FROM BloodGroups bg "
+                    "LEFT JOIN Donations d ON bg.GroupName = d.BloodGroup "
+                    "   AND d.ExpiryDate >= CAST(GETDATE() AS DATE) "
+                    "GROUP BY bg.GroupName "
+                    "ORDER BY bg.GroupName");
                 if (dt != nullptr)
                     dgvQuickOverview->DataSource = dt;
             }
@@ -715,11 +722,17 @@ namespace BloodBank {
         void LoadInventory()
         {
             if (dgvInventory == nullptr) return;
+
+            // UPDATED: Dynamic calculation from Donations table
             DataTable^ dt = Database::GetInstance()->FillDataTable(
-                "SELECT BloodGroup    AS [Blood Group], "
-                "       QuantityUnits AS [Units Available] "
-                "FROM   BloodInventory "
-                "ORDER BY BloodGroup");
+                "SELECT bg.GroupName AS [Blood Group], "
+                "       ISNULL(SUM(d.Quantity), 0) AS [Units Available] "
+                "FROM BloodGroups bg "
+                "LEFT JOIN Donations d ON bg.GroupName = d.BloodGroup "
+                "   AND d.ExpiryDate >= CAST(GETDATE() AS DATE) "
+                "GROUP BY bg.GroupName "
+                "ORDER BY bg.GroupName");
+
             if (dt != nullptr)
                 dgvInventory->DataSource = dt;
         }
@@ -727,6 +740,7 @@ namespace BloodBank {
         void LoadRequests()
         {
             if (dgvRequests == nullptr) return;
+
             DataTable^ dt = Database::GetInstance()->FillDataTable(
                 "SELECT br.RequestID         AS [ID], "
                 "       u.FullName           AS [Recipient Name], "
@@ -735,10 +749,41 @@ namespace BloodBank {
                 "       br.RequestStatus     AS [Status], "
                 "       br.RequestDate       AS [Date] "
                 "FROM   BloodRequests br "
-                "JOIN   Users u ON br.UserID = u.UserID "
-                "ORDER BY br.RequestDate DESC");
+                "JOIN   Users u ON br.RecipientID = u.UserID "
+                "WHERE  br.RequestStatus = 'Pending' "
+                "ORDER BY CASE WHEN br.RequestStatus = 'Pending' THEN 0 ELSE 1 END, br.RequestDate DESC");
+
             if (dt != nullptr)
+            {
                 dgvRequests->DataSource = dt;
+
+                // 1. Add "Approve" Button Column (if it doesn't exist yet)
+                if (!dgvRequests->Columns->Contains("btnApprove"))
+                {
+                    DataGridViewButtonColumn^ btnApprove = gcnew DataGridViewButtonColumn();
+                    btnApprove->Name = "btnApprove";
+                    btnApprove->HeaderText = "Action";
+                    btnApprove->Text = "Approve";
+                    btnApprove->UseColumnTextForButtonValue = true;
+                    btnApprove->FlatStyle = FlatStyle::Flat;
+                    // Optional: Set a specific color for the button text
+                    btnApprove->DefaultCellStyle->ForeColor = Color::Green;
+                    dgvRequests->Columns->Add(btnApprove);
+                }
+
+                // 2. Add "Reject" Button Column
+                if (!dgvRequests->Columns->Contains("btnReject"))
+                {
+                    DataGridViewButtonColumn^ btnReject = gcnew DataGridViewButtonColumn();
+                    btnReject->Name = "btnReject";
+                    btnReject->HeaderText = ""; // Leave header blank for the second button
+                    btnReject->Text = "Reject";
+                    btnReject->UseColumnTextForButtonValue = true;
+                    btnReject->FlatStyle = FlatStyle::Flat;
+                    btnReject->DefaultCellStyle->ForeColor = Color::Red;
+                    dgvRequests->Columns->Add(btnReject);
+                }
+            }
         }
 
 
@@ -779,6 +824,141 @@ namespace BloodBank {
         {
             LoadAllData();
         }
+
+
+        void OnRequestActionClick(Object^ sender, DataGridViewCellEventArgs^ e)
+        {
+            if (e->RowIndex < 0) return;
+
+            String^ colName = dgvRequests->Columns[e->ColumnIndex]->Name;
+
+            if (colName == "btnApprove" || colName == "btnReject")
+            {
+                int requestID = Convert::ToInt32(dgvRequests->Rows[e->RowIndex]->Cells["ID"]->Value);
+                String^ currentStatus = dgvRequests->Rows[e->RowIndex]->Cells["Status"]->Value->ToString();
+                String^ bloodGroup = dgvRequests->Rows[e->RowIndex]->Cells["Blood Group"]->Value->ToString();
+                int qtyRequested = Convert::ToInt32(dgvRequests->Rows[e->RowIndex]->Cells["Qty"]->Value);
+
+                if (currentStatus != "Pending")
+                {
+                    MessageBox::Show("This request has already been " + currentStatus + " and cannot be changed.",
+                        "Action Not Allowed", MessageBoxButtons::OK, MessageBoxIcon::Information);
+                    return;
+                }
+
+                String^ newStatus = (colName == "btnApprove") ? "Approved" : "Rejected";
+                Database^ db = Database::GetInstance();
+
+                if (newStatus == "Approved")
+                {
+                    // 1. Define Universal Compatibility Rules
+                    String^ compGroups;
+                    if (bloodGroup == "A+")       compGroups = "'A+', 'A-', 'O+', 'O-'";
+                    else if (bloodGroup == "A-")  compGroups = "'A-', 'O-'";
+                    else if (bloodGroup == "B+")  compGroups = "'B+', 'B-', 'O+', 'O-'";
+                    else if (bloodGroup == "B-")  compGroups = "'B-', 'O-'";
+                    else if (bloodGroup == "AB+") compGroups = "'AB+', 'AB-', 'A+', 'A-', 'B+', 'B-', 'O+', 'O-'";
+                    else if (bloodGroup == "AB-") compGroups = "'AB-', 'A-', 'B-', 'O-'";
+                    else if (bloodGroup == "O+")  compGroups = "'O+', 'O-'";
+                    else if (bloodGroup == "O-")  compGroups = "'O-'";
+                    else                          compGroups = "'" + bloodGroup + "'";
+
+                    // 2. Check if we have enough stock across ALL compatible types
+                    String^ checkQuery = String::Format(
+                        "SELECT ISNULL(SUM(Quantity), 0) FROM Donations "
+                        "WHERE BloodGroup IN ({0}) AND ExpiryDate >= CAST(GETDATE() AS DATE) AND Quantity > 0",
+                        compGroups);
+
+                    Object^ stockObj = db->ExecuteScalar(checkQuery);
+                    int availableStock = (stockObj != nullptr && stockObj != DBNull::Value) ? Convert::ToInt32(stockObj) : 0;
+
+                    if (availableStock < qtyRequested)
+                    {
+                        MessageBox::Show("Insufficient Inventory!\n\nYou do not have enough " + bloodGroup + " (or any compatible substitutes) to fulfill a request of " + qtyRequested + " units.",
+                            "Approval Failed", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+                        return;
+                    }
+
+                    // 3. Ask for confirmation
+                    System::Windows::Forms::DialogResult res = MessageBox::Show(
+                        "Approve this request? This will deduct " + qtyRequested + " units of " + bloodGroup + " (or a compatible substitute) from your inventory.",
+                        "Confirm Approval", MessageBoxButtons::YesNo, MessageBoxIcon::Question);
+
+                    if (res != System::Windows::Forms::DialogResult::Yes) return;
+
+                    // 4. FIFO & Priority Deduction
+                    //    ORDER BY CASE ensures the EXACT match is used first. If out, it grabs the oldest substitute.
+                    String^ getBatchesQuery = String::Format(
+                        "SELECT DonationID, Quantity, BloodGroup FROM Donations "
+                        "WHERE BloodGroup IN ({0}) AND ExpiryDate >= CAST(GETDATE() AS DATE) AND Quantity > 0 "
+                        "ORDER BY CASE WHEN BloodGroup = '{1}' THEN 0 ELSE 1 END, ExpiryDate ASC",
+                        compGroups, bloodGroup);
+
+                    DataTable^ dtBatches = db->FillDataTable(getBatchesQuery);
+                    int remainingToDeduct = qtyRequested;
+
+                    for (int i = 0; i < dtBatches->Rows->Count && remainingToDeduct > 0; i++)
+                    {
+                        int donationID = Convert::ToInt32(dtBatches->Rows[i]["DonationID"]);
+                        int batchQty = Convert::ToInt32(dtBatches->Rows[i]["Quantity"]);
+
+                        int deductAmount = (batchQty >= remainingToDeduct) ? remainingToDeduct : batchQty;
+
+                        SqlCommand^ updateStockCmd = gcnew SqlCommand(
+                            "UPDATE Donations SET Quantity = Quantity - @deduct WHERE DonationID = @did");
+                        updateStockCmd->Parameters->AddWithValue("@deduct", deductAmount);
+                        updateStockCmd->Parameters->AddWithValue("@did", donationID);
+                        db->ExecuteNonQuery(updateStockCmd);
+
+                        remainingToDeduct -= deductAmount;
+                    }
+                }
+                else
+                {
+                    System::Windows::Forms::DialogResult res = MessageBox::Show(
+                        "Are you sure you want to mark this request as Rejected?",
+                        "Confirm Rejection", MessageBoxButtons::YesNo, MessageBoxIcon::Question);
+
+                    if (res != System::Windows::Forms::DialogResult::Yes) return;
+                }
+
+                // Finalize Status
+                SqlCommand^ cmd = gcnew SqlCommand(
+                    "UPDATE BloodRequests SET RequestStatus = @status WHERE RequestID = @id");
+                cmd->Parameters->AddWithValue("@status", newStatus);
+                cmd->Parameters->AddWithValue("@id", requestID);
+
+                int rows = db->ExecuteNonQuery(cmd);
+
+                if (rows > 0)
+                {
+                    MessageBox::Show("Request successfully " + newStatus + "!", "Success", MessageBoxButtons::OK, MessageBoxIcon::Information);
+
+                    LoadRequests();
+                    LoadInventory();
+                    LoadOverviewMetrics();
+                }
+            }
+        }
+
+        void OnRequestCellFormatting(Object^ sender, DataGridViewCellFormattingEventArgs^ e)
+        {
+            if (e->RowIndex >= 0 && e->ColumnIndex >= 0)
+            {
+                String^ colName = dgvRequests->Columns[e->ColumnIndex]->Name;
+                if (colName == "btnApprove")
+                {
+                    e->CellStyle->ForeColor = Color::Green; // Force green
+                }
+                else if (colName == "btnReject")
+                {
+                    e->CellStyle->ForeColor = Color::Red;   // Force red
+                }
+            }
+        }
+
+
+
 
         // ── Nav hover ─────────────────────────────────────────────
         void OnNavEnter(Object^ s, EventArgs^ e)
