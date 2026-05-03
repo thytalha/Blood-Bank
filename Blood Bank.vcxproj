@@ -124,6 +124,15 @@
   <ItemGroup>
     <ClCompile Include="..\..\Blood Bank\main.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Blood Bank\AdminDashboard.h" />
+    <ClInclude Include="..\..\Blood Bank\Database.h" />
+    <ClInclude Include="..\..\Blood Bank\DonorDashboard.h" />
+    <ClInclude Include="..\..\Blood Bank\LandingPage.h" />
+    <ClInclude Include="..\..\Blood Bank\LoginForm.h" />
+    <ClInclude Include="..\..\Blood Bank\RecipientDashboard.h" />
+    <ClInclude Include="..\..\Blood Bank\SignupForm.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
