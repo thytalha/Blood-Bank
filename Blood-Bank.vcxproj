@@ -114,6 +114,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AboutForm.h" />
     <ClInclude Include="AdminDashboard.h" />
     <ClInclude Include="Database.h" />
     <ClInclude Include="DonorDashboard.h" />
