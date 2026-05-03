@@ -1,40 +1,9 @@
-﻿// ================================================================
-//  LandingPage.h  —  Blood Bank Management System
-//  Animated · Scrollable · Light-Theme Landing Page  (v2)
-//
-//  ARCHITECTURE:
-//    • Maximized + Borderless + AutoScroll=true fullscreen form
-//    • Palette  BG=#FFFFFF  ACCENT=#C0392B  TEXT=#212529  MUTED=#6C757D
-//    • Vertical Dock-Top stacking (processed in reverse Controls->Add order):
-//        topNavPanel (80px)  →  heroPanel (600px)  →  cardsPanel (300px)
-//        footerPanel (80px, Dock=Bottom)
-//    • Hero splits into leftContentPanel (Dock=Left, 56%) +
-//                       rightAnimPanel   (Dock=Fill)
-//    • Pill badge, heading, subtext, 2 CTA buttons, stats row on left
-//    • GDI+ animation engine on right: dark-crimson gradient box,
-//        central hovering white blood drop + 4 orbiting blood-type drops
-//    • 3 feature cards in cardsPanel — Y-axis hover-lift (+5px)
-//    • Nav links: Home · Login · About · Contact + solid "Sign Up" button
-//    • Login / "Login to Dashboard" → LoginForm  (OnChildClosed restores)
-//    • "Sign Up" (nav + hero CTA missing; hero only has "Learn More")
-//        actually Sign Up nav btn → SignupForm
-//    • [✕] Anchor=Top|Right → Application::Exit()
-//    • DoubleBuffered=true on form; Reflection double-buffer on rightAnimPanel
-//
-//  DOCK ORDER (Controls->Add reverse rule):
-//    footerPanel(Bottom) → cardsPanel(Top) → heroPanel(Top) → topNavPanel(Top)
-//    → btnClose(float)
-//
-//  Inside heroPanel:
-//    rightAnimPanel(Fill) → leftContentPanel(Left)   [Fill added first]
-//
-//  GDI+ MEMORY: Every Brush / Pen / GraphicsPath deleted before return.
-// ================================================================
-
+﻿
 #pragma once
 #include <cmath>
 #include "LoginForm.h"
 #include "SignupForm.h"
+#include "AboutForm.h"
 
 #using <System.dll>
 #using <System.Drawing.dll>
@@ -51,13 +20,9 @@ namespace BloodBank {
 
     public ref class LandingPage : public System::Windows::Forms::Form
     {
-        // ══════════════════════════════════════════════════════════════════
-        //  PUBLIC  —  Constructor / Destructor
-        // ══════════════════════════════════════════════════════════════════
     public:
         LandingPage(void)
         {
-            // ── Palette (single source of truth) ──────────────────────
             CLR_BG_FORM = Color::White;
             CLR_BG_CARD = Color::White;
             CLR_ACCENT = Color::FromArgb(0xC0, 0x39, 0x2B);
@@ -261,6 +226,7 @@ namespace BloodBank {
             // ── Nav text links (positions computed in PositionControls) ─
             SetupNavLink(btnNavHome, L"Home", 72);
             SetupNavLink(btnNavAbout, L"About", 64);
+            btnNavAbout->Click += gcnew EventHandler(this, &LandingPage::btnNavAbout_Click);
             SetupNavLink(btnNavContact, L"Contact", 80);
             SetupNavLink(btnNavLogin, L"Login", 64);
             // Wire Login nav link to LoginForm
@@ -1270,6 +1236,14 @@ namespace BloodBank {
         SignupForm^ sf = gcnew SignupForm();
         sf->FormClosed += gcnew FormClosedEventHandler(this, &LandingPage::OnChildClosed);
         sf->Show();
+    }
+
+           // ── "About" nav link ──────────────────────────────────────────────
+    private: System::Void btnNavAbout_Click(Object^ sender, EventArgs^ e)
+    {
+        // Creates and shows the AboutForm as a popup dialog
+        AboutForm^ aboutWindow = gcnew AboutForm();
+        aboutWindow->ShowDialog();
     }
 
            // ── Child form closed: restore this landing page ───────────────────
