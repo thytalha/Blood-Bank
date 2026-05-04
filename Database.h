@@ -1,11 +1,5 @@
 #pragma once
 
-// ============================================================
-//  Database.h  —  Blood Bank Management System
-//  Singleton ADO.NET connection manager (C++/CLI)
-//  Handles all SQL Server interactions via System::Data::SqlClient
-// ============================================================
-
 #using <System.dll>
 #using <System.Data.dll>
 #using <System.Windows.Forms.dll>
@@ -17,30 +11,21 @@ using namespace System::Data::SqlClient;
 using namespace System::Windows::Forms;
 
 
-// ────────────────────────────────────────────────────────────
-//  Database  —  Singleton ref class
-//  Usage (from any Form):
-//      Database^ db = Database::GetInstance();
-//      SqlDataReader^ rdr = db->ExecuteReader("SELECT ...");
-// ────────────────────────────────────────────────────────────
 ref class Database sealed
 {
-    // ── Private Members ─────────────────────────────────────
 private:
-    static Database^ _instance = nullptr;    // Singleton instance
-    SqlConnection^ _connection = nullptr;    // Shared live connection
+    static Database^ _instance = nullptr;
+    SqlConnection^ _connection = nullptr;
 
-    // Connection string — Windows Authentication on TALHA\SQLEXPRESS
     static String^ CONNECTION_STRING =
         "Server=Talha\\SQLEXPRESS;"
         "Database=db_bloodbank;"
         "Integrated Security=True;"
         "TrustServerCertificate=True;"
         "Connect Timeout=30;"
-        "MultipleActiveResultSets=True;";           // Allows multiple readers simultaneously
+        "MultipleActiveResultSets=True;";
 
 
-    // ── Private Constructor (Singleton pattern) ──────────────
 private:
     Database()
     {
@@ -48,12 +33,7 @@ private:
     }
 
 
-    // ── Singleton Accessor ───────────────────────────────────
 public:
-    /// <summary>
-    /// Returns the single shared Database instance.
-    /// Creates it on first call (lazy initialization).
-    /// </summary>
     static Database^ GetInstance()
     {
         if (_instance == nullptr)
@@ -63,12 +43,7 @@ public:
     }
 
 
-    // ── Connection Lifecycle ─────────────────────────────────
 public:
-    /// <summary>
-    /// Opens the SQL connection if it is not already open.
-    /// Returns true on success, false on failure (with UI alert).
-    /// </summary>
     bool OpenConnection()
     {
         try
@@ -102,9 +77,6 @@ public:
         }
     }
 
-    /// <summary>
-    /// Closes the SQL connection if it is currently open.
-    /// </summary>
     void CloseConnection()
     {
         try
@@ -115,31 +87,20 @@ public:
                 _connection->Close();
             }
         }
-        catch (Exception^) { /* Swallow — best effort close */ }
+        catch (Exception^) { }
     }
 
-    /// <summary>
-    /// Returns the underlying SqlConnection^ for advanced use cases
-    /// (e.g., transactions, DataAdapters).
-    /// </summary>
     SqlConnection^ GetConnection()
     {
-        OpenConnection();   // Ensure the connection is open
+        OpenConnection();
         return _connection;
     }
 
-    /// <summary>
-    /// Returns the current state of the connection.
-    /// </summary>
     ConnectionState GetState()
     {
         return _connection->State;
     }
 
-    /// <summary>
-    /// Pings the database. Returns true if reachable.
-    /// Useful on app startup to validate the connection.
-    /// </summary>
     bool TestConnection()
     {
         SqlConnection^ testConn = gcnew SqlConnection(CONNECTION_STRING);
@@ -160,15 +121,7 @@ public:
         }
     }
 
-
-    // ── Core Query Methods ───────────────────────────────────
 public:
-
-    // ────────────────────────────────────────────────────────
-    //  ExecuteNonQuery
-    //  Use for: INSERT, UPDATE, DELETE, stored procedures
-    //  Returns: number of rows affected, or -1 on error
-    // ────────────────────────────────────────────────────────
     int ExecuteNonQuery(String^ query)
     {
         if (!OpenConnection()) return -1;
@@ -195,8 +148,6 @@ public:
         }
     }
 
-    // Overload — accepts a pre-built SqlCommand^ with parameters already bound
-    // Use this overload to PREVENT SQL INJECTION (parameterized queries)
     int ExecuteNonQuery(SqlCommand^ cmd)
     {
         if (!OpenConnection()) return -1;
@@ -218,15 +169,6 @@ public:
         }
     }
 
-
-    // ────────────────────────────────────────────────────────
-    //  ExecuteReader
-    //  Use for: SELECT queries that return rows
-    //  IMPORTANT: Caller MUST close the reader after use:
-    //      SqlDataReader^ rdr = db->ExecuteReader("...");
-    //      while (rdr->Read()) { ... }
-    //      rdr->Close();
-    // ────────────────────────────────────────────────────────
     SqlDataReader^ ExecuteReader(String^ query)
     {
         if (!OpenConnection()) return nullptr;
@@ -249,7 +191,6 @@ public:
         }
     }
 
-    // Overload — parameterized SELECT (recommended for user-supplied values)
     SqlDataReader^ ExecuteReader(SqlCommand^ cmd)
     {
         if (!OpenConnection()) return nullptr;
@@ -271,15 +212,6 @@ public:
         }
     }
 
-
-    // ────────────────────────────────────────────────────────
-    //  ExecuteScalar
-    //  Use for: COUNT(*), MAX(), single-cell SELECTs
-    //  Returns: boxed Object^ — cast to the expected type
-    //  Example:
-    //      Object^ obj = db->ExecuteScalar("SELECT COUNT(*) FROM Users");
-    //      int count = safe_cast<int>(obj);
-    // ────────────────────────────────────────────────────────
     Object^ ExecuteScalar(String^ query)
     {
         if (!OpenConnection()) return nullptr;
@@ -306,7 +238,6 @@ public:
         }
     }
 
-    // Overload — parameterized scalar
     Object^ ExecuteScalar(SqlCommand^ cmd)
     {
         if (!OpenConnection()) return nullptr;
@@ -328,15 +259,6 @@ public:
         }
     }
 
-
-    // ────────────────────────────────────────────────────────
-    //  FillDataTable
-    //  Use for: Binding results directly to DataGridView
-    //  Returns: DataTable^ ready for dataGridView->DataSource = dt;
-    //  Example:
-    //      DataTable^ dt = db->FillDataTable("SELECT * FROM Users");
-    //      dataGridView1->DataSource = dt;
-    // ────────────────────────────────────────────────────────
     DataTable^ FillDataTable(String^ query)
     {
         DataTable^ dt = gcnew DataTable();
@@ -366,7 +288,6 @@ public:
         }
     }
 
-    // Overload — parameterized FillDataTable
     DataTable^ FillDataTable(SqlCommand^ cmd)
     {
         DataTable^ dt = gcnew DataTable();
@@ -394,26 +315,13 @@ public:
         }
     }
 
-
-    // ── Convenience Helpers ──────────────────────────────────
 public:
-
-    /// <summary>
-    /// Checks whether a record exists.
-    /// Example: db->RecordExists(cmd) where cmd SELECTs 1 row
-    /// </summary>
     bool RecordExists(SqlCommand^ cmd)
     {
         Object^ result = ExecuteScalar(cmd);
         return (result != nullptr && result != DBNull::Value);
     }
 
-    /// <summary>
-    /// Validates login credentials.
-    /// Sets outRole, outUserID, and outFullName on success.
-    /// Returns true if credentials matched a Users row.
-    /// USE THIS in the Login form.
-    /// </summary>
     bool ValidateLogin(String^ username, String^ password,
         String^% outRole, int% outUserID, String^% outFullName)
     {
@@ -447,10 +355,6 @@ public:
         return found;
     }
 
-    /// <summary>
-    /// Returns true if the given username is already taken in Users.
-    /// USE THIS in the Signup / Registration form.
-    /// </summary>
     bool UsernameExists(String^ username)
     {
         SqlCommand^ cmd = gcnew SqlCommand(
@@ -461,10 +365,6 @@ public:
         return RecordExists(cmd);
     }
 
-    /// <summary>
-    /// Returns current stock units for a given BloodGroup string (e.g. "A+").
-    /// Returns -1 if blood type not found in BloodInventory.
-    /// </summary>
     int GetBloodStock(String^ bloodGroup)
     {
         SqlCommand^ cmd = gcnew SqlCommand(
@@ -480,10 +380,6 @@ public:
         return Convert::ToInt32(result);
     }
 
-    /// <summary>
-    /// Counts donations whose ExpiryDate is before today.
-    /// Used by the Admin dashboard for the expiry alert badge.
-    /// </summary>
     int CountExpiredUnits()
     {
         Object^ result = ExecuteScalar(
@@ -493,10 +389,6 @@ public:
         return (result != nullptr) ? Convert::ToInt32(result) : 0;
     }
 
-    /// <summary>
-    /// Counts BloodRequests with RequestStatus = 'Pending'.
-    /// Used by the Admin dashboard for the pending-requests badge.
-    /// </summary>
     int CountPendingRequests()
     {
         Object^ result = ExecuteScalar(
