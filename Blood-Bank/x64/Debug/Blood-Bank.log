@@ -1,11 +1,11 @@
 ﻿  main.cpp
-D:\S04\OOP Project\Blood-Bank\LoginForm.h(728,24): warning C5307: 'System::Drawing::Color System::Drawing::Color::FromArgb(int,int,int,int)': argument (2) converted from 'unsigned char' to 'int'. Missing 'L' encoding-prefix for character literal?
+D:\S04\OOP Project\Blood-Bank\LoginForm.h(541,24): warning C5307: 'System::Drawing::Color System::Drawing::Color::FromArgb(int,int,int,int)': argument (2) converted from 'unsigned char' to 'int'. Missing 'L' encoding-prefix for character literal?
   (compiling source file 'main.cpp')
   
-D:\S04\OOP Project\Blood-Bank\LoginForm.h(728,24): warning C5307: 'System::Drawing::Color System::Drawing::Color::FromArgb(int,int,int,int)': argument (3) converted from 'unsigned char' to 'int'. Missing 'L' encoding-prefix for character literal?
+D:\S04\OOP Project\Blood-Bank\LoginForm.h(541,24): warning C5307: 'System::Drawing::Color System::Drawing::Color::FromArgb(int,int,int,int)': argument (3) converted from 'unsigned char' to 'int'. Missing 'L' encoding-prefix for character literal?
   (compiling source file 'main.cpp')
   
-D:\S04\OOP Project\Blood-Bank\LoginForm.h(728,24): warning C5307: 'System::Drawing::Color System::Drawing::Color::FromArgb(int,int,int,int)': argument (4) converted from 'unsigned char' to 'int'. Missing 'L' encoding-prefix for character literal?
+D:\S04\OOP Project\Blood-Bank\LoginForm.h(541,24): warning C5307: 'System::Drawing::Color System::Drawing::Color::FromArgb(int,int,int,int)': argument (4) converted from 'unsigned char' to 'int'. Missing 'L' encoding-prefix for character literal?
   (compiling source file 'main.cpp')
   
 D:\S04\OOP Project\Blood-Bank\AboutForm.h(249,41): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
@@ -20,34 +20,32 @@ D:\S04\OOP Project\Blood-Bank\AboutForm.h(255,41): warning C4244: 'argument': co
 D:\S04\OOP Project\Blood-Bank\AboutForm.h(257,43): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   (compiling source file 'main.cpp')
   
-D:\S04\OOP Project\Blood-Bank\LandingPage.h(919,40): warning C5307: 'System::Drawing::Color System::Drawing::Color::FromArgb(int,int,int,int)': argument (2) converted from 'unsigned char' to 'int'. Missing 'L' encoding-prefix for character literal?
+D:\S04\OOP Project\Blood-Bank\LandingPage.h(787,40): warning C5307: 'System::Drawing::Color System::Drawing::Color::FromArgb(int,int,int,int)': argument (2) converted from 'unsigned char' to 'int'. Missing 'L' encoding-prefix for character literal?
   (compiling source file 'main.cpp')
   
-D:\S04\OOP Project\Blood-Bank\LandingPage.h(919,40): warning C5307: 'System::Drawing::Color System::Drawing::Color::FromArgb(int,int,int,int)': argument (3) converted from 'unsigned char' to 'int'. Missing 'L' encoding-prefix for character literal?
+D:\S04\OOP Project\Blood-Bank\LandingPage.h(787,40): warning C5307: 'System::Drawing::Color System::Drawing::Color::FromArgb(int,int,int,int)': argument (3) converted from 'unsigned char' to 'int'. Missing 'L' encoding-prefix for character literal?
   (compiling source file 'main.cpp')
   
-D:\S04\OOP Project\Blood-Bank\LandingPage.h(919,40): warning C5307: 'System::Drawing::Color System::Drawing::Color::FromArgb(int,int,int,int)': argument (4) converted from 'unsigned char' to 'int'. Missing 'L' encoding-prefix for character literal?
+D:\S04\OOP Project\Blood-Bank\LandingPage.h(787,40): warning C5307: 'System::Drawing::Color System::Drawing::Color::FromArgb(int,int,int,int)': argument (4) converted from 'unsigned char' to 'int'. Missing 'L' encoding-prefix for character literal?
   (compiling source file 'main.cpp')
   
-D:\S04\OOP Project\Blood-Bank\LandingPage.h(1020,24): warning C5307: 'System::Drawing::Color System::Drawing::Color::FromArgb(int,int,int,int)': argument (2) converted from 'unsigned char' to 'int'. Missing 'L' encoding-prefix for character literal?
+D:\S04\OOP Project\Blood-Bank\LandingPage.h(882,24): warning C5307: 'System::Drawing::Color System::Drawing::Color::FromArgb(int,int,int,int)': argument (2) converted from 'unsigned char' to 'int'. Missing 'L' encoding-prefix for character literal?
   (compiling source file 'main.cpp')
   
-D:\S04\OOP Project\Blood-Bank\LandingPage.h(1020,24): warning C5307: 'System::Drawing::Color System::Drawing::Color::FromArgb(int,int,int,int)': argument (3) converted from 'unsigned char' to 'int'. Missing 'L' encoding-prefix for character literal?
+D:\S04\OOP Project\Blood-Bank\LandingPage.h(882,24): warning C5307: 'System::Drawing::Color System::Drawing::Color::FromArgb(int,int,int,int)': argument (3) converted from 'unsigned char' to 'int'. Missing 'L' encoding-prefix for character literal?
   (compiling source file 'main.cpp')
   
-D:\S04\OOP Project\Blood-Bank\LandingPage.h(1020,24): warning C5307: 'System::Drawing::Color System::Drawing::Color::FromArgb(int,int,int,int)': argument (4) converted from 'unsigned char' to 'int'. Missing 'L' encoding-prefix for character literal?
+D:\S04\OOP Project\Blood-Bank\LandingPage.h(882,24): warning C5307: 'System::Drawing::Color System::Drawing::Color::FromArgb(int,int,int,int)': argument (4) converted from 'unsigned char' to 'int'. Missing 'L' encoding-prefix for character literal?
   (compiling source file 'main.cpp')
   
-D:\S04\OOP Project\Blood-Bank\LandingPage.h(1074,22): warning C5307: 'System::Drawing::Color System::Drawing::Color::FromArgb(int,int,int,int)': argument (2) converted from 'unsigned char' to 'int'. Missing 'L' encoding-prefix for character literal?
+D:\S04\OOP Project\Blood-Bank\LandingPage.h(930,22): warning C5307: 'System::Drawing::Color System::Drawing::Color::FromArgb(int,int,int,int)': argument (2) converted from 'unsigned char' to 'int'. Missing 'L' encoding-prefix for character literal?
   (compiling source file 'main.cpp')
   
-D:\S04\OOP Project\Blood-Bank\LandingPage.h(1074,22): warning C5307: 'System::Drawing::Color System::Drawing::Color::FromArgb(int,int,int,int)': argument (3) converted from 'unsigned char' to 'int'. Missing 'L' encoding-prefix for character literal?
+D:\S04\OOP Project\Blood-Bank\LandingPage.h(930,22): warning C5307: 'System::Drawing::Color System::Drawing::Color::FromArgb(int,int,int,int)': argument (3) converted from 'unsigned char' to 'int'. Missing 'L' encoding-prefix for character literal?
   (compiling source file 'main.cpp')
   
-D:\S04\OOP Project\Blood-Bank\LandingPage.h(1074,22): warning C5307: 'System::Drawing::Color System::Drawing::Color::FromArgb(int,int,int,int)': argument (4) converted from 'unsigned char' to 'int'. Missing 'L' encoding-prefix for character literal?
+D:\S04\OOP Project\Blood-Bank\LandingPage.h(930,22): warning C5307: 'System::Drawing::Color System::Drawing::Color::FromArgb(int,int,int,int)': argument (4) converted from 'unsigned char' to 'int'. Missing 'L' encoding-prefix for character literal?
   (compiling source file 'main.cpp')
   
-  .NETFramework,Version=v4.8.1.AssemblyAttributes.cpp
-  Generating Code...
   main.obj : MSIL module encountered; incremental linking is disabled for MSIL; performing full link
   Blood-Bank.vcxproj -> D:\S04\OOP Project\Blood-Bank\x64\Debug\Blood-Bank.exe

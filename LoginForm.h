@@ -1,39 +1,4 @@
-﻿// ================================================================
-//  LoginForm.h  —  LifeBlood MMS
-//  Logic-Injection Overhaul
-//
-//  VISUAL ORIGIN : loginForm.h  (Heartbeat / Glass GDI+ right panel,
-//                                50/50 split, crimson brand palette)
-//  LOGIC  ORIGIN : LoginForm.h  (Role state machine, DB singleton,
-//                                role guard, dashboard routing)
-//
-//  COMPILER CONSTRAINTS OBSERVED
-//  ─────────────────────────────────────────────────────────────
-//  1. NO LAMBDAS        — every event handler is a named member fn
-//  2. INTEGER BOXING    — LoginRole stored in Tag as (int) to avoid
-//                         C2440 "cannot convert LoginRole to Object^"
-//  3. UNICODE SAFE      — arrows / special chars via
-//                         Char::ConvertFromUtf32(codepoint); no raw
-//                         Unicode string literals that trigger CP-1252
-//
-//  ARCHITECTURE
-//  ─────────────────────────────────────────────────────────────
-//  • WindowState = Maximized | FormBorderStyle = None | DoubleBuffered
-//  • Left  Panel (50 %) — white functional login panel
-//  • Right Panel (50 %) — original heartbeat / glass GDI+ showcase
-//  • enum class LoginRole { Admin, Donor, Recipient }
-//  • SwitchRole(LoginRole) updates every dynamic element
-//  • _animTimer (~60 fps) drives pill sine-drift + panel Invalidate()
-//  • _fadeTimer drives btnLogin RGB hover lerp
-//  • Role Guard: DB role must match UI-selected role, else blocked
-//
-//  DEPENDENCIES (unchanged)
-//  ─────────────────────────────────────────────────────────────
-//  Database.h · SignupForm.h · AdminDashboard.h
-//  DonorDashboard.h · RecipientDashboard.h
-// ================================================================
-
-#pragma once
+﻿#pragma once
 #include "Database.h"
 #include "SignupForm.h"
 #include "AdminDashboard.h"
@@ -53,155 +18,91 @@ using namespace System::Runtime::InteropServices;
 
 namespace BloodBank {
 
-    // ────────────────────────────────────────────────────────────
-    //  Role enum — drives every dynamic UI state
-    // ────────────────────────────────────────────────────────────
     enum class LoginRole { Admin, Donor, Recipient };
-
 
     public ref class LoginForm : public Form
     {
 
-        // ── Win32 cue-banner P/Invoke ────────────────────────────
     private:
         [DllImport("user32.dll", EntryPoint = "SendMessageW",
             CharSet = CharSet::Unicode)]
             static IntPtr SendCue(IntPtr hWnd, UInt32 msg,
                 IntPtr wp, String^ lp);
 
+        Color CLR_WHITE;
+        Color CLR_TEXT;
 
+        Color CLR_MUTED;
+        Color CLR_HINT;
 
+        Color CLR_ACCENT;
+        Color CLR_ACCENT_DARK;
+        Color CLR_ERROR;
 
+        Color CLR_BTN_ACTIVE_BG;
+        Color CLR_BTN_IDLE_BG;
+        Color CLR_BTN_IDLE_FG;
 
+        Color CLR_BORDER;
+        Color CLR_FIELD_BG;
+        Color CLR_HOVER_BG;
 
-        // ════════════════════════════════════════════════════════
-        //  PALETTE
-        //  Left panel uses the original form's pure whites and
-        //  its exact brand crimson (232, 15, 59).
-        //  Right panel keeps the old form's exact gradient stops.
-        // ════════════════════════════════════════════════════════
-        Color CLR_WHITE;          // #FFFFFF
-        Color CLR_TEXT;           // #1A0A0A  near-black
+        Color CLR_RIGHT_TOP;
+        Color CLR_RIGHT_BOT;
 
-        Color CLR_MUTED;          // #6C757D  secondary text
-        Color CLR_HINT;           // #ADB5BD  placeholder / icon
-
-        // Accent — old form's brand crimson family
-        Color CLR_ACCENT;         // rgb(232, 15, 59)   primary
-        Color CLR_ACCENT_DARK;    // rgb(180, 10, 45)   hover target
-        Color CLR_ERROR;          // #E74C3C            error red
-
-        // Role switcher button states
-        Color CLR_BTN_ACTIVE_BG;  // = CLR_ACCENT fill when selected
-        Color CLR_BTN_IDLE_BG;    // #F0F0F0  unselected bg
-        Color CLR_BTN_IDLE_FG;    // #555555  unselected text
-
-        // Input / layout structure
-        Color CLR_BORDER;         // #E9ECEF  field outline
-        Color CLR_FIELD_BG;       // #F8F8FA  glass-input surface
-        Color CLR_HOVER_BG;       // rgb(255,230,235)  close btn hover
-
-        // Right panel — old form's exact gradient stops (preserved 1-for-1)
-        Color CLR_RIGHT_TOP;      // rgb(210, 10,  45) Dark Red
-        Color CLR_RIGHT_BOT;      // rgb( 60, 20,  35) Deep Burgundy
-
-
-        // Adjust this number to push the content further right
         int LEFT_MARGIN = 120;
 
-        // Adjust this number to push the content lower down
-        int TOP_MARGIN = 60; // Change this to whatever looks best
+        int TOP_MARGIN = 60;
 
-
-        // ════════════════════════════════════════════════════════
-        //  STATE
-        // ════════════════════════════════════════════════════════
         LoginRole currentRole;
 
-
-        // ════════════════════════════════════════════════════════
-        //  CONTROL HANDLES — Left panel
-        // ════════════════════════════════════════════════════════
         Panel^ pnlLeft;
         Panel^ pnlRight;
 
-        // Role switcher (3-button segmented control)
         Button^ btnAdmin;
         Button^ btnDonor;
         Button^ btnRecipient;
-        Label^ lblRoleHint;    // "Manage inventory, requests…"
+        Label^ lblRoleHint;
 
-        // Glass input boxes
         Panel^ pnlUserBox;
         Panel^ pnlPassBox;
         TextBox^ txtUsername;
         TextBox^ txtPassword;
-        Button^ btnReveal;      // eye-icon toggle inside password box
+        Button^ btnReveal;
 
-
-        // CTA
         Button^ btnLogin;
 
-        // Signup row
         LinkLabel^ lnkSignup;
 
-        // Status / error
         Label^ lblError;
 
-        // Screen-level close button (top-right)
         Button^ btnClose;
 
+        Label^ lblPortalChip;
+        Label^ lblRightHeading;
+        Label^ lblRightSub;
 
-        // ════════════════════════════════════════════════════════
-        //  CONTROL HANDLES — Right panel (dynamic role text)
-        // ════════════════════════════════════════════════════════
-        Label^ lblPortalChip;    // e.g. "⊙ Admin portal"
-        Label^ lblRightHeading;  // hero text (changes per role)
-        Label^ lblRightSub;      // subtitle paragraph
-
-
-        // ════════════════════════════════════════════════════════
-        //  ANIMATION — btnLogin hover (RGB lerp)
-        // ════════════════════════════════════════════════════════
         Timer^ _fadeTimer;
         float       _fadeT;
         int         _fadeDir;
         const float FADE_STEP = 0.08f;
 
-
-        // ════════════════════════════════════════════════════════
-        //  ANIMATION — right panel (~60 fps)
-        //
-        //  Single _animTimer drives two visual effects:
-        //    A) Floating blood-type pills — sine-wave Y drift
-        //    B) Heartbeat / EKG glass card — panel Invalidate()
-        //       re-draws every frame so the card is always fresh
-        //
-        //  Pill layout: label, fractional X, fractional base-Y,
-        //  phase offset for staggered sine waves.
-        // ════════════════════════════════════════════════════════
         Timer^ _animTimer;
-        double          _animTick;        // ever-increasing radian angle
+        double          _animTick;
 
         array<String^>^ _pillLabels;
-        array<float>^ _pillX;          // fraction of right-panel width
-        array<float>^ _pillBaseY;      // fraction of right-panel height
-        array<float>^ _pillPhase;      // per-pill phase offset
+        array<float>^ _pillX;
+        array<float>^ _pillBaseY;
+        array<float>^ _pillPhase;
 
-
-        // ════════════════════════════════════════════════════════
-        //  CONSTRUCTOR
-        // ════════════════════════════════════════════════════════
     public:
         LoginForm()
         {
-            // ── Palette initialisation ───────────────────────────
             CLR_WHITE = Color::White;
             CLR_TEXT = ColorTranslator::FromHtml("#1A0A0A");
             CLR_MUTED = ColorTranslator::FromHtml("#6C757D");
             CLR_HINT = ColorTranslator::FromHtml("#ADB5BD");
 
-            // Old form's exact brand crimson
             CLR_ACCENT = Color::FromArgb(232, 15, 59);
             CLR_ACCENT_DARK = Color::FromArgb(180, 10, 45);
             CLR_ERROR = ColorTranslator::FromHtml("#E74C3C");
@@ -214,25 +115,20 @@ namespace BloodBank {
             CLR_FIELD_BG = Color::FromArgb(248, 248, 250);
             CLR_HOVER_BG = Color::FromArgb(255, 230, 235);
 
-            // Old form's right panel gradient — preserved exactly
             CLR_RIGHT_TOP = Color::FromArgb(210, 10, 45);
             CLR_RIGHT_BOT = Color::FromArgb(60, 20, 35);
 
-
-            // ── Pill data ────────────────────────────────────────
             _pillLabels = gcnew array<String^>{ "A+", "O-", "O+", "B+" };
             _pillX = gcnew array<float>{ 0.06f, 0.60f, 0.52f, 0.08f };
             _pillBaseY = gcnew array<float>{ 0.08f, 0.18f, 0.31f, 0.44f };
             _pillPhase = gcnew array<float>{ 0.0f, 1.2f, 2.4f, 3.6f };
 
-            // ── Hover fade timer ─────────────────────────────────
             _fadeTimer = gcnew Timer();
             _fadeTimer->Interval = 12;
             _fadeTimer->Tick += gcnew EventHandler(this, &LoginForm::OnFadeTick);
             _fadeT = 0.0f;
             _fadeDir = 0;
 
-            // ── Heartbeat + pill animation (~60 fps) ─────────────
             _animTimer = gcnew Timer();
             _animTimer->Interval = 16;
             _animTick = 0.0;
@@ -246,10 +142,6 @@ namespace BloodBank {
     protected:
         ~LoginForm() {}
 
-
-        // ════════════════════════════════════════════════════════
-        //  InitializeComponent
-        // ════════════════════════════════════════════════════════
     private:
         void InitializeComponent()
         {
@@ -265,19 +157,12 @@ namespace BloodBank {
             this->Resize += gcnew EventHandler(this, &LoginForm::OnResize);
             this->KeyDown += gcnew KeyEventHandler(this, &LoginForm::OnFormKey);
 
-            // Build order matters: right panel first (z-order back)
             BuildRightPanel();
             BuildLeftPanel();
-            BuildCloseButton();   // floats above both panels
+            BuildCloseButton();
 
-            // Apply default role styling after all controls exist
             SwitchRole(LoginRole::Admin);
         }
-
-
-        // ════════════════════════════════════════════════════════
-        //  LAYOUT HELPERS
-        // ════════════════════════════════════════════════════════
 
         void LayoutPanels()
         {
@@ -288,40 +173,21 @@ namespace BloodBank {
             pnlLeft->SetBounds(0, 0, half, H);
             pnlRight->SetBounds(half, 0, W - half, H);
 
-            // Keep close button pinned to absolute top-right
             btnClose->Location =
                 Drawing::Point(this->ClientSize.Width - 48, 0);
         }
 
-
-        // ════════════════════════════════════════════════════════
-        //  RIGHT PANEL — Original Heartbeat / Glass showcase
-        //
-        //  Visual origin: loginForm.h (old form), preserved exactly.
-        //  Added on top: floating blood-type pills from new form.
-        //
-        //  Paint layers (back to front)
-        //  ─────────────────────────────────────────────────────
-        //  1. ForwardDiagonal gradient (CLR_RIGHT_TOP → CLR_RIGHT_BOT)
-        //  2. Floating blood-type pills  (sine-wave Y drift)
-        //  3. Central glass card         (translucent rounded rect)
-        //  4. Heartbeat / EKG icon       (heart outline + EKG polyline)
-        //  5. Dynamic role labels        (portal chip, heading, sub-text)
-        //  6. Stats footer               (Donors / Units / Hospitals)
-        // ════════════════════════════════════════════════════════
         void BuildRightPanel()
         {
             pnlRight = gcnew Panel();
             pnlRight->Dock = DockStyle::None;
             pnlRight->BackColor = CLR_RIGHT_TOP;
 
-            // Enable double-buffering via reflection (Panel has no public setter)
             pnlRight->GetType()->GetProperty("DoubleBuffered",
                 System::Reflection::BindingFlags::Instance |
                 System::Reflection::BindingFlags::NonPublic)
                 ->SetValue(pnlRight, true);
 
-            // ── Dynamic role text labels ─────────────────────────
             lblPortalChip = BuildRightLabel(
                 "  Admin portal", 9, FontStyle::Regular,
                 Color::FromArgb(200, 255, 255, 255));
@@ -341,17 +207,14 @@ namespace BloodBank {
             lblRightSub->Size = Drawing::Size(420, 70);
             pnlRight->Controls->Add(lblRightSub);
 
-            // ── Stats footer ─────────────────────────────────────
             BuildStatsFooter();
 
-            // ── GDI+ paint ───────────────────────────────────────
             pnlRight->Paint += gcnew PaintEventHandler(
                 this, &LoginForm::OnRightPaint);
 
             this->Controls->Add(pnlRight);
         }
 
-        // Factory for a transparent right-panel label
         Label^ BuildRightLabel(String^ text, float size,
             FontStyle style, Color fore)
         {
@@ -364,13 +227,11 @@ namespace BloodBank {
             return l;
         }
 
-        // Build the three-column stat footer on the right panel
         void BuildStatsFooter()
         {
-            // Subtle divider line above the stats
             Panel^ div = gcnew Panel();
             div->BackColor = Color::FromArgb(60, 255, 255, 255);
-            div->Size = Drawing::Size(1, 1);   // real size set in PositionRightLabels
+            div->Size = Drawing::Size(1, 1);
             div->Tag = "divider";
             pnlRight->Controls->Add(div);
 
@@ -401,12 +262,6 @@ namespace BloodBank {
             }
         }
 
-
-        // ════════════════════════════════════════════════════════
-        //  OnRightPaint  — GDI+ paint for right panel
-        //  Combines old form's heartbeat / glass with new form's
-        //  floating pills for a richer animated showcase.
-        // ════════════════════════════════════════════════════════
         void OnRightPaint(Object^ sender, PaintEventArgs^ e)
         {
             Graphics^ g = e->Graphics;
@@ -417,17 +272,15 @@ namespace BloodBank {
             int W = pnlRight->Width;
             int H = pnlRight->Height;
 
-            // ── Layer 1: Diagonal gradient (old form exact colors) ─
             Rectangle rect = pnlRight->ClientRectangle;
             LinearGradientBrush^ bgBrush = gcnew LinearGradientBrush(
                 rect,
-                CLR_RIGHT_TOP,          // rgb(210,  10,  45) Dark Red
-                CLR_RIGHT_BOT,          // rgb( 60,  20,  35) Deep Burgundy
+                CLR_RIGHT_TOP,
+                CLR_RIGHT_BOT,
                 LinearGradientMode::ForwardDiagonal);
             g->FillRectangle(bgBrush, rect);
             delete bgBrush;
 
-            // ── Layer 2: Floating blood-type pills (sine drift) ────
             for (int i = 0; i < _pillLabels->Length; i++)
             {
                 double drift = Math::Sin(_animTick + _pillPhase[i]) * 12.0;
@@ -436,7 +289,6 @@ namespace BloodBank {
                 DrawPill(g, _pillLabels[i], px, py);
             }
 
-            // ── Layer 3: Central glass card (old form style) ───────
             SolidBrush^ glassBrush =
                 gcnew SolidBrush(Color::FromArgb(30, 255, 255, 255));
             Pen^ glassBorder =
@@ -445,7 +297,6 @@ namespace BloodBank {
             int CW = Math::Min(200, (int)(W * 0.38));
             int CH = (int)(CW * 1.15);
             int CX = (W - CW) / 2;
-            // Old form used ClientSize.Height * 0.25 for the card's reference Y
             int CY = (int)(H * 0.25) - CH / 2;
 
             Rectangle cardRect(CX, CY, CW, CH);
@@ -454,9 +305,6 @@ namespace BloodBank {
             g->DrawPath(glassBorder, cardPath);
             delete glassBrush; delete glassBorder; delete cardPath;
 
-            // ── Layer 4: Heartbeat / EKG icon inside card (old form) ─
-            //  Inset 5 px left/right, start 12 % from card top,
-            //  occupy 75 % of card height (matches original proportions).
             DrawHeartbeatIcon(g,
                 Rectangle(
                     CX + 5,
@@ -465,12 +313,6 @@ namespace BloodBank {
                     (int)(CH * 0.75f)));
         }
 
-
-        // ════════════════════════════════════════════════════════
-        //  GDI+ DRAWING PRIMITIVES
-        // ════════════════════════════════════════════════════════
-
-        // ── Heartbeat + EKG icon  (source: loginForm.h, exact copy) ─
         void DrawHeartbeatIcon(Graphics^ g, Rectangle bounds)
         {
             g->SmoothingMode = SmoothingMode::AntiAlias;
@@ -491,28 +333,24 @@ namespace BloodBank {
 
             heart->StartFigure();
 
-            // Left lobe
             heart->AddBezier(
                 pTop,
                 Point(x + static_cast<int>(w * 0.18f), y - 2),
                 Point(x - 2, y + static_cast<int>(h * 0.38f)),
                 Point(x + static_cast<int>(w * 0.24f), y + static_cast<int>(h * 0.60f)));
 
-            // Left lower
             heart->AddBezier(
                 Point(x + static_cast<int>(w * 0.24f), y + static_cast<int>(h * 0.60f)),
                 Point(x + static_cast<int>(w * 0.34f), y + static_cast<int>(h * 0.74f)),
                 Point(x + static_cast<int>(w * 0.43f), y + static_cast<int>(h * 0.88f)),
                 pBottom);
 
-            // Right lower
             heart->AddBezier(
                 pBottom,
                 Point(x + static_cast<int>(w * 0.57f), y + static_cast<int>(h * 0.88f)),
                 Point(x + static_cast<int>(w * 0.66f), y + static_cast<int>(h * 0.74f)),
                 Point(x + static_cast<int>(w * 0.76f), y + static_cast<int>(h * 0.60f)));
 
-            // Right lobe
             heart->AddBezier(
                 Point(x + static_cast<int>(w * 0.76f), y + static_cast<int>(h * 0.60f)),
                 Point(x + w + 2, y + static_cast<int>(h * 0.38f)),
@@ -521,7 +359,6 @@ namespace BloodBank {
 
             g->DrawPath(iconPen, heart);
 
-            // EKG / pulse line through the heart
             array<Point>^ ekgPoints = {
                 Point(x + static_cast<int>(w * 0.16f), y + static_cast<int>(h * 0.52f)),
                 Point(x + static_cast<int>(w * 0.35f), y + static_cast<int>(h * 0.52f)),
@@ -536,11 +373,8 @@ namespace BloodBank {
             delete iconPen;
         }
 
-
-        // ── Floating blood-type pill  (source: LoginForm.h) ─────────
         void DrawPill(Graphics^ g, String^ label, int x, int y)
         {
-            // UNICODE SAFE: blood-drop via codepoint, not a raw literal
             String^ text = Char::ConvertFromUtf32(0x1FA78) + " " + label;
 
             Drawing::Font^ f = gcnew Drawing::Font(
@@ -567,8 +401,6 @@ namespace BloodBank {
             delete fg; delete f;
         }
 
-
-        // ── Blood-drop shape  (for brand badge dot) ──────────────────
         void DrawBloodDrop(Graphics^ g, int cx, int cy, int r)
         {
             SolidBrush^ wb =
@@ -595,7 +427,6 @@ namespace BloodBank {
 
             g->FillPath(wb, drop);
 
-            // Specular glint
             SolidBrush^ glint =
                 gcnew SolidBrush(Color::FromArgb(90, 255, 255, 255));
             g->FillEllipse(glint,
@@ -605,8 +436,6 @@ namespace BloodBank {
             delete wb; delete glint; delete drop;
         }
 
-
-        // ── Rounded-corner GraphicsPath (shared by all controls) ─────
         GraphicsPath^ RoundedRect(Drawing::Rectangle r, int radius)
         {
             GraphicsPath^ path = gcnew GraphicsPath();
@@ -619,43 +448,32 @@ namespace BloodBank {
             return path;
         }
 
-
-        // ── Animation tick: advance angle, force right-panel repaint ─
         void OnAnimTick(Object^ sender, EventArgs^ e)
         {
-            _animTick += 0.018;                        // radians per frame
+            _animTick += 0.018;
             if (_animTick > Math::PI * 200) _animTick = 0.0;
             pnlRight->Invalidate();
         }
 
-
-        // ════════════════════════════════════════════════════════
-        //  LEFT PANEL — White functional login area
-        //  Build order matches visual top-to-bottom reading order.
-        // ════════════════════════════════════════════════════════
         void BuildLeftPanel()
         {
             pnlLeft = gcnew Panel();
             pnlLeft->BackColor = CLR_WHITE;
 
-            BuildBrandRow();       //  LifeBlood logo + wordmark
-            BuildWelcomeChip();    //  "✦ Welcome back" pill chip
-            BuildTitleBlock();     //  "Sign in to LifeBlood MMS"
-            BuildRoleSwitcher();   //  [Admin] [Donor] [Recipient]
-            BuildRoleHint();       //  context sentence below switcher
-            BuildUsernameField();  //  glass rounded input
-            BuildPasswordField();  //  glass rounded input + reveal btn
-            BuildErrorLabel();     //  hidden until ShowError() called
-            BuildLoginButton();    //  CTA — "Sign in as Admin →"
-            BuildSignupRow();      //  "Don't have an account? Create one"
-            // NOTE: Social (Google / Microsoft) buttons intentionally omitted
-            //       per UI requirements.
+            BuildBrandRow();
+            BuildWelcomeChip();
+            BuildTitleBlock();
+            BuildRoleSwitcher();
+            BuildRoleHint();
+            BuildUsernameField();
+            BuildPasswordField();
+            BuildErrorLabel();
+            BuildLoginButton();
+            BuildSignupRow();
 
             this->Controls->Add(pnlLeft);
         }
 
-
-        // ── Brand row: red dot + "LifeBlood" wordmark ────────────────
         void BuildBrandRow()
         {
             Panel^ dot = gcnew Panel();
@@ -676,7 +494,6 @@ namespace BloodBank {
             pnlLeft->Controls->Add(brand);
         }
 
-        // Circular red badge with a tiny white blood-drop inside
         void OnDotPaint(Object^ s, PaintEventArgs^ e)
         {
             Graphics^ g = e->Graphics;
@@ -687,24 +504,20 @@ namespace BloodBank {
             g->FillEllipse(rb, 0, 0, p->Width - 1, p->Height - 1);
             delete rb;
 
-            // White micro drop centred in the badge
             DrawBloodDrop(g, p->Width / 2, p->Height / 2 + 1, 5);
         }
 
-
-        // ── "✦ Welcome back" chip ─────────────────────────────────────
         void BuildWelcomeChip()
         {
             Panel^ chip = gcnew Panel();
             chip->Size = Drawing::Size(136, 28);
             chip->Location = Drawing::Point(LEFT_MARGIN, TOP_MARGIN + 80);
-            chip->BackColor = Color::FromArgb(255, 230, 235);  // matches old form
+            chip->BackColor = Color::FromArgb(255, 230, 235);
             chip->Paint += gcnew PaintEventHandler(
                 this, &LoginForm::OnChipPaint);
             pnlLeft->Controls->Add(chip);
 
             Label^ lbl = gcnew Label();
-            // UNICODE SAFE: four-pointed star via codepoint
             lbl->Text = Char::ConvertFromUtf32(0x2726) + "  Welcome back";
             lbl->Font = gcnew Drawing::Font("Segoe UI", 8, FontStyle::Regular);
             lbl->ForeColor = CLR_ACCENT;
@@ -730,8 +543,6 @@ namespace BloodBank {
             delete bg; delete pen; delete path;
         }
 
-
-        // ── Title block ───────────────────────────────────────────────
         void BuildTitleBlock()
         {
             Label^ title = gcnew Label();
@@ -755,18 +566,6 @@ namespace BloodBank {
             pnlLeft->Controls->Add(sub);
         }
 
-
-        // ════════════════════════════════════════════════════════
-        //  Role Switcher — 3 segmented buttons
-        //
-        //  INTEGER BOXING CONTRACT
-        //  MakeRoleButton stores   b->Tag = (int)role;
-        //  OnRoleClick   unboxes   (LoginRole)(int)b->Tag;
-        //  Both casts are explicit C-style to prevent C2440.
-        //
-        //  Active  : CLR_ACCENT fill, white text, bold
-        //  Inactive: CLR_BTN_IDLE_BG, dark text, regular
-        // ════════════════════════════════════════════════════════
         void BuildRoleSwitcher()
         {
             Panel^ row = gcnew Panel();
@@ -779,7 +578,6 @@ namespace BloodBank {
 
             int BW = 368 / 3;
 
-            // UNICODE SAFE: circled dot / heart / circled asterisk
             btnAdmin = MakeRoleButton(
                 Char::ConvertFromUtf32(0x1F464) + "  Admin",
                 LoginRole::Admin, 0, BW, row);
@@ -811,7 +609,6 @@ namespace BloodBank {
             b->Font = gcnew Drawing::Font("Segoe UI", 9, FontStyle::Regular);
             b->Cursor = Cursors::Hand;
 
-            // INTEGER BOXING: cast enum to int — avoids C2440
             b->Tag = (int)role;
 
             b->Click += gcnew EventHandler(this, &LoginForm::OnRoleClick);
@@ -830,8 +627,6 @@ namespace BloodBank {
             delete bg; delete path;
         }
 
-
-        // ── Role hint text (below switcher) ──────────────────────────
         void BuildRoleHint()
         {
             lblRoleHint = gcnew Label();
@@ -844,8 +639,6 @@ namespace BloodBank {
             pnlLeft->Controls->Add(lblRoleHint);
         }
 
-
-        // ── Username glass input ──────────────────────────────────────
         void BuildUsernameField()
         {
             pnlUserBox = BuildInputBox(TOP_MARGIN + 316);
@@ -853,15 +646,12 @@ namespace BloodBank {
             pnlLeft->Controls->Add(pnlUserBox);
         }
 
-
-        // ── Password glass input + eye-reveal toggle ──────────────────
         void BuildPasswordField()
         {
             pnlPassBox = BuildInputBox(TOP_MARGIN + 376);
             txtPassword = BuildTextBox(pnlPassBox, "Password", true);
 
             btnReveal = gcnew Button();
-            // UNICODE SAFE: eye emoji via codepoint
             btnReveal->Text = Char::ConvertFromUtf32(0x1F441);
             btnReveal->Size = Drawing::Size(36, 36);
             btnReveal->Location =
@@ -879,7 +669,6 @@ namespace BloodBank {
             pnlLeft->Controls->Add(pnlPassBox);
         }
 
-        // Shared factory for a rounded glass input container
         Panel^ BuildInputBox(int y)
         {
             Panel^ box = gcnew Panel();
@@ -891,7 +680,6 @@ namespace BloodBank {
             return box;
         }
 
-        // Shared factory for a borderless TextBox inside a glass box
         TextBox^ BuildTextBox(Panel^ box, String^ cue, bool isPassword)
         {
             TextBox^ t = gcnew TextBox();
@@ -901,7 +689,7 @@ namespace BloodBank {
             t->BackColor = CLR_FIELD_BG;
             t->ForeColor = CLR_TEXT;
             t->Font = gcnew Drawing::Font("Segoe UI", 11);
-            t->Tag = cue;   // cue text stored for P/Invoke on Load
+            t->Tag = cue;
 
             if (isPassword)
             {
@@ -933,8 +721,6 @@ namespace BloodBank {
             delete bg; delete border; delete path;
         }
 
-
-        // ── Error / status label ──────────────────────────────────────
         void BuildErrorLabel()
         {
             lblError = gcnew Label();
@@ -948,12 +734,9 @@ namespace BloodBank {
             pnlLeft->Controls->Add(lblError);
         }
 
-
-        // ── CTA Login button ──────────────────────────────────────────
         void BuildLoginButton()
         {
             btnLogin = gcnew Button();
-            // UNICODE SAFE: right arrow via codepoint
             btnLogin->Text = "Sign in as Admin  " + Char::ConvertFromUtf32(0x2192);
             btnLogin->Size = Drawing::Size(368, 52);
             btnLogin->Location = Drawing::Point(LEFT_MARGIN, TOP_MARGIN + 468);
@@ -979,7 +762,6 @@ namespace BloodBank {
 
         void OnLoginBtnPaint(Object^ s, PaintEventArgs^ e)
         {
-            // Rounded fill — GDI+ overrides default square rendering
             Graphics^ g = e->Graphics;
             g->SmoothingMode = SmoothingMode::AntiAlias;
             Button^ b = safe_cast<Button^>(s);
@@ -999,8 +781,6 @@ namespace BloodBank {
             delete fg; delete sf; delete path;
         }
 
-
-        // ── Signup row ────────────────────────────────────────────────
         void BuildSignupRow()
         {
             LinkLabel^ lnk = gcnew LinkLabel();
@@ -1013,7 +793,7 @@ namespace BloodBank {
             lnk->ActiveLinkColor = CLR_ERROR;
             lnk->LinkBehavior = LinkBehavior::HoverUnderline;
             lnk->LinkArea =
-                System::Windows::Forms::LinkArea(24, 10);   // "Create one"
+                System::Windows::Forms::LinkArea(24, 10);
             lnk->Size = Drawing::Size(368, 28);
             lnk->Location = Drawing::Point(LEFT_MARGIN, TOP_MARGIN + 530);
             lnk->TextAlign = ContentAlignment::MiddleCenter;
@@ -1022,15 +802,9 @@ namespace BloodBank {
             pnlLeft->Controls->Add(lnk);
         }
 
-
-        // ════════════════════════════════════════════════════════
-        //  CLOSE BUTTON — screen-level ✕ (top-right corner)
-        //  Floats above both panels; calls Application::Exit().
-        // ════════════════════════════════════════════════════════
         void BuildCloseButton()
         {
             btnClose = gcnew Button();
-            // UNICODE SAFE: multiplication sign as close glyph
             btnClose->Text = Char::ConvertFromUtf32(0x2715);
             btnClose->Font = gcnew Drawing::Font("Segoe UI", 12);
             btnClose->Size = Drawing::Size(48, 48);
@@ -1048,31 +822,14 @@ namespace BloodBank {
             btnClose->MouseEnter += gcnew EventHandler(this, &LoginForm::OnCloseBtnEnter);
             btnClose->MouseLeave += gcnew EventHandler(this, &LoginForm::OnCloseBtnLeave);
 
-            this->Controls->Add(btnClose);   // add to Form, not to a panel
+            this->Controls->Add(btnClose);
             btnClose->BringToFront();
         }
 
-
-        // ════════════════════════════════════════════════════════
-        //  SwitchRole  — CORE STATE MACHINE
-        //
-        //  The single source of truth for every dynamic element.
-        //  Updates in order:
-        //    1. Reset all three role buttons to idle state
-        //    2. Apply active styling to the selected button
-        //    3. Update left-panel helper text (lblRoleHint)
-        //    4. Update right-panel dynamic labels + repaint
-        //    5. Update btnLogin text with correct role + arrow
-        //    6. Reset hover-fade and clear any visible error
-        //
-        //  UNICODE SAFE: arrows and special chars use codepoints.
-        //  NO LAMBDAS: explicit per-button statements instead.
-        // ════════════════════════════════════════════════════════
         void SwitchRole(LoginRole newRole)
         {
             currentRole = newRole;
 
-            // ── Step 1: Reset all buttons to idle ───────────────
             btnAdmin->BackColor = CLR_BTN_IDLE_BG;
             btnAdmin->ForeColor = CLR_BTN_IDLE_FG;
             btnAdmin->Font = gcnew Drawing::Font(
@@ -1088,7 +845,6 @@ namespace BloodBank {
             btnRecipient->Font = gcnew Drawing::Font(
                 "Segoe UI", 9, FontStyle::Regular);
 
-            // ── Step 2-5: Role-specific content ─────────────────
             String^ roleHint;
             String^ portalChip;
             String^ heading;
@@ -1096,7 +852,6 @@ namespace BloodBank {
 
             switch (newRole)
             {
-                // ────────────────────────────────────────────────────
             case LoginRole::Admin:
                 btnAdmin->BackColor = CLR_ACCENT;
                 btnAdmin->ForeColor = Color::White;
@@ -1115,7 +870,6 @@ namespace BloodBank {
                     "Sign in as Admin  " + Char::ConvertFromUtf32(0x2192);
                 break;
 
-                // ────────────────────────────────────────────────────
             case LoginRole::Donor:
                 btnDonor->BackColor = CLR_ACCENT;
                 btnDonor->ForeColor = Color::White;
@@ -1125,7 +879,6 @@ namespace BloodBank {
                 roleHint = "Save lives. Track your impact.";
                 portalChip = Char::ConvertFromUtf32(0x2665)
                     + "  Donor portal";
-                // UNICODE SAFE: right-single-quotation mark via codepoint
                 heading = "Every drop you give writes a chapter in"
                     " someone"
                     + Char::ConvertFromUtf32(0x2019)
@@ -1137,7 +890,6 @@ namespace BloodBank {
                     "Sign in as Donor  " + Char::ConvertFromUtf32(0x2192);
                 break;
 
-                // ────────────────────────────────────────────────────
             case LoginRole::Recipient:
             default:
                 btnRecipient->BackColor = CLR_ACCENT;
@@ -1148,7 +900,6 @@ namespace BloodBank {
                 roleHint = "Request blood when it matters most.";
                 portalChip = Char::ConvertFromUtf32(0x229B)
                     + "  Recipient portal";
-                // UNICODE SAFE: em-dash via codepoint
                 heading = "Help is always one request away "
                     + Char::ConvertFromUtf32(0x2014)
                     + " never alone.";
@@ -1159,16 +910,13 @@ namespace BloodBank {
                 break;
             }
 
-            // ── Update left panel ────────────────────────────────
             lblRoleHint->Text = roleHint;
 
-            // ── Update right panel ───────────────────────────────
             lblPortalChip->Text = portalChip;
             lblRightHeading->Text = heading;
             lblRightSub->Text = sub;
             PositionRightLabels();
 
-            // ── Step 6: Reset hover-fade & clear error ───────────
             _fadeT = 0.0f;
             btnLogin->BackColor = CLR_ACCENT;
             btnLogin->Invalidate();
@@ -1177,14 +925,6 @@ namespace BloodBank {
                 lblError->Visible = false;
         }
 
-
-        // ════════════════════════════════════════════════════════
-        //  PositionRightLabels
-        //  All right-panel labels are positioned as fractions of
-        //  pnlRight's live dimensions so the layout scales
-        //  correctly when the window is resized.
-        //  Called by SwitchRole() and OnResize().
-        // ════════════════════════════════════════════════════════
         void PositionRightLabels()
         {
             if (pnlRight == nullptr) return;
@@ -1210,8 +950,6 @@ namespace BloodBank {
             int divY = H - 90;
             int slotW = (W - margin * 2) / 3;
 
-            // Divider line + stat labels — located by Tag strings.
-            // "for each" loop is the no-lambda-safe iteration form.
             for each (Control ^ c in pnlRight->Controls)
             {
                 if (c->Tag == nullptr) continue;
@@ -1226,37 +964,29 @@ namespace BloodBank {
                 else if (tag == "stat_val_0")
                     c->Location = Drawing::Point(margin + slotW * 0, statY);
                 else if (tag == "stat_cap_0")
-                    c->Location = Drawing::Point(margin + slotW * 0, statY + 36); // Increased from 28
+                    c->Location = Drawing::Point(margin + slotW * 0, statY + 36);
                 else if (tag == "stat_val_1")
                     c->Location = Drawing::Point(margin + slotW * 1, statY);
                 else if (tag == "stat_cap_1")
-                    c->Location = Drawing::Point(margin + slotW * 1, statY + 36); // Increased from 28
+                    c->Location = Drawing::Point(margin + slotW * 1, statY + 36);
                 else if (tag == "stat_val_2")
                     c->Location = Drawing::Point(margin + slotW * 2, statY);
                 else if (tag == "stat_cap_2")
-                    c->Location = Drawing::Point(margin + slotW * 2, statY + 36); // Increased from 28
+                    c->Location = Drawing::Point(margin + slotW * 2, statY + 36);
             }
         }
 
-
-        // ════════════════════════════════════════════════════════
-        //  EVENT HANDLERS
-        // ════════════════════════════════════════════════════════
-
-        // ── Form Load ────────────────────────────────────────────
         void OnLoad(Object^ sender, EventArgs^ e)
         {
             LayoutPanels();
             PositionRightLabels();
 
-            // Win32 cue banners (grey placeholder text in TextBoxes)
             const UInt32 EM_SETCUEBANNER = 0x1501u;
             SendCue(txtUsername->Handle, EM_SETCUEBANNER,
                 IntPtr(1), "Email or Username");
             SendCue(txtPassword->Handle, EM_SETCUEBANNER,
                 IntPtr(1), "Password");
 
-            // DB startup health-check
             if (!Database::GetInstance()->TestConnection())
             {
                 MessageBox::Show(
@@ -1272,22 +1002,12 @@ namespace BloodBank {
             txtUsername->Focus();
         }
 
-
-        // ── Form Resize ───────────────────────────────────────────
         void OnResize(Object^ sender, EventArgs^ e)
         {
             LayoutPanels();
             PositionRightLabels();
         }
 
-
-        // ── Role button click ─────────────────────────────────────
-        //
-        //  INTEGER UNBOXING:
-        //    Tag was stored as (int)role in MakeRoleButton.
-        //    Unbox as: (LoginRole)(int)b->Tag
-        //    The explicit C-style double-cast prevents C2440.
-        // ─────────────────────────────────────────────────────────
         void OnRoleClick(Object^ sender, EventArgs^ e)
         {
             Button^ b = (Button^)sender;
@@ -1295,8 +1015,6 @@ namespace BloodBank {
             SwitchRole(selRole);
         }
 
-
-        // ── btnLogin hover fade (RGB lerp) ────────────────────────
         Color LerpColor(Color a, Color b, float t)
         {
             int r = Math::Max(0, Math::Min(255,
@@ -1329,8 +1047,6 @@ namespace BloodBank {
             _fadeTimer->Start();
         }
 
-
-        // ── Password reveal toggle ────────────────────────────────
         void OnRevealClick(Object^ sender, EventArgs^ e)
         {
             if (txtPassword->PasswordChar == L'\0')
@@ -1345,8 +1061,6 @@ namespace BloodBank {
             }
         }
 
-
-        // ── Close button ──────────────────────────────────────────
         void OnClose(Object^ s, EventArgs^ e)
         {
             _animTimer->Stop();
@@ -1355,7 +1069,7 @@ namespace BloodBank {
 
         void OnCloseBtnEnter(Object^ s, EventArgs^ e)
         {
-            btnClose->ForeColor = CLR_HOVER_BG;  // warm pink tint on hover
+            btnClose->ForeColor = CLR_HOVER_BG;
         }
 
         void OnCloseBtnLeave(Object^ s, EventArgs^ e)
@@ -1363,12 +1077,6 @@ namespace BloodBank {
             btnClose->ForeColor = Color::White;
         }
 
-
-        // ── Remember-me colour tint ───────────────────────────────
-        // (declared with BuildRememberRow above; kept near its control)
-
-
-        // ── Keyboard shortcuts ────────────────────────────────────
         void OnUserKey(Object^ s, KeyEventArgs^ e)
         {
             if (e->KeyCode == Keys::Return)
@@ -1393,8 +1101,6 @@ namespace BloodBank {
                 Application::Exit();
         }
 
-
-        // ── Signup navigation ─────────────────────────────────────
         void OnSignupClick(Object^ sender, LinkLabelLinkClickedEventArgs^ e)
         {
             this->Hide();
@@ -1404,8 +1110,6 @@ namespace BloodBank {
             sf->Show();
         }
 
-
-        // ── Restore login form when any child window closes ───────
         void OnChildClosed(Object^ s, FormClosedEventArgs^ e)
         {
             txtUsername->Clear();
@@ -1416,49 +1120,28 @@ namespace BloodBank {
             txtUsername->Focus();
         }
 
-
-        // ── Display an error message ──────────────────────────────
         void ShowError(String^ msg)
         {
             lblError->Text = msg;
             lblError->Visible = true;
         }
 
-
-        // ════════════════════════════════════════════════════════
-        //  OnLoginClick  — AUTHENTICATION + ROLE GUARD
-        //
-        //  SECURITY CONTRACT
-        //  ─────────────────────────────────────────────────────
-        //  Database::GetInstance()->ValidateLogin() returns the
-        //  role stored in the DB for the authenticated user.
-        //  That role MUST exactly match the role the user selected
-        //  in the UI switcher.  Mismatch → login blocked with:
-        //    "Unauthorized: You do not have <role> privileges."
-        //
-        //  This prevents a Donor account from escalating to Admin
-        //  by simply clicking a different role button.
-        // ════════════════════════════════════════════════════════
         void OnLoginClick(Object^ sender, EventArgs^ e)
         {
-            // Reset any previous error
             lblError->Visible = false;
             lblError->Text = "";
 
             String^ uname = txtUsername->Text->Trim();
             String^ pwd = txtPassword->Text;
 
-            // ── Guard: empty fields ──────────────────────────────
             if (String::IsNullOrWhiteSpace(uname) ||
                 String::IsNullOrWhiteSpace(pwd))
             {
-                // UNICODE SAFE: warning sign via codepoint
                 ShowError(Char::ConvertFromUtf32(0x26A0)
                     + "  Username and password cannot be empty.");
                 return;
             }
 
-            // ── Database authentication (singleton pattern) ──────
             String^ dbRole = nullptr;
             String^ fullName = nullptr;
             int     userID = 0;
@@ -1475,7 +1158,6 @@ namespace BloodBank {
                 return;
             }
 
-            // ── Role Guard ───────────────────────────────────────
             String^ selectedRoleStr;
             switch (currentRole)
             {
@@ -1488,7 +1170,6 @@ namespace BloodBank {
             if (!dbRole->Equals(selectedRoleStr,
                 StringComparison::OrdinalIgnoreCase))
             {
-                // UNICODE SAFE: no-entry sign via codepoint
                 ShowError(Char::ConvertFromUtf32(0x1F6AB)
                     + "  Unauthorized: You do not have "
                     + selectedRoleStr + " privileges.");
@@ -1497,7 +1178,6 @@ namespace BloodBank {
                 return;
             }
 
-            // ── Route to correct dashboard ───────────────────────
             _animTimer->Stop();
             this->Hide();
 
@@ -1525,63 +1205,12 @@ namespace BloodBank {
             }
             else
             {
-                // Unknown DB role — should never reach here after the guard
                 this->Show();
                 _animTimer->Start();
                 ShowError("Unknown role '" + dbRole + "'. Contact admin.");
             }
         }
 
-    };  // ref class LoginForm
+    };
 
-}  // namespace BloodBank
-
-
-// ════════════════════════════════════════════════════════════════
-//  ENTRY POINT WIRING  (main.cpp — unchanged)
-//
-//  [STAThread]
-//  int main(array<String^>^ args)
-//  {
-//      Application::EnableVisualStyles();
-//      Application::SetCompatibleTextRenderingDefault(false);
-//      Application::Run(gcnew BloodBank::LoginForm());
-//      return 0;
-//  }
-// ════════════════════════════════════════════════════════════════
-//
-//  WHAT CHANGED vs. loginForm.h (old form)
-//  ──────────────────────────────────────────────────────────────
-//  REMOVED
-//    • SqlConnection / connectionString field & ValidateUser()
-//    • Hard-coded 1200×800 fixed window size
-//    • "Continue with Google" / "Continue with Microsoft" buttons
-//    • "OR" social-login divider
-//    • Placeholder-text simulation (••••••••, gray forecolor trick)
-//
-//  ADDED
-//    • enum class LoginRole { Admin, Donor, Recipient }
-//    • SwitchRole(LoginRole) state machine
-//    • 3-button role switcher with active / idle GDI+ painting
-//    • Role hint label (context sentence below switcher)
-//    • Database::GetInstance()->ValidateLogin() — singleton pattern
-//    • Role Guard: DB role != UI role → blocked with error
-//    • FormWindowState::Maximized + FormBorderStyle::None
-//    • LayoutPanels() / OnResize() — responsive 50/50 split
-//    • Floating blood-type pills (A+, O-, O+, B+) with sine drift
-//    • _animTimer (~60 fps) driving heartbeat + pill animation
-//    • _fadeTimer driving btnLogin hover RGB lerp
-//    • Dynamic right-panel role text (lblPortalChip / heading / sub)
-//    • Stats footer (12,450 Donors / 3,280 Units / 47 Hospitals)
-//    • Win32 SendCue / EM_SETCUEBANNER P/Invoke for placeholder text
-//    • btnClose (✕) — top-right, calls Application::Exit()
-//    • Dashboard routing with FormClosed chain for all three roles
-//
-//  PRESERVED 1-FOR-1 FROM OLD FORM
-//    • Heartbeat / EKG icon (DrawHeartbeatIcon — exact Bezier code)
-//    • Right-panel gradient colors (210,10,45 → 60,20,35 diagonal)
-//    • Central glass card dimensions and translucency values
-//    • CLR_ACCENT = rgb(232, 15, 59) brand crimson
-//    • lblLogo background tint = rgb(255, 230, 235)
-//    • 50/50 left / right split layout
-// ════════════════════════════════════════════════════════════════
+}
