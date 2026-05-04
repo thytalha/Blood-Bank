@@ -1,43 +1,6 @@
 ﻿#pragma once
 #include "Database.h"
 
-// ================================================================
-//  RecipientDashboard.h  —  Blood Bank Management System
-//  "Clean-Light" Aesthetic: premium light mode + crimson accents
-//
-//  ARCHITECTURE:
-//    Mirrors DonorDashboard.h exactly — same Z-order rules,
-//    same emoji encoding, same colour palette, same grid style.
-//    Role badge uses CLR_CARD_ORANGE (orange dot + "RECIPIENT").
-//
-//  Z-ORDER RULE (inherited from AdminDashboard v3):
-//    BuildSidebar()   → adds pnlSidebar to Controls  [higher Z]
-//    BuildRightArea() → adds pnlRight   to Controls  [lower  Z]
-//    pnlSidebar->SendToBack() → WinForms docks Left (250px) first,
-//    pnlRight fills the remainder.
-//
-//  INSIDE pnlRight (same rule applies):
-//    Content panels added FIRST (Fill) → lower Z → docked second.
-//    pnlTopBar added LAST             → higher Z → docked first,
-//                                        claiming the top 56 px.
-//    Content panels then fill whatever remains below the top bar.
-//
-//  PANELS:
-//    pnlOverview    — Home / metrics
-//    pnlRequest     — Request Blood (form card)
-//    pnlMyRequests  — My Requests  (DataGridView)
-//
-//  GRID SCROLLBAR SUPPRESSION:
-//    dgvMyRequests lives inside pnlGridBox (Dock::Fill, Padding(32,0,32,32)).
-//    pnlMyRequests->AutoScroll = false.
-//    dgvMyRequests->Dock = Fill → stretches to fill the padded box.
-//    No AnchorStyles::Bottom anywhere → no phantom scroll bar.
-//
-//  EMOJI ENCODING:
-//    Char::ConvertFromUtf32(int) runs at runtime using the CLR's
-//    Unicode engine — unaffected by /source-charset or BOM settings.
-// ================================================================
-
 #using <System.dll>
 #using <System.Data.dll>
 #using <System.Drawing.dll>
@@ -54,70 +17,48 @@ namespace BloodBank {
 
     public ref class RecipientDashboard : public Form
     {
-
-        // ══════════════════════════════════════════════════════════
-        //  COLOUR PALETTE  — single source of truth (identical to Donor/Admin)
-        // ══════════════════════════════════════════════════════════
     private:
-        Color CLR_BG_FORM;       // #F8F9FA  soft off-white
-        Color CLR_BG_CARD;       // #FFFFFF  pure white
-        Color CLR_ACCENT;        // #C0392B  crimson
-        Color CLR_TEXT;          // #212529  near-black
-        Color CLR_MUTED;         // #6C757D  medium gray
-        Color CLR_BORDER;        // #E9ECEF  pale gray
-        Color CLR_HOVER_BG;      // #FADBD8  blush pink
-        Color CLR_GRID_LINE;     // #DEE2E6
-        Color CLR_SEL_BG;        // #FADBD8
-        Color CLR_SEL_FG;        // #C0392B
-        Color CLR_ALT_ROW;       // #FAFAFA
-        Color CLR_CARD_ORANGE;   // #E67E22  — recipient role badge colour
-        Color CLR_CARD_GREEN;    // #27AE60
-        Color CLR_CARD_BLUE;     // #2980B9
+        Color CLR_BG_FORM;
+        Color CLR_BG_CARD;
+        Color CLR_ACCENT;
+        Color CLR_TEXT;
+        Color CLR_MUTED;
+        Color CLR_BORDER;
+        Color CLR_HOVER_BG;
+        Color CLR_GRID_LINE;
+        Color CLR_SEL_BG;
+        Color CLR_SEL_FG;
+        Color CLR_ALT_ROW;
+        Color CLR_CARD_ORANGE;
+        Color CLR_CARD_GREEN;
+        Color CLR_CARD_BLUE;
 
-
-        // ══════════════════════════════════════════════════════════
-        //  MEMBER FIELDS
-        // ══════════════════════════════════════════════════════════
-
-        // ── Identity ─────────────────────────────────────────────
         int     _recipientID;
         String^ _fullName;
-
-        // ── Navigation state ─────────────────────────────────────
         Button^ _activeNavBtn;
 
-        // ── Layout panels ────────────────────────────────────────
-        Panel^ pnlSidebar;       // 250 px, DockStyle::Left
-        Panel^ pnlTopBar;        // 56  px, DockStyle::Top (inside pnlRight)
-        Panel^ pnlOverview;      // content view 1 — DockStyle::Fill
-        Panel^ pnlRequest;       // content view 2 — DockStyle::Fill
-        Panel^ pnlMyRequests;    // content view 3 — DockStyle::Fill
+        Panel^ pnlSidebar;
+        Panel^ pnlTopBar;
+        Panel^ pnlOverview;
+        Panel^ pnlRequest;
+        Panel^ pnlMyRequests;
 
-        // ── Sidebar controls ─────────────────────────────────────
         Button^ btnNavHome;
         Button^ btnNavRequest;
         Button^ btnNavMyRequests;
         Button^ btnLogout;
 
-        // ── Top-bar controls ─────────────────────────────────────
         Button^ btnClose;
         Label^ lblTopBarTitle;
 
-        // ── DataGridView ─────────────────────────────────────────
         DataGridView^ dgvMyRequests;
 
-        // ── Metric card value labels (Overview) ──────────────────
         Label^ lblMetricTotal;
         Label^ lblMetricPending;
 
-        // ── Request form controls ─────────────────────────────────
         ComboBox^ cmbBloodGroup;
         NumericUpDown^ nudQuantity;
 
-
-        // ══════════════════════════════════════════════════════════
-        //  CONSTRUCTOR
-        // ══════════════════════════════════════════════════════════
     public:
         RecipientDashboard(int recipientID, String^ fullName)
         {
@@ -146,10 +87,6 @@ namespace BloodBank {
     protected:
         ~RecipientDashboard() {}
 
-
-        // ══════════════════════════════════════════════════════════
-        //  InitializeComponent
-        // ══════════════════════════════════════════════════════════
     private:
         void InitializeComponent()
         {
@@ -160,26 +97,11 @@ namespace BloodBank {
             this->DoubleBuffered = true;
             this->Load += gcnew EventHandler(this, &RecipientDashboard::OnLoad);
 
-            // ══ Z-ORDER — CRITICAL ADD SEQUENCE (mirrors DonorDashboard) ══
-            //
-            //  WinForms docks controls in REVERSE Z-order.
-            //  The control with the HIGHEST Z-order (last added /
-            //  BringToFront'd) is docked first and claims its edge.
-            //
-            //  1. BuildSidebar()   → Controls->Add(pnlSidebar)  [higher Z]
-            //  2. BuildRightArea() → Controls->Add(pnlRight)    [lower  Z]
-            //  3. pnlSidebar->SendToBack() → makes pnlRight Fill first,
-            //     then pnlSidebar claims Left 250 px.
-            //
-            BuildSidebar();         // adds pnlSidebar to this->Controls
-            BuildRightArea();       // adds pnlRight   to this->Controls
+            BuildSidebar();
+            BuildRightArea();
             pnlSidebar->SendToBack();
         }
 
-
-        // ══════════════════════════════════════════════════════════
-        //  SIDEBAR
-        // ══════════════════════════════════════════════════════════
         void BuildSidebar()
         {
             pnlSidebar = gcnew Panel();
@@ -197,7 +119,6 @@ namespace BloodBank {
             this->Controls->Add(pnlSidebar);
         }
 
-        // ── ① Crimson brand strip (80 px) ────────────────────────
         void BuildSidebarBrand()
         {
             Panel^ pnlBrand = gcnew Panel();
@@ -205,12 +126,12 @@ namespace BloodBank {
             pnlBrand->Location = Drawing::Point(0, 0);
             pnlBrand->BackColor = CLR_ACCENT;
 
-            Panel^ cv = gcnew Panel();          // cross — vertical bar
+            Panel^ cv = gcnew Panel();
             cv->Size = Drawing::Size(6, 22);
             cv->Location = Drawing::Point(24, 28);
             cv->BackColor = Color::White;
 
-            Panel^ ch = gcnew Panel();          // cross — horizontal bar
+            Panel^ ch = gcnew Panel();
             ch->Size = Drawing::Size(22, 6);
             ch->Location = Drawing::Point(16, 36);
             ch->BackColor = Color::White;
@@ -238,7 +159,6 @@ namespace BloodBank {
             pnlSidebar->Controls->Add(pnlBrand);
         }
 
-        // ── ② Welcome block (name + role badge) ──────────────────
         void BuildSidebarWelcome()
         {
             Panel^ pnlWelcome = gcnew Panel();
@@ -265,8 +185,6 @@ namespace BloodBank {
             lblName->Location = Drawing::Point(20, 32);
             lblName->BackColor = Color::Transparent;
 
-            // Orange filled circle dot + role text (recipient = orange)
-            // U+25CF = BLACK CIRCLE ●
             Label^ lblRole = gcnew Label();
             lblRole->Text = " " + Char::ConvertFromUtf32(0x25CF) + "  RECIPIENT";
             lblRole->Font = gcnew Drawing::Font("Segoe UI", 7, FontStyle::Bold);
@@ -281,7 +199,6 @@ namespace BloodBank {
             pnlSidebar->Controls->Add(pnlWelcome);
         }
 
-        // ── ③ Navigation buttons ──────────────────────────────────
         void BuildSidebarNav()
         {
             Label^ lblSection = gcnew Label();
@@ -297,14 +214,8 @@ namespace BloodBank {
             btnNavRequest = MakeNavButton(260);
             btnNavMyRequests = MakeNavButton(306);
 
-            // Char::ConvertFromUtf32 — runtime code-point conversion,
-            // immune to MSVC source-encoding mis-transcription.
-            // U+1F3E0 = HOUSE BUILDING 🏠
             btnNavHome->Text = " " + Char::ConvertFromUtf32(0x1F3E0) + "  Home";
-            // U+1F6A8 = POLICE CARS REVOLVING LIGHT (used as "alert/request") 🚨
-            // U+1F489 = SYRINGE 💉
             btnNavRequest->Text = " " + Char::ConvertFromUtf32(0x1F489) + "  Request Blood";
-            // U+1F4CB = CLIPBOARD 📋
             btnNavMyRequests->Text = " " + Char::ConvertFromUtf32(0x1F4CB) + "  My Requests";
 
             pnlSidebar->Controls->Add(btnNavHome);
@@ -312,7 +223,6 @@ namespace BloodBank {
             pnlSidebar->Controls->Add(btnNavMyRequests);
         }
 
-        // Factory: nav button at a given Y coordinate
         Button^ MakeNavButton(int y)
         {
             Button^ btn = gcnew Button();
@@ -332,11 +242,9 @@ namespace BloodBank {
             return btn;
         }
 
-        // ── ④ Log Out button (DockStyle::Bottom) ──────────────────
         void BuildSidebarLogout()
         {
             btnLogout = gcnew Button();
-            // U+1F511 = KEY 🔑
             btnLogout->Text = " " + Char::ConvertFromUtf32(0x1F511) + "  Log Out";
             btnLogout->TextAlign = ContentAlignment::MiddleLeft;
             btnLogout->Font = gcnew Drawing::Font("Segoe UI", 10, FontStyle::Regular);
@@ -355,17 +263,12 @@ namespace BloodBank {
             pnlSidebar->Controls->Add(btnLogout);
         }
 
-
-        // ══════════════════════════════════════════════════════════
-        //  RIGHT AREA  (top bar + three swappable content panels)
-        // ══════════════════════════════════════════════════════════
         void BuildRightArea()
         {
             Panel^ pnlRight = gcnew Panel();
             pnlRight->Dock = DockStyle::Fill;
             pnlRight->BackColor = CLR_BG_FORM;
 
-            // 1. Build all components
             BuildTopBar();
             pnlTopBar->Dock = DockStyle::Top;
 
@@ -377,27 +280,22 @@ namespace BloodBank {
             pnlRequest->Dock = DockStyle::Fill;
             pnlMyRequests->Dock = DockStyle::Fill;
 
-            // 2. Add content panels FIRST (lower Z → docked last → Fill)
             pnlRight->Controls->Add(pnlMyRequests);
             pnlRight->Controls->Add(pnlRequest);
             pnlRight->Controls->Add(pnlOverview);
 
-            // 3. Add top bar LAST → highest Z → docked first → claims top 56 px
             pnlRight->Controls->Add(pnlTopBar);
 
-            // 4. Wire nav buttons to content panels via Tag
             btnNavHome->Tag = pnlOverview;
             btnNavRequest->Tag = pnlRequest;
             btnNavMyRequests->Tag = pnlMyRequests;
 
-            // 5. Default view
             ShowPanel(pnlOverview);
             SetActiveNav(btnNavHome);
 
             this->Controls->Add(pnlRight);
         }
 
-        // ── Top bar (56 px, white, 1-px bottom border) ────────────
         void BuildTopBar()
         {
             pnlTopBar = gcnew Panel();
@@ -406,7 +304,6 @@ namespace BloodBank {
             pnlTopBar->Paint += gcnew PaintEventHandler(
                 this, &RecipientDashboard::OnTopBarPaint);
 
-            // "X" close — DockStyle::Right, always flush to right edge
             btnClose = gcnew Button();
             btnClose->Text = "X";
             btnClose->Font = gcnew Drawing::Font("Segoe UI", 11, FontStyle::Bold);
@@ -429,22 +326,16 @@ namespace BloodBank {
             lblTopBarTitle->Location = Drawing::Point(28, 13);
             lblTopBarTitle->BackColor = Color::Transparent;
 
-            // btnClose added FIRST so DockStyle::Right claims its 56 px strip
             pnlTopBar->Controls->Add(btnClose);
             pnlTopBar->Controls->Add(lblTopBarTitle);
         }
 
-
-        // ══════════════════════════════════════════════════════════
-        //  PANEL 1 — OVERVIEW
-        // ══════════════════════════════════════════════════════════
         void BuildOverviewPanel()
         {
             pnlOverview = gcnew Panel();
             pnlOverview->BackColor = CLR_BG_FORM;
             pnlOverview->AutoScroll = true;
 
-            // ── Hero welcome section ──────────────────────────────
             Label^ lblHello = gcnew Label();
             lblHello->Text = "Hello, " + _fullName + "!";
             lblHello->Font = gcnew Drawing::Font("Segoe UI Light", 22, FontStyle::Regular);
@@ -454,7 +345,6 @@ namespace BloodBank {
             lblHello->BackColor = Color::Transparent;
 
             Label^ lblSub = gcnew Label();
-            // U+1F497 = GROWING HEART 💗
             lblSub->Text = Char::ConvertFromUtf32(0x1F497)
                 + "  We're here to help. Request blood quickly and safely.";
             lblSub->Font = gcnew Drawing::Font("Segoe UI", 10);
@@ -463,13 +353,11 @@ namespace BloodBank {
             lblSub->Location = Drawing::Point(34, 76);
             lblSub->BackColor = Color::Transparent;
 
-            // ── Divider line ─────────────────────────────────────
             Panel^ pnlDivider = gcnew Panel();
             pnlDivider->Size = Drawing::Size(500, 1);
             pnlDivider->Location = Drawing::Point(32, 116);
             pnlDivider->BackColor = CLR_BORDER;
 
-            // ── Section label ────────────────────────────────────
             Label^ lblMetricSection = gcnew Label();
             lblMetricSection->Text = "YOUR REQUEST SUMMARY";
             lblMetricSection->Font = gcnew Drawing::Font("Segoe UI", 7, FontStyle::Bold);
@@ -478,20 +366,16 @@ namespace BloodBank {
             lblMetricSection->Location = Drawing::Point(32, 134);
             lblMetricSection->BackColor = Color::Transparent;
 
-            // ── Two metric cards ─────────────────────────────────
-            //    Card 1: Total Requests  (Crimson accent)
-            //    Card 2: Pending Requests (Orange accent — recipient theme)
             Panel^ cTotal = MakeMetricCard("TOTAL REQUESTS", CLR_ACCENT, 32, 160);
             Panel^ cPending = MakeMetricCard("PENDING REQUESTS", CLR_CARD_ORANGE, 272, 160);
 
             lblMetricTotal = GetMetricValueLabel(cTotal);
             lblMetricPending = GetMetricValueLabel(cPending);
 
-            // ── Info tip card ─────────────────────────────────────
             Panel^ pnlTip = gcnew Panel();
             pnlTip->Size = Drawing::Size(462, 72);
             pnlTip->Location = Drawing::Point(32, 340);
-            pnlTip->BackColor = ColorTranslator::FromHtml("#FEF9E7");  // warm amber tint
+            pnlTip->BackColor = ColorTranslator::FromHtml("#FEF9E7");
             pnlTip->Paint += gcnew PaintEventHandler(this, &RecipientDashboard::OnCardPaint);
 
             Panel^ tipBar = gcnew Panel();
@@ -500,7 +384,6 @@ namespace BloodBank {
             tipBar->BackColor = CLR_CARD_ORANGE;
 
             Label^ lblTipHead = gcnew Label();
-            // U+2139 = INFORMATION SOURCE ℹ
             lblTipHead->Text = Char::ConvertFromUtf32(0x2139) + "  How it works";
             lblTipHead->Font = gcnew Drawing::Font("Segoe UI", 9, FontStyle::Bold);
             lblTipHead->ForeColor = CLR_CARD_ORANGE;
@@ -530,17 +413,12 @@ namespace BloodBank {
             pnlOverview->Controls->Add(pnlTip);
         }
 
-
-        // ══════════════════════════════════════════════════════════
-        //  PANEL 2 — REQUEST BLOOD
-        // ══════════════════════════════════════════════════════════
         void BuildRequestPanel()
         {
             pnlRequest = gcnew Panel();
             pnlRequest->BackColor = CLR_BG_FORM;
             pnlRequest->AutoScroll = true;
 
-            // ── Section heading ───────────────────────────────────
             Label^ lblTitle = gcnew Label();
             lblTitle->Text = "Request Blood";
             lblTitle->Font = gcnew Drawing::Font("Segoe UI", 14, FontStyle::Bold);
@@ -557,20 +435,17 @@ namespace BloodBank {
             lblSub->Location = Drawing::Point(32, 66);
             lblSub->BackColor = Color::Transparent;
 
-            // ── White form card ───────────────────────────────────
             Panel^ card = gcnew Panel();
             card->Size = Drawing::Size(480, 320);
             card->Location = Drawing::Point(32, 108);
             card->BackColor = CLR_BG_CARD;
             card->Paint += gcnew PaintEventHandler(this, &RecipientDashboard::OnCardPaint);
 
-            // Orange left accent bar (recipient theme)
             Panel^ bar = gcnew Panel();
             bar->Size = Drawing::Size(4, 320);
             bar->Location = Drawing::Point(0, 0);
             bar->BackColor = CLR_CARD_ORANGE;
 
-            // ── Blood Group row ───────────────────────────────────
             Label^ lblBG = gcnew Label();
             lblBG->Text = "Blood Group";
             lblBG->Font = gcnew Drawing::Font("Segoe UI", 9, FontStyle::Bold);
@@ -586,7 +461,6 @@ namespace BloodBank {
             cmbBloodGroup->Location = Drawing::Point(28, 62);
             cmbBloodGroup->DropDownStyle = ComboBoxStyle::DropDownList;
             cmbBloodGroup->FlatStyle = FlatStyle::Flat;
-            // All 8 ABO blood groups
             cmbBloodGroup->Items->Add("A+");
             cmbBloodGroup->Items->Add("A-");
             cmbBloodGroup->Items->Add("B+");
@@ -597,7 +471,6 @@ namespace BloodBank {
             cmbBloodGroup->Items->Add("AB-");
             cmbBloodGroup->SelectedIndex = 0;
 
-            // ── Quantity row ──────────────────────────────────────
             Label^ lblQty = gcnew Label();
             lblQty->Text = "Quantity  (Units)";
             lblQty->Font = gcnew Drawing::Font("Segoe UI", 9, FontStyle::Bold);
@@ -612,13 +485,11 @@ namespace BloodBank {
             nudQuantity->Size = Drawing::Size(120, 32);
             nudQuantity->Location = Drawing::Point(28, 144);
             nudQuantity->Minimum = 1;
-            nudQuantity->Maximum = 10;      // reasonable upper limit per request
+            nudQuantity->Maximum = 10;
             nudQuantity->Value = 1;
             nudQuantity->BorderStyle = BorderStyle::FixedSingle;
 
-            // ── Informational note ────────────────────────────────
             Label^ lblInfo = gcnew Label();
-            // U+2139 = INFORMATION SOURCE ℹ
             lblInfo->Text = Char::ConvertFromUtf32(0x2139)
                 + "  Your request will be set to 'Pending' "
                 "until reviewed and approved by an admin.";
@@ -628,16 +499,12 @@ namespace BloodBank {
             lblInfo->Location = Drawing::Point(28, 200);
             lblInfo->BackColor = Color::Transparent;
 
-            // ── Divider ───────────────────────────────────────────
             Panel^ cardDiv = gcnew Panel();
             cardDiv->Size = Drawing::Size(420, 1);
             cardDiv->Location = Drawing::Point(28, 248);
             cardDiv->BackColor = CLR_BORDER;
 
-            // ── Primary "Submit Request" button ───────────────────
-            //    Solid crimson fill — primary call-to-action.
             Button^ btnSubmit = gcnew Button();
-            // U+1FA78 = DROP OF BLOOD 🩸
             btnSubmit->Text = Char::ConvertFromUtf32(0x1FA78) + "  Submit Request";
             btnSubmit->Font = gcnew Drawing::Font("Segoe UI", 11, FontStyle::Bold);
             btnSubmit->Size = Drawing::Size(210, 52);
@@ -665,47 +532,33 @@ namespace BloodBank {
             pnlRequest->Controls->Add(card);
         }
 
-
-        // ══════════════════════════════════════════════════════════
-        //  PANEL 3 — MY REQUESTS
-        // ══════════════════════════════════════════════════════════
         void BuildMyRequestsPanel()
         {
             pnlMyRequests = gcnew Panel();
             pnlMyRequests->BackColor = CLR_BG_FORM;
-            pnlMyRequests->AutoScroll = false;  // no infinite scrollbar; grid fills
+            pnlMyRequests->AutoScroll = false;
 
-            // ── Top strip (Refresh button) ─────────────────────────
             Panel^ pnlTop = gcnew Panel();
             pnlTop->Dock = DockStyle::Top;
             pnlTop->Height = 80;
 
-            // U+1F504 = ANTICLOCKWISE DOWNWARDS AND UPWARDS OPEN CIRCLE ARROWS 🔄
             Button^ btnRef = MakeOutlineButton(
                 " " + Char::ConvertFromUtf32(0x1F504) + "  Refresh", 32, 24);
             btnRef->Click += gcnew EventHandler(this, &RecipientDashboard::OnRefreshRequests);
             pnlTop->Controls->Add(btnRef);
 
-            // ── Padding container — grid never escapes the panel ────
             Panel^ pnlGridBox = gcnew Panel();
             pnlGridBox->Dock = DockStyle::Fill;
             pnlGridBox->Padding = System::Windows::Forms::Padding(32, 0, 32, 32);
 
             dgvMyRequests = MakeStyledGrid();
-            dgvMyRequests->Dock = DockStyle::Fill;  // fills perfectly inside the padding
+            dgvMyRequests->Dock = DockStyle::Fill;
             pnlGridBox->Controls->Add(dgvMyRequests);
 
-            // Add in reverse Z-order: grid box (Fill) first, then top strip (Top)
             pnlMyRequests->Controls->Add(pnlGridBox);
             pnlMyRequests->Controls->Add(pnlTop);
         }
 
-
-        // ══════════════════════════════════════════════════════════
-        //  SHARED WIDGET FACTORIES  (identical style to DonorDashboard)
-        // ══════════════════════════════════════════════════════════
-
-        // Metric card: coloured 4-px left bar + large number/text label
         Panel^ MakeMetricCard(String^ title, Color accent, int x, int y)
         {
             Panel^ card = gcnew Panel();
@@ -734,7 +587,7 @@ namespace BloodBank {
             lblVal->AutoSize = true;
             lblVal->Location = Drawing::Point(18, 48);
             lblVal->BackColor = Color::Transparent;
-            lblVal->Tag = "metric_value";    // retrieval marker
+            lblVal->Tag = "metric_value";
 
             card->Controls->Add(bar);
             card->Controls->Add(lblTitle);
@@ -742,7 +595,6 @@ namespace BloodBank {
             return card;
         }
 
-        // Walk a card's children and return the label tagged "metric_value"
         Label^ GetMetricValueLabel(Panel^ card)
         {
             for each (Control ^ c in card->Controls)
@@ -756,7 +608,6 @@ namespace BloodBank {
             return nullptr;
         }
 
-        // Fully styled DataGridView — crimson headers, blush selection
         DataGridView^ MakeStyledGrid()
         {
             DataGridView^ dgv = gcnew DataGridView();
@@ -769,14 +620,12 @@ namespace BloodBank {
             dgv->AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode::Fill;
             dgv->RowHeadersVisible = false;
 
-            // MUST be false — otherwise Windows overrides header colours
             dgv->EnableHeadersVisualStyles = false;
             dgv->BackgroundColor = Color::White;
             dgv->BorderStyle = BorderStyle::None;
             dgv->CellBorderStyle = DataGridViewCellBorderStyle::SingleHorizontal;
             dgv->GridColor = CLR_GRID_LINE;
 
-            // Column headers: crimson bg, white bold text
             DataGridViewCellStyle^ hStyle = gcnew DataGridViewCellStyle();
             hStyle->BackColor = CLR_ACCENT;
             hStyle->ForeColor = Color::White;
@@ -789,7 +638,6 @@ namespace BloodBank {
             dgv->ColumnHeadersHeightSizeMode =
                 DataGridViewColumnHeadersHeightSizeMode::DisableResizing;
 
-            // Default cells
             DataGridViewCellStyle^ cStyle = gcnew DataGridViewCellStyle();
             cStyle->BackColor = Color::White;
             cStyle->ForeColor = CLR_TEXT;
@@ -799,7 +647,6 @@ namespace BloodBank {
             cStyle->Padding = System::Windows::Forms::Padding(10, 4, 0, 4);
             dgv->DefaultCellStyle = cStyle;
 
-            // Alternating rows
             DataGridViewCellStyle^ aStyle = gcnew DataGridViewCellStyle();
             aStyle->BackColor = CLR_ALT_ROW;
             aStyle->ForeColor = CLR_TEXT;
@@ -811,7 +658,6 @@ namespace BloodBank {
             return dgv;
         }
 
-        // Crimson-outline action button (Refresh, etc.)
         Button^ MakeOutlineButton(String^ text, int x, int y)
         {
             Button^ btn = gcnew Button();
@@ -830,23 +676,16 @@ namespace BloodBank {
             return btn;
         }
 
-
-        // ══════════════════════════════════════════════════════════
-        //  DATA LOADING
-        // ══════════════════════════════════════════════════════════
-
         void LoadAllData()
         {
             LoadOverviewMetrics();
             LoadMyRequests();
         }
 
-        // ── Overview: Total & Pending requests for this recipient ─
         void LoadOverviewMetrics()
         {
             Database^ db = Database::GetInstance();
 
-            // ── Total requests submitted by THIS recipient ────────
             SqlCommand^ cmdTotal = gcnew SqlCommand(
                 "SELECT COUNT(*) FROM BloodRequests WHERE RecipientID = @id");
             cmdTotal->Parameters->AddWithValue("@id", _recipientID);
@@ -854,7 +693,6 @@ namespace BloodBank {
             if (lblMetricTotal != nullptr && tObj != nullptr)
                 lblMetricTotal->Text = Convert::ToInt32(tObj).ToString();
 
-            // ── Pending requests for THIS recipient ───────────────
             SqlCommand^ cmdPending = gcnew SqlCommand(
                 "SELECT COUNT(*) FROM BloodRequests "
                 "WHERE  RecipientID = @id AND RequestStatus = 'Pending'");
@@ -864,12 +702,10 @@ namespace BloodBank {
                 lblMetricPending->Text = Convert::ToInt32(pObj).ToString();
         }
 
-        // ── My Requests grid: all requests for this recipient ─────
         void LoadMyRequests()
         {
             if (dgvMyRequests == nullptr) return;
 
-            // Parameterised query — SQL-injection safe, scoped to this recipient
             SqlCommand^ cmd = gcnew SqlCommand(
                 "SELECT RequestID          AS [Request ID], "
                 "       BloodGroup         AS [Blood Group], "
@@ -885,11 +721,6 @@ namespace BloodBank {
             if (dt != nullptr)
                 dgvMyRequests->DataSource = dt;
         }
-
-
-        // ══════════════════════════════════════════════════════════
-        //  NAVIGATION HELPERS
-        // ══════════════════════════════════════════════════════════
 
         void ShowPanel(Panel^ target)
         {
@@ -913,18 +744,11 @@ namespace BloodBank {
             btn->Font = gcnew Drawing::Font("Segoe UI", 10, FontStyle::Bold);
         }
 
-
-        // ══════════════════════════════════════════════════════════
-        //  EVENT HANDLERS
-        // ══════════════════════════════════════════════════════════
-
-        // ── Form load ─────────────────────────────────────────────
         void OnLoad(Object^ sender, EventArgs^ e)
         {
             LoadAllData();
         }
 
-        // ── Nav hover ─────────────────────────────────────────────
         void OnNavEnter(Object^ s, EventArgs^ e)
         {
             Button^ btn = safe_cast<Button^>(s);
@@ -944,7 +768,6 @@ namespace BloodBank {
             }
         }
 
-        // ── Nav click: swap panel + update top bar title ──────────
         void OnNavClick(Object^ s, EventArgs^ e)
         {
             Button^ btn = safe_cast<Button^>(s);
@@ -970,7 +793,6 @@ namespace BloodBank {
             }
         }
 
-        // ── Outline button hover ──────────────────────────────────
         void OnOutlineBtnEnter(Object^ s, EventArgs^ e)
         {
             safe_cast<Button^>(s)->BackColor = CLR_HOVER_BG;
@@ -980,16 +802,13 @@ namespace BloodBank {
             safe_cast<Button^>(s)->BackColor = CLR_BG_CARD;
         }
 
-        // ── Refresh my requests ───────────────────────────────────
         void OnRefreshRequests(Object^ s, EventArgs^ e)
         {
             LoadMyRequests();
         }
 
-        // ── Submit blood request (parameterised INSERT) ────────────
         void OnSubmitRequest(Object^ s, EventArgs^ e)
         {
-            // Guard — ComboBox should always have a selection, but be safe
             if (cmbBloodGroup->SelectedItem == nullptr)
             {
                 MessageBox::Show(
@@ -1003,8 +822,6 @@ namespace BloodBank {
             String^ bg = cmbBloodGroup->SelectedItem->ToString();
             int     qty = Convert::ToInt32(nudQuantity->Value);
 
-            // Parameterised INSERT — prevents SQL injection
-            // RequestStatus defaults to 'Pending' for admin review
             SqlCommand^ cmd = gcnew SqlCommand(
                 "INSERT INTO BloodRequests "
                 "       (RecipientID, BloodGroup, QuantityRequested, RequestDate, RequestStatus) "
@@ -1017,7 +834,6 @@ namespace BloodBank {
 
             if (rows > 0)
             {
-                // Success dialog
                 MessageBox::Show(
                     "Blood request submitted successfully!\n\n"
                     "Blood Group  :  " + bg + "\n"
@@ -1029,28 +845,23 @@ namespace BloodBank {
                     MessageBoxButtons::OK,
                     MessageBoxIcon::Information);
 
-                // Reset form controls to defaults
                 cmbBloodGroup->SelectedIndex = 0;
                 nudQuantity->Value = 1;
 
-                // Silently refresh the Home metrics so numbers stay current
                 LoadOverviewMetrics();
             }
-            // If rows <= 0 the Database singleton already showed an error dialog
         }
 
-        // ── Submit button hover (darker crimson on hover) ──────────
         void OnSubmitEnter(Object^ s, EventArgs^ e)
         {
             safe_cast<Button^>(s)->BackColor =
-                ColorTranslator::FromHtml("#A93226");   // 15% darker crimson
+                ColorTranslator::FromHtml("#A93226");
         }
         void OnSubmitLeave(Object^ s, EventArgs^ e)
         {
             safe_cast<Button^>(s)->BackColor = CLR_ACCENT;
         }
 
-        // ── Logout: close dashboard → LoginForm resurfaces ─────────
         void OnLogoutEnter(Object^ s, EventArgs^ e)
         {
             btnLogout->BackColor = CLR_HOVER_BG;
@@ -1063,10 +874,9 @@ namespace BloodBank {
         }
         void OnLogoutClick(Object^ s, EventArgs^ e)
         {
-            this->Close();   // closes dashboard only; LoginForm::OnChildClosed fires
+            this->Close();
         }
 
-        // ── Close (X): terminate the entire application ───────────
         void OnCloseBtnEnter(Object^ s, EventArgs^ e)
         {
             btnClose->ForeColor = CLR_ACCENT;
@@ -1082,12 +892,6 @@ namespace BloodBank {
             Application::Exit();
         }
 
-
-        // ══════════════════════════════════════════════════════════
-        //  CUSTOM PAINT HANDLERS
-        // ══════════════════════════════════════════════════════════
-
-        // Sidebar — 1-px right-edge separator
         void OnSidebarPaint(Object^ s, PaintEventArgs^ e)
         {
             Panel^ p = safe_cast<Panel^>(s);
@@ -1096,7 +900,6 @@ namespace BloodBank {
             delete pen;
         }
 
-        // Welcome block — 1-px bottom divider
         void OnDividerPaint(Object^ s, PaintEventArgs^ e)
         {
             Panel^ p = safe_cast<Panel^>(s);
@@ -1105,7 +908,6 @@ namespace BloodBank {
             delete pen;
         }
 
-        // Top bar — 1-px bottom border
         void OnTopBarPaint(Object^ s, PaintEventArgs^ e)
         {
             Panel^ p = safe_cast<Panel^>(s);
@@ -1114,7 +916,6 @@ namespace BloodBank {
             delete pen;
         }
 
-        // Cards — thin border on all four sides
         void OnCardPaint(Object^ s, PaintEventArgs^ e)
         {
             Panel^ p = safe_cast<Panel^>(s);
@@ -1123,7 +924,6 @@ namespace BloodBank {
             delete pen;
         }
 
-        // Logout button — 1-px top separator
         void OnLogoutPaint(Object^ s, PaintEventArgs^ e)
         {
             Button^ b = safe_cast<Button^>(s);
@@ -1131,62 +931,5 @@ namespace BloodBank {
             e->Graphics->DrawLine(pen, 0, 0, b->Width, 0);
             delete pen;
         }
-
-    };  // ref class RecipientDashboard
-
-}   // namespace BloodBank
-
-
-// ================================================================
-//  LOGINFORM WIRING (add to LoginForm after role check)
-// ================================================================
-//
-//   else if (role == "Recipient")
-//   {
-//       this->Hide();
-//       RecipientDashboard^ rd = gcnew RecipientDashboard(userID, fullName);
-//       rd->FormClosed += gcnew FormClosedEventHandler(
-//                             this, &LoginForm::OnChildClosed);
-//       rd->Show();
-//   }
-//
-// ================================================================
-//  ARCHITECTURE NOTES
-// ================================================================
-//
-//  Z-ORDER (mirrors DonorDashboard / AdminDashboard v3 exactly)
-//  ─────────────────────────────────────────────────────────────
-//  BuildSidebar()   → this->Controls->Add(pnlSidebar)  [high Z]
-//  BuildRightArea() → this->Controls->Add(pnlRight)    [low  Z]
-//  pnlSidebar->SendToBack()
-//    → WinForms docks pnlRight (Fill) first, consuming all space.
-//    → Then docks pnlSidebar (Left) on top, claiming 250 px.
-//
-//  INSIDE pnlRight (same rule applies):
-//    Content panels added FIRST (Fill) → lower Z → docked second.
-//    pnlTopBar added LAST             → higher Z → docked first,
-//                                        claiming the top 56 px.
-//    Content panels then fill whatever remains below the top bar.
-//
-//  GRID SCROLLBAR SUPPRESSION
-//  ─────────────────────────────────────────────────────────────
-//  dgvMyRequests lives inside pnlGridBox (Dock::Fill, Padding(32,0,32,32)).
-//  pnlMyRequests->AutoScroll = false.
-//  dgvMyRequests->Dock = Fill → stretches to fill the padded box.
-//  No AnchorStyles::Bottom anywhere → no phantom scroll bar.
-//
-//  EMOJI ENCODING
-//  ─────────────────────────────────────────────────────────────
-//  Char::ConvertFromUtf32(int) runs at runtime using the CLR's
-//  Unicode engine — unaffected by /source-charset or BOM settings.
-//  0x25CF = ●  BLACK CIRCLE         (role badge dot)
-//  0x1F3E0 = 🏠 HOUSE BUILDING      (Home nav)
-//  0x1F489 = 💉 SYRINGE              (Request Blood nav)
-//  0x1F4CB = 📋 CLIPBOARD            (My Requests nav)
-//  0x1F511 = 🔑 KEY                  (Logout)
-//  0x1F504 = 🔄 ARROWS (Refresh)
-//  0x1FA78 = 🩸 DROP OF BLOOD        (Submit button)
-//  0x1F497 = 💗 GROWING HEART        (overview subtitle + success msg)
-//  0x2139  = ℹ  INFORMATION SOURCE   (tip card + form note)
-//
-// ================================================================
+    };
+}
