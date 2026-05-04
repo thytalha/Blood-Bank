@@ -1,48 +1,3 @@
-// ================================================================
-//  SignupForm.h  —  Blood Bank Management System
-//  "Web-in-Desktop" Medical Aesthetic — Full Rewrite
-//
-//  LAYOUT (1260 x 690 px centred container):
-//    • Full-screen  WindowState = Maximized | BorderStyle = None
-//    • pnlMain      1260 × 690  — centres on Load + every Resize
-//    • pnlLeftCard   820 × 600  — Registration form   (~65 %)
-//    • pnlRightCard  390 × 600  — "Why Join Us?" info (~30 %)
-//    • btnClose       52 ×  52  — Anchored Top|Right → Application::Exit()
-//
-//  FIELD → SQL COLUMN MAPPING:
-//    txtFullName        → FullName          (nvarchar)
-//    txtUsername        → Username          (nvarchar, UNIQUE)
-//    txtContactDetails  → ContactDetails    (nvarchar)
-//    dtpDOB             → Age               (INT, via CalculateAge)
-//    cmbBloodGroup      → BloodGroup        (nvarchar, e.g. "A+")
-//    cmbRole            → UserRole          (nvarchar)
-//    txtAddress         → [Address]         (nvarchar)
-//    txtPassword        → [Password]        (nvarchar)
-//    txtConfirmPass     → validation only   (not stored)
-//
-//  BACKEND:
-//    • Database::GetInstance() singleton — unchanged
-//    • Blood groups: DISTINCT BloodGroup FROM Users; hardcoded fallback
-//    • Age: CalculateAge(DateTime) helper (birthday-aware subtraction)
-//    • Parameterised INSERT — SQL-injection safe via SqlCommand^ overload
-//    • Database::UsernameExists() — checks for duplicate usernames
-//
-//  NAVIGATION:
-//    • "Create Account"              → INSERT → success dialog → Close()
-//    • "Already have an account?"   → this->Close()  (LoginForm shows)
-//    • Floating "✕" (top-right)     → Application::Exit()
-//
-//  WIRING  (LoginForm.h  —  unchanged, same pattern as before):
-//    void OnSignupClick(Object^ s, LinkLabelLinkClickedEventArgs^ e)
-//    {
-//        this->Hide();
-//        SignupForm^ sf = gcnew SignupForm();
-//        sf->FormClosed += gcnew FormClosedEventHandler(
-//                              this, &LoginForm::OnChildClosed);
-//        sf->Show();
-//    }
-// ================================================================
-
 #pragma once
 #include "Database.h"
 
@@ -63,38 +18,27 @@ namespace BloodBank {
 
     public ref class SignupForm : public Form
     {
-
-        // ══════════════════════════════════════════════════════════
-        //  COLOUR PALETTE — single source of truth
-        // ══════════════════════════════════════════════════════════
     private:
-        Color CLR_BG_FORM;       // #F8F9FA  soft off-white form backdrop
-        Color CLR_BG_CARD;       // #FFFFFF  pure white card surface
-        Color CLR_ACCENT;        // #C0392B  crimson  — buttons / bullets
-        Color CLR_ACCENT_DARK;   // #A93226  15 % darker — hover state
-        Color CLR_TEXT;          // #212529  near-black primary text
-        Color CLR_MUTED;         // #6C757D  medium grey labels / hints
-        Color CLR_BORDER;        // #E9ECEF  pale grey card border / divider
-        Color CLR_FIELD_BORDER;  // #DEE2E6  input box idle border
-        Color CLR_HOVER_BG;      // #FADBD8  blush pink  — hover fills
-        Color CLR_ERROR;         // #C0392B  same as accent — error text
-        Color CLR_SUCCESS;       // #27AE60  green — success feedback
-        Color CLR_INFO_BG;       // #FDECEA  very light rose — icon bg / box
+        Color CLR_BG_FORM;
+        Color CLR_BG_CARD;
+        Color CLR_ACCENT;
+        Color CLR_ACCENT_DARK;
+        Color CLR_TEXT;
+        Color CLR_MUTED;
+        Color CLR_BORDER;
+        Color CLR_FIELD_BORDER;
+        Color CLR_HOVER_BG;
+        Color CLR_ERROR;
+        Color CLR_SUCCESS;
+        Color CLR_INFO_BG;
 
+        Panel^ pnlMain;
+        Panel^ pnlLeftCard;
+        Panel^ pnlRightCard;
+        Button^ btnClose;
 
-        // ══════════════════════════════════════════════════════════
-        //  CONTROL HANDLES
-        // ══════════════════════════════════════════════════════════
-
-        // ── Layout ───────────────────────────────────────────────
-        Panel^ pnlMain;          // centred outer wrapper (both cards)
-        Panel^ pnlLeftCard;      // white form card
-        Panel^ pnlRightCard;     // info panel card
-        Button^ btnClose;         // floating ✕, anchored Top|Right
-
-        // ── Form fields ───────────────────────────────────────────
         TextBox^ txtFullName;
-        TextBox^ txtUsername;       // username field (unique login handle)
+        TextBox^ txtUsername;
         TextBox^ txtContactDetails;
         DateTimePicker^ dtpDOB;
         ComboBox^ cmbBloodGroup;
@@ -105,9 +49,8 @@ namespace BloodBank {
         CheckBox^ chkTerms;
         Button^ btnSubmit;
         Button^ btnBack;
-        Label^ lblStatus;         // inline error / success strip
+        Label^ lblStatus;
 
-        // ── Field wrapper panels (border painting + focus glow) ───
         Panel^ pboxFullName;
         Panel^ pboxUsername;
         Panel^ pboxContact;
@@ -115,17 +58,11 @@ namespace BloodBank {
         Panel^ pboxPassword;
         Panel^ pboxConfirmPass;
 
-        // Tracks which wrapper is currently focused for repaint
         Panel^ _focusedBox;
 
-
-        // ══════════════════════════════════════════════════════════
-        //  CONSTRUCTOR
-        // ══════════════════════════════════════════════════════════
     public:
         SignupForm()
         {
-            // ── Palette ───────────────────────────────────────────
             CLR_BG_FORM = ColorTranslator::FromHtml("#F8F9FA");
             CLR_BG_CARD = ColorTranslator::FromHtml("#FFFFFF");
             CLR_ACCENT = ColorTranslator::FromHtml("#C0392B");
@@ -146,10 +83,6 @@ namespace BloodBank {
     protected:
         ~SignupForm() {}
 
-
-        // ══════════════════════════════════════════════════════════
-        //  InitializeComponent
-        // ══════════════════════════════════════════════════════════
     private:
         void InitializeComponent()
         {
@@ -163,22 +96,14 @@ namespace BloodBank {
             this->Resize += gcnew EventHandler(this, &SignupForm::OnResize);
             this->Click += gcnew EventHandler(this, &SignupForm::OnBackgroundClick);
 
-            // Build Z-order: close button last so it floats above cards
             BuildMainLayout();
             BuildCloseButton();
         }
 
-
-        // ══════════════════════════════════════════════════════════
-        //  CLOSE BUTTON
-        //  Anchored Top|Right — always in the screen corner.
-        //  Calls Application::Exit() (not Close, which would just
-        //  return to LoginForm).
-        // ══════════════════════════════════════════════════════════
         void BuildCloseButton()
         {
             btnClose = gcnew Button();
-            btnClose->Text = Char::ConvertFromUtf32(0x2715); // ✕
+            btnClose->Text = Char::ConvertFromUtf32(0x2715);
             btnClose->Font = gcnew Drawing::Font("Segoe UI", 12, FontStyle::Bold);
             btnClose->Size = Drawing::Size(52, 52);
             btnClose->Location = Drawing::Point(this->Width - 60, 4);
@@ -199,19 +124,13 @@ namespace BloodBank {
             this->Controls->Add(btnClose);
         }
 
-
-        // ══════════════════════════════════════════════════════════
-        //  MAIN LAYOUT  (page title + both cards side by side)
-        // ══════════════════════════════════════════════════════════
         void BuildMainLayout()
         {
-            // Outer wrapper — centred in OnLoad / OnResize
             pnlMain = gcnew Panel();
             pnlMain->BackColor = CLR_BG_FORM;
             pnlMain->Size = Drawing::Size(1260, 690);
             pnlMain->Click += gcnew EventHandler(this, &SignupForm::OnBackgroundClick);
 
-            // ── Page title ───────────────────────────────────────
             Label^ lblPageTitle = gcnew Label();
             lblPageTitle->Text = "Create Your Account";
             lblPageTitle->Font = gcnew Drawing::Font(
@@ -229,21 +148,14 @@ namespace BloodBank {
             lblPageSub->Location = Drawing::Point(2, 36);
             pnlMain->Controls->Add(lblPageSub);
 
-            // ── Build both cards then add to wrapper ─────────────
             BuildLeftCard();
             BuildRightCard();
 
-            // Right card must be added before left so left is on top
             pnlMain->Controls->Add(pnlRightCard);
             pnlMain->Controls->Add(pnlLeftCard);
             this->Controls->Add(pnlMain);
         }
 
-
-        // ══════════════════════════════════════════════════════════
-        //  LEFT CARD  (Registration Form)
-        //  820 × 600 px — two-column field grid
-        // ══════════════════════════════════════════════════════════
         void BuildLeftCard()
         {
             pnlLeftCard = gcnew Panel();
@@ -254,8 +166,6 @@ namespace BloodBank {
                 this, &SignupForm::OnCardPaint);
             pnlLeftCard->Click += gcnew EventHandler(this, &SignupForm::OnBackgroundClick);
 
-            // ── Card header: icon badge + title + subtitle ────────
-            // Rounded icon badge (drawn via OnIconBadgePaint)
             Panel^ pnlBadge = gcnew Panel();
             pnlBadge->Size = Drawing::Size(46, 46);
             pnlBadge->Location = Drawing::Point(28, 20);
@@ -264,7 +174,6 @@ namespace BloodBank {
                 this, &SignupForm::OnIconBadgePaint);
             pnlLeftCard->Controls->Add(pnlBadge);
 
-            // Icon inside badge — U+1F464 👤 person silhouette
             Label^ lblBadgeIcon = gcnew Label();
             lblBadgeIcon->Text = Char::ConvertFromUtf32(0x1F464);
             lblBadgeIcon->Font = gcnew Drawing::Font("Segoe UI Emoji", 18);
@@ -290,19 +199,15 @@ namespace BloodBank {
             lblCardSub->Location = Drawing::Point(84, 44);
             pnlLeftCard->Controls->Add(lblCardSub);
 
-            // Thin horizontal divider beneath the header
             Panel^ divider = gcnew Panel();
             divider->BackColor = CLR_BORDER;
             divider->Size = Drawing::Size(760, 1);
             divider->Location = Drawing::Point(30, 82);
             pnlLeftCard->Controls->Add(divider);
 
-            // ── Two-column field grid ─────────────────────────────
-            // x1 = left col   x2 = right col   fw = column width   fh = field height
             const int x1 = 30, x2 = 425, fw = 365, fh = 36;
-            int y = 100;   // first row label top
+            int y = 100;
 
-            // ── Row 1: Full Name  |  Username ────
             AddLabel(pnlLeftCard, "Full Name", x1, y);
             AddLabel(pnlLeftCard, "Username", x2, y);
             y += 22;
@@ -312,20 +217,18 @@ namespace BloodBank {
             txtUsername = AddTextBox(pboxUsername, "thytalha", false);
             y += fh + 16;
 
-            // ── Row 2: Phone Number  |  Date of Birth ────────────
             AddLabel(pnlLeftCard, "Phone Number", x1, y);
             AddLabel(pnlLeftCard, "Date of Birth", x2, y);
             y += 22;
             pboxContact = MakeFieldBox(pnlLeftCard, x1, y, fw, fh);
             txtContactDetails = AddTextBox(pboxContact, "+92 (301) 2345678", false);
-            // DateTimePicker — placed directly (has own border rendering)
             dtpDOB = gcnew DateTimePicker();
             dtpDOB->Format = DateTimePickerFormat::Custom;
             dtpDOB->CustomFormat = "'MM/DD/YYYY'";
             dtpDOB->Font = gcnew Drawing::Font("Segoe UI", 10);
             dtpDOB->Size = Drawing::Size(fw, fh);
             dtpDOB->Location = Drawing::Point(x2, y);
-            dtpDOB->MaxDate = DateTime::Today.AddYears(-16); // must be 16+
+            dtpDOB->MaxDate = DateTime::Today.AddYears(-16);
             dtpDOB->Value = dtpDOB->MaxDate;
             dtpDOB->Tag = false;
             dtpDOB->ValueChanged += gcnew EventHandler(this, &SignupForm::OnDobChanged);
@@ -333,25 +236,21 @@ namespace BloodBank {
             pnlLeftCard->Controls->Add(dtpDOB);
             y += fh + 16;
 
-            // ── Row 3: Blood Group  |  Role ──────────────────────
             AddLabel(pnlLeftCard, "Blood Group", x1, y);
             AddLabel(pnlLeftCard, "Role", x2, y);
             y += 22;
             cmbBloodGroup = MakeComboBox(pnlLeftCard, x1, y, fw, fh);
-            // Blood groups populated in OnLoad → LoadBloodGroups()
             cmbRole = MakeComboBox(pnlLeftCard, x2, y, fw, fh);
             cmbRole->Items->AddRange(gcnew array<Object^>{ "Donor", "Recipient" });
             cmbRole->SelectedIndex = 0;
             y += fh + 16;
 
-            // ── Row 4: Address (full width) ───────────────────────
             AddLabel(pnlLeftCard, "Address", x1, y);
             y += 22;
             pboxAddress = MakeFieldBox(pnlLeftCard, x1, y, 760, fh);
             txtAddress = AddTextBox(pboxAddress, "Street, City, State", false);
             y += fh + 16;
 
-            // ── Row 5: Password  |  Confirm Password ─────────────
             AddLabel(pnlLeftCard, "Password", x1, y);
             AddLabel(pnlLeftCard, "Confirm Password", x2, y);
             y += 22;
@@ -361,7 +260,6 @@ namespace BloodBank {
             txtConfirmPass = AddPasswordBox(pboxConfirmPass, fw, fh);
             y += fh + 22;
 
-            // ── Terms checkbox ────────────────────────────────────
             chkTerms = gcnew CheckBox();
             chkTerms->Text = "I agree to the terms of service and donation eligibility criteria.";
             chkTerms->Font = gcnew Drawing::Font("Segoe UI", 9);
@@ -371,7 +269,6 @@ namespace BloodBank {
             pnlLeftCard->Controls->Add(chkTerms);
             y += 30;
 
-            // ── Inline status label (error / success) ─────────────
             lblStatus = gcnew Label();
             lblStatus->Text = "";
             lblStatus->Font = gcnew Drawing::Font("Segoe UI", 9);
@@ -382,8 +279,6 @@ namespace BloodBank {
             pnlLeftCard->Controls->Add(lblStatus);
             y += 24;
 
-            // ── Action buttons ────────────────────────────────────
-            // Primary: "Create Account" — solid crimson
             btnSubmit = gcnew Button();
             btnSubmit->Text = "Create Account";
             btnSubmit->Font = gcnew Drawing::Font(
@@ -403,7 +298,6 @@ namespace BloodBank {
                 this, &SignupForm::OnSubmitClick);
             pnlLeftCard->Controls->Add(btnSubmit);
 
-            // Secondary: "Already have an account?" — outlined
             btnBack = gcnew Button();
             btnBack->Text = "Already have an account? Login";
             btnBack->Font = gcnew Drawing::Font("Segoe UI", 10);
@@ -421,11 +315,6 @@ namespace BloodBank {
             pnlLeftCard->Controls->Add(btnBack);
         }
 
-
-        // ══════════════════════════════════════════════════════════
-        //  RIGHT CARD  ("Why Join Us?" info panel)
-        //  390 × 600 px
-        // ══════════════════════════════════════════════════════════
         void BuildRightCard()
         {
             pnlRightCard = gcnew Panel();
@@ -436,7 +325,6 @@ namespace BloodBank {
                 this, &SignupForm::OnCardPaint);
             pnlRightCard->Click += gcnew EventHandler(this, &SignupForm::OnBackgroundClick);
 
-            // Section title
             Label^ lblTitle = gcnew Label();
             lblTitle->Text = "Why Join Us?";
             lblTitle->Font = gcnew Drawing::Font(
@@ -446,7 +334,6 @@ namespace BloodBank {
             lblTitle->Location = Drawing::Point(24, 28);
             pnlRightCard->Controls->Add(lblTitle);
 
-            // Bullet point entries
             array<String^>^ points = gcnew array<String^> {
                 "Track your donation history and impact",
                     "Get notified when your blood type is urgently needed",
@@ -457,9 +344,8 @@ namespace BloodBank {
             int y = 70;
             for each (String ^ text in points)
             {
-                // Crimson bullet dot  U+2022 •
                 Label^ dot = gcnew Label();
-                dot->Text = Char::ConvertFromUtf32(0x2022); // •
+                dot->Text = Char::ConvertFromUtf32(0x2022);
                 dot->Font = gcnew Drawing::Font("Segoe UI", 12, FontStyle::Bold);
                 dot->ForeColor = CLR_ACCENT;
                 dot->Size = Drawing::Size(18, 24);
@@ -478,7 +364,6 @@ namespace BloodBank {
                 y += 46;
             }
 
-            // ── "Did you know?" info box ──────────────────────────
             Panel^ pnlInfo = gcnew Panel();
             pnlInfo->BackColor = CLR_INFO_BG;
             pnlInfo->Size = Drawing::Size(338, 82);
@@ -505,12 +390,6 @@ namespace BloodBank {
             pnlInfo->Controls->Add(lblDYKText);
         }
 
-
-        // ══════════════════════════════════════════════════════════
-        //  FIELD FACTORY HELPERS
-        // ══════════════════════════════════════════════════════════
-
-        // ── Shared field label (sits above every input) ───────────
         void AddLabel(Panel^ parent, String^ text, int x, int y)
         {
             Label^ lbl = gcnew Label();
@@ -522,24 +401,19 @@ namespace BloodBank {
             parent->Controls->Add(lbl);
         }
 
-        // ── Border wrapper panel for TextBox controls ─────────────
-        //    OnFieldBoxPaint draws a 1-px border (crimson when focused).
         Panel^ MakeFieldBox(Panel^ parent, int x, int y, int w, int h)
         {
             Panel^ box = gcnew Panel();
             box->Size = Drawing::Size(w, h);
             box->Location = Drawing::Point(x, y);
             box->BackColor = Color::White;
-            box->Tag = (Object^)false; // false = not focused
+            box->Tag = (Object^)false;
             box->Paint += gcnew PaintEventHandler(
                 this, &SignupForm::OnFieldBoxPaint);
             parent->Controls->Add(box);
             return box;
         }
 
-        // ── Plain text input with placeholder simulation ──────────
-        //    Placeholder text is stored in TextBox::Tag.
-        //    GotFocus clears it; LostFocus restores it if still empty.
         TextBox^ AddTextBox(Panel^ box, String^ placeholder, bool isPass)
         {
             TextBox^ tb = gcnew TextBox();
@@ -557,7 +431,6 @@ namespace BloodBank {
             return tb;
         }
 
-        // ── Password input — no placeholder (label above is clear) ──
         TextBox^ AddPasswordBox(Panel^ box, int w, int h)
         {
             TextBox^ tb = gcnew TextBox();
@@ -570,14 +443,13 @@ namespace BloodBank {
             tb->Location = Drawing::Point(7, (h - 22) / 2);
             tb->Tag = "......";
             tb->Text = Char::ConvertFromUtf32(0x2022) + Char::ConvertFromUtf32(0x2022) + Char::ConvertFromUtf32(0x2022) + Char::ConvertFromUtf32(0x2022) +
-                Char::ConvertFromUtf32(0x2022) + Char::ConvertFromUtf32(0x2022) + Char::ConvertFromUtf32(0x2022) + Char::ConvertFromUtf32(0x2022); // ••••••••
+                Char::ConvertFromUtf32(0x2022) + Char::ConvertFromUtf32(0x2022) + Char::ConvertFromUtf32(0x2022) + Char::ConvertFromUtf32(0x2022);
             tb->GotFocus += gcnew EventHandler(this, &SignupForm::OnTbFocus);
             tb->LostFocus += gcnew EventHandler(this, &SignupForm::OnTbBlur);
             box->Controls->Add(tb);
             return tb;
         }
 
-        // ── Drop-down selector ────────────────────────────────────
         ComboBox^ MakeComboBox(Panel^ parent, int x, int y, int w, int h)
         {
             ComboBox^ cmb = gcnew ComboBox();
@@ -592,12 +464,6 @@ namespace BloodBank {
             return cmb;
         }
 
-
-        // ══════════════════════════════════════════════════════════
-        //  CENTERING LOGIC
-        //  Called on Load and every Resize — keeps pnlMain dead-centre
-        //  at any resolution.
-        // ══════════════════════════════════════════════════════════
         void CenterMain()
         {
             pnlMain->Location = Drawing::Point(
@@ -606,12 +472,6 @@ namespace BloodBank {
             );
         }
 
-
-        // ══════════════════════════════════════════════════════════
-        //  PAINT HANDLERS
-        // ══════════════════════════════════════════════════════════
-
-        // 1-px CLR_BORDER outline around a card panel
         void OnCardPaint(Object^ s, PaintEventArgs^ e)
         {
             Panel^ p = safe_cast<Panel^>(s);
@@ -620,7 +480,6 @@ namespace BloodBank {
             delete pen;
         }
 
-        // Field wrapper — 1-px idle border / 2-px crimson focused border
         void OnFieldBoxPaint(Object^ s, PaintEventArgs^ e)
         {
             Panel^ p = safe_cast<Panel^>(s);
@@ -632,7 +491,6 @@ namespace BloodBank {
             delete pen;
         }
 
-        // Icon badge — filled circle in CLR_INFO_BG tint
         void OnIconBadgePaint(Object^ s, PaintEventArgs^ e)
         {
             Panel^ p = safe_cast<Panel^>(s);
@@ -643,7 +501,6 @@ namespace BloodBank {
             delete br;
         }
 
-        // "Did you know?" box — light rose border
         void OnInfoBoxPaint(Object^ s, PaintEventArgs^ e)
         {
             Panel^ p = safe_cast<Panel^>(s);
@@ -652,16 +509,11 @@ namespace BloodBank {
             delete pen;
         }
 
-
-        // ══════════════════════════════════════════════════════════
-        //  FOCUS MANAGEMENT  (placeholder reveal + border glow)
-        // ══════════════════════════════════════════════════════════
         void OnTbFocus(Object^ s, EventArgs^ e)
         {
             TextBox^ tb = safe_cast<TextBox^>(s);
             String^ placeholder = tb->Tag ? tb->Tag->ToString() : "";
 
-            // Clear placeholder text on focus (non-password fields only)
             if (!String::IsNullOrEmpty(placeholder) && tb->Text == placeholder)
             {
                 tb->Text = "";
@@ -670,7 +522,6 @@ namespace BloodBank {
                     tb->UseSystemPasswordChar = true;
             }
 
-            // Highlight the wrapper panel border
             Panel^ box = safe_cast<Panel^>(tb->Parent);
             _focusedBox = box;
             box->Invalidate();
@@ -681,7 +532,6 @@ namespace BloodBank {
             TextBox^ tb = safe_cast<TextBox^>(s);
             String^ placeholder = tb->Tag ? tb->Tag->ToString() : "";
 
-            // Restore placeholder if field is still empty
             if (!String::IsNullOrEmpty(placeholder) &&
                 String::IsNullOrEmpty(tb->Text))
             {
@@ -696,10 +546,6 @@ namespace BloodBank {
             box->Invalidate();
         }
 
-
-        // ══════════════════════════════════════════════════════════
-        //  DOB PLACEHOLDER HANDLING
-        // ══════════════════════════════════════════════════════════
         void OnDobChanged(Object^ s, EventArgs^ e)
         {
             if (dtpDOB->CustomFormat != "MM/dd/yyyy")
@@ -707,10 +553,6 @@ namespace BloodBank {
             dtpDOB->Tag = true;
         }
 
-
-        // ══════════════════════════════════════════════════════════
-        //  EVENT HANDLERS
-        // ══════════════════════════════════════════════════════════
         void OnBackgroundClick(Object^ s, EventArgs^ e)
         {
             this->ActiveControl = nullptr;
@@ -730,34 +572,15 @@ namespace BloodBank {
 
         void OnResize(Object^ s, EventArgs^ e) { CenterMain(); }
 
-        // Floating ✕ button — exits the entire application
         void OnCloseClick(Object^ s, EventArgs^ e) { Application::Exit(); }
         void OnCloseEnter(Object^ s, EventArgs^ e) { btnClose->ForeColor = CLR_ERROR; }
         void OnCloseLeave(Object^ s, EventArgs^ e) { btnClose->ForeColor = CLR_MUTED; }
 
-        // "Create Account" hover — darkens background
         void OnSubmitEnter(Object^ s, EventArgs^ e) { btnSubmit->BackColor = CLR_ACCENT_DARK; }
         void OnSubmitLeave(Object^ s, EventArgs^ e) { btnSubmit->BackColor = CLR_ACCENT; }
 
-        // "Already have an account?" — returns to LoginForm
         void OnBackClick(Object^ s, EventArgs^ e) { this->Close(); }
 
-
-        // ══════════════════════════════════════════════════════════
-        //  BLOOD GROUP LOADER
-        //
-        //  Strategy 1: SELECT DISTINCT BloodGroup FROM Users — reads
-        //    whatever groups are already in the database so the list
-        //    is always in sync with actual data.
-        //  Strategy 2: If the query returns no rows (fresh DB) or
-        //    fails for any reason, fall back to the canonical 8-type
-        //    hardcoded list.
-        //
-        //  NOTE: Users.BloodGroup stores the group name string directly
-        //    (e.g. "A+"), NOT a foreign-key integer, as confirmed by the
-        //    live db_bloodbank schema screenshot. The INSERT also uses
-        //    the string value.
-        // ══════════════════════════════════════════════════════════
         void LoadBloodGroups()
         {
             bool loaded = false;
@@ -781,7 +604,6 @@ namespace BloodBank {
             }
             catch (Exception^)
             {
-                // Silent — fall through to hardcoded fallback below
             }
 
             if (!loaded)
@@ -800,28 +622,15 @@ namespace BloodBank {
                 cmbBloodGroup->Items->Add(g);
         }
 
-
-        // ══════════════════════════════════════════════════════════
-        //  AGE HELPER
-        //  Birthday-aware age calculation in full calendar years.
-        //  Subtracts 1 if the birthday this year hasn't occurred yet.
-        // ══════════════════════════════════════════════════════════
         int CalculateAge(DateTime dob)
         {
             DateTime today = DateTime::Today;
             int age = today.Year - dob.Year;
-            // Adjust if the current date is before this year's birthday
             if (dob.Date > today.AddYears(-age))
                 age--;
             return age;
         }
 
-
-        // ══════════════════════════════════════════════════════════
-        //  GetFieldText
-        //  Returns the actual typed value, stripping the placeholder
-        //  (which is stored in TextBox::Tag).
-        // ══════════════════════════════════════════════════════════
         String^ GetFieldText(TextBox^ tb)
         {
             String^ placeholder = tb->Tag ? tb->Tag->ToString() : "";
@@ -829,13 +638,6 @@ namespace BloodBank {
             return (val == placeholder) ? "" : val;
         }
 
-
-        // ══════════════════════════════════════════════════════════
-        //  ShowStatus
-        //  Surfaces an inline message below the Terms checkbox.
-        //  isError = true  → CLR_ERROR (crimson)
-        //  isError = false → CLR_SUCCESS (green)
-        // ══════════════════════════════════════════════════════════
         void ShowStatus(String^ msg, bool isError)
         {
             lblStatus->Text = msg;
@@ -843,30 +645,14 @@ namespace BloodBank {
             lblStatus->Visible = true;
         }
 
-
-        // ══════════════════════════════════════════════════════════
-        //  SUBMIT HANDLER  ("Create Account")
-        //
-        //  Pipeline:
-        //    1. Gather & trim all inputs (placeholder-aware)
-        //    2. Client-side validation  (required fields, age, passwords)
-        //    3. Duplicate username check via Database::UsernameExists()
-        //    4. Parameterised INSERT INTO Users (all 8 columns)
-        //    5. Success dialog → this->Close()  (LoginForm resurfaces)
-        // ══════════════════════════════════════════════════════════
         void OnSubmitClick(Object^ s, EventArgs^ e)
         {
             lblStatus->Visible = false;
 
-            // ── 1. Gather inputs ──────────────────────────────────
             String^ fullName = GetFieldText(txtFullName);
             String^ username = GetFieldText(txtUsername);
             String^ contact = GetFieldText(txtContactDetails);
             String^ address = GetFieldText(txtAddress);
-            // Password fields use "......" as a visual placeholder sentinel
-            // (stored in Tag; rendered as literal dots while unfocused).
-            // Strip it here so untouched fields are treated as truly empty.
-            // NOTE: do NOT Trim() -- leading/trailing spaces are valid in passwords.
             String^ pwdPlaceholder = txtPassword->Tag ? txtPassword->Tag->ToString() : "";
             String^ cfmPlaceholder = txtConfirmPass->Tag ? txtConfirmPass->Tag->ToString() : "";
             String^ password = (txtPassword->Text == pwdPlaceholder) ? "" : txtPassword->Text;
@@ -881,18 +667,8 @@ namespace BloodBank {
 
             int age = CalculateAge(dtpDOB->Value);
 
-            // ── 2. Validation ─────────────────────────────────────
-            //
-            //  All patterns are compiled once as local Regex^ handles.
-            //  RegexOptions::None is explicit for clarity.
-            //  ShowStatus(msg, true) colours the strip crimson (error).
-            //
-            String^ warn = Char::ConvertFromUtf32(0x26A0) + "  ";   // ⚠
+            String^ warn = Char::ConvertFromUtf32(0x26A0) + "  ";
 
-            // ── 2a. Full Name ─────────────────────────────────────
-            //  Rules: 2-50 chars; only letters, spaces, apostrophes,
-            //         and hyphens. No leading/trailing spaces (already
-            //         trimmed by GetFieldText).
             if (String::IsNullOrWhiteSpace(fullName))
             {
                 ShowStatus(warn + "Full Name is required.", true);
@@ -906,7 +682,6 @@ namespace BloodBank {
                 return;
             }
             {
-                // ^[A-Za-z\s'\-]{2,50}$
                 Regex^ rxName = gcnew Regex("^[A-Za-z\\s'\\-]{2,50}$");
                 if (!rxName->IsMatch(fullName))
                 {
@@ -918,10 +693,6 @@ namespace BloodBank {
                 }
             }
 
-            // ── 2b. Username ──────────────────────────────────────
-            //  Rules: 3-30 characters; only letters, digits, underscores,
-            //         hyphens, and dots allowed. Must start with a letter
-            //         or digit (no leading punctuation). No spaces.
             if (String::IsNullOrWhiteSpace(username))
             {
                 ShowStatus(warn + "Username is required.", true);
@@ -941,9 +712,6 @@ namespace BloodBank {
                 return;
             }
             {
-                // Must start with a letter or digit, then allow letters,
-                // digits, underscores, hyphens, and dots in the remainder.
-                // ^[a-zA-Z0-9][a-zA-Z0-9._\-]{2,29}$
                 Regex^ rxUsername = gcnew Regex(
                     "^[a-zA-Z0-9][a-zA-Z0-9._\\-]{2,29}$");
                 if (!rxUsername->IsMatch(username))
@@ -957,11 +725,6 @@ namespace BloodBank {
                 }
             }
 
-            // ── 2c. Contact / Phone Number ────────────────────────
-            //  Rules: optional leading +, then 10-15 digits; spaces,
-            //         dashes, and parentheses permitted as separators.
-            //  Digit-count is verified by stripping non-digits and
-            //  measuring the remainder.
             if (String::IsNullOrWhiteSpace(contact))
             {
                 ShowStatus(warn + "Phone Number is required.", true);
@@ -969,7 +732,6 @@ namespace BloodBank {
                 return;
             }
             {
-                // Character set: optional +, then digits / spaces / - / ( / )
                 Regex^ rxPhoneFmt = gcnew Regex(
                     "^\\+?[\\d\\s\\-\\(\\)]+$");
                 if (!rxPhoneFmt->IsMatch(contact))
@@ -980,7 +742,6 @@ namespace BloodBank {
                     txtContactDetails->Focus();
                     return;
                 }
-                // Count pure digits — must be 10-15
                 Regex^ rxDigits = gcnew Regex("\\d");
                 int digitCount = rxDigits->Matches(contact)->Count;
                 if (digitCount < 10 || digitCount > 15)
@@ -992,7 +753,6 @@ namespace BloodBank {
                 }
             }
 
-            // ── 2d. Date of Birth (picker interaction guard) ──────
             if (dtpDOB->Tag == nullptr || !safe_cast<bool>(dtpDOB->Tag))
             {
                 ShowStatus(warn + "Please select a Date of Birth.", true);
@@ -1000,9 +760,6 @@ namespace BloodBank {
                 return;
             }
 
-            // ── 2e. Role-based Age ────────────────────────────────
-            //  Donor     : must be 16-65 (inclusive).
-            //  Recipient : must be > 0  (any positive age accepted).
             if (role == "Donor")
             {
                 if (age < 16)
@@ -1029,7 +786,6 @@ namespace BloodBank {
                 }
             }
 
-            // ── 2f. Blood Group ───────────────────────────────────
             if (String::IsNullOrEmpty(bloodGroup))
             {
                 ShowStatus(warn + "Please select a Blood Group.", true);
@@ -1037,9 +793,6 @@ namespace BloodBank {
                 return;
             }
 
-            // ── 2g. Password ──────────────────────────────────────
-            //  Rules: ≥ 8 chars; at least one uppercase letter,
-            //         one lowercase letter, one digit, one special char.
             if (String::IsNullOrWhiteSpace(password))
             {
                 ShowStatus(warn + "Password is required.", true);
@@ -1090,7 +843,6 @@ namespace BloodBank {
                 }
             }
 
-            // ── 2h. Confirm Password ──────────────────────────────
             if (password != confirm)
             {
                 ShowStatus(warn + "Passwords do not match. Please re-enter.", true);
@@ -1099,8 +851,6 @@ namespace BloodBank {
                 return;
             }
 
-            // ── 2i. Address (optional field) ─────────────────────
-            //  If the user typed something it must be under 255 chars.
             if (!String::IsNullOrWhiteSpace(address) && address->Length >= 255)
             {
                 ShowStatus(warn +
@@ -1109,14 +859,12 @@ namespace BloodBank {
                 return;
             }
 
-            // ── 2j. Terms of Service ──────────────────────────────
             if (!chkTerms->Checked)
             {
                 ShowStatus(warn + "Please agree to the terms of service.", true);
                 return;
             }
 
-            // ── 3. Duplicate username check ───────────────────────
             if (Database::GetInstance()->UsernameExists(username))
             {
                 ShowStatus(Char::ConvertFromUtf32(0x26A0) +
@@ -1130,18 +878,6 @@ namespace BloodBank {
                 return;
             }
 
-            // ── 4. Parameterised INSERT INTO Users ────────────────
-            //
-            //  Column mapping (db_bloodbank schema, confirmed via screenshot):
-            //    Username       → @uname   (unique login handle)
-            //    [Password]     → @pwd     (plain-text; hash recommended later)
-            //    UserRole       → @role    ("Donor" | "Recipient")
-            //    FullName       → @fn
-            //    ContactDetails → @cd      (phone number)
-            //    Age            → @age     (INT, birthday-aware calculation)
-            //    [Address]      → @addr
-            //    BloodGroup     → @bg      (string, e.g. "A+")
-            //
             SqlCommand^ cmd = gcnew SqlCommand(
                 "INSERT INTO Users "
                 "       (Username, [Password], Role, FullName, "
@@ -1160,13 +896,11 @@ namespace BloodBank {
 
             int rows = Database::GetInstance()->ExecuteNonQuery(cmd);
 
-            // ── 5. Post-insert feedback ───────────────────────────
             if (rows > 0)
             {
-                // Role-specific emoji greeting
                 String^ roleEmoji = (role == "Donor")
-                    ? Char::ConvertFromUtf32(0x1F489)   // 💉 syringe
-                    : Char::ConvertFromUtf32(0x1F3E5);  // 🏥 hospital
+                    ? Char::ConvertFromUtf32(0x1F489)
+                    : Char::ConvertFromUtf32(0x1F3E5);
 
                 MessageBox::Show(
                     roleEmoji + "  Welcome to LifeBlood, " + fullName + "!\n\n"
@@ -1177,62 +911,15 @@ namespace BloodBank {
                     "Age           :  " + age.ToString() + "\n\n"
                     "You can now log in with your credentials.\n"
                     "Thank you for joining the LifeBlood community "
-                    + Char::ConvertFromUtf32(0x2764),     // ❤
+                    + Char::ConvertFromUtf32(0x2764),
                     "Registration Successful",
                     MessageBoxButtons::OK,
                     MessageBoxIcon::Information);
 
-                // Close returns to LoginForm (OnChildClosed fires automatically)
                 this->Close();
             }
-            // If rows <= 0, Database singleton already displayed an error dialog.
         }
 
-    };  // ref class SignupForm
+    };
 
-}   // namespace BloodBank
-
-
-// ================================================================
-//  SQL SCHEMA ALIGNMENT (db_bloodbank — confirmed via screenshot)
-// ================================================================
-//
-//  TABLE: Users
-//  ─────────────────────────────────────────────────────────────
-//  Column          Type        Source
-//  ─────────────── ─────────── ────────────────────────────────
-//  UserID          INT IDENTITY auto-generated (not inserted)
-//  Username        NVARCHAR    txtUsername     (unique login handle)
-//  [Password]      NVARCHAR    txtPassword
-//  UserRole        NVARCHAR    cmbRole         ("Donor"/"Recipient")
-//  FullName        NVARCHAR    txtFullName
-//  ContactDetails  NVARCHAR    txtContactDetails
-//  Age             INT         CalculateAge(dtpDOB.Value)
-//  [Address]       NVARCHAR    txtAddress
-//  BloodGroup      NVARCHAR    cmbBloodGroup   (stored as "A+", etc.)
-//
-//  Note: Admin accounts are NOT creatable via public signup — by
-//  design. Seed admins directly in the database.
-//
-// ================================================================
-//  EMOJI CODEPOINTS
-// ================================================================
-//
-//  U+2715   ✕  Close button
-//  U+1F464  👤  Person silhouette — card header badge
-//  U+2022   •  Bullet dot — right card list
-//  U+26A0   ⚠  Warning — inline validation messages
-//  U+1F489  💉  Syringe — Donor success greeting
-//  U+1F3E5  🏥  Hospital — Recipient success greeting
-//  U+2764   ❤  Heart — success dialog footer
-//
-// ================================================================
-//  LAYOUT DIMENSIONS (at design target: 1366 × 768 and above)
-// ================================================================
-//
-//  pnlMain       1260 × 690   centred on form
-//  pnlLeftCard    820 × 600   at (0,   68) in pnlMain
-//  pnlRightCard   390 × 600   at (870, 68) in pnlMain
-//  btnClose        52 ×  52   anchored Top|Right on form
-//
-// ================================================================
+}
