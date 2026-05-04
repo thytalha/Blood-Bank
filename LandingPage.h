@@ -1,5 +1,4 @@
-﻿
-#pragma once
+﻿#pragma once
 #include <cmath>
 #include "LoginForm.h"
 #include "SignupForm.h"
@@ -30,7 +29,6 @@ namespace BloodBank {
             CLR_MUTED = Color::FromArgb(0x6C, 0x75, 0x7D);
             CLR_PINK_LIGHT = Color::FromArgb(0xFF, 0xEB, 0xEE);
 
-            // ── Animation state ────────────────────────────────────────
             angleO = 0.0f;
             angleA = 2.0f;
             angleB = 4.0f;
@@ -40,7 +38,6 @@ namespace BloodBank {
 
             InitializeComponent();
 
-            // ── 33 fps animation clock ─────────────────────────────────
             animTimer = gcnew System::Windows::Forms::Timer();
             animTimer->Interval = 30;
             animTimer->Tick += gcnew EventHandler(this, &LandingPage::OnAnimTick);
@@ -53,12 +50,8 @@ namespace BloodBank {
             if (components) delete components;
         }
 
-        // ══════════════════════════════════════════════════════════════════
-        //  PRIVATE FIELDS
-        // ══════════════════════════════════════════════════════════════════
     private:
 
-        // ── Colour Palette ─────────────────────────────────────────────
         Color CLR_BG_FORM;
         Color CLR_BG_CARD;
         Color CLR_ACCENT;
@@ -66,16 +59,12 @@ namespace BloodBank {
         Color CLR_MUTED;
         Color CLR_PINK_LIGHT;
 
-        // ── Right-anim inset margins ────────────────────────────────────
-        //    The dark hero box is inset from rightAnimPanel edges by these.
         int RP_TOP = 20;
         int RP_BOTTOM = 20;
         int RP_RIGHT = 20;
 
-        // ── Card hover baseline (updated by PositionControls) ───────────
         int cardRestY;
 
-        // ── Section 1 – Header ──────────────────────────────────────────
         Panel^ topNavPanel;
         Panel^ logoBadge;
         Label^ lblBrand;
@@ -83,63 +72,55 @@ namespace BloodBank {
         Button^ btnNavLogin;
         Button^ btnNavAbout;
         Button^ btnNavContact;
-        Button^ btnSignUpNav;       // solid crimson "Sign Up" in nav
+        Button^ btnSignUpNav;
 
-        // ── Section 2 – Hero ────────────────────────────────────────────
-        Panel^ heroPanel;          // Dock=Top wrapper, H=600
-        Panel^ leftContentPanel;   // Dock=Left, 56% of hero width
-        Panel^ rightAnimPanel;     // Dock=Fill, GDI+ animation
-        Panel^ pillBadgePanel;     // "♥ Every drop counts" pill
+        Panel^ heroPanel;
+        Panel^ leftContentPanel;
+        Panel^ rightAnimPanel;
+        Panel^ pillBadgePanel;
         Label^ lblPillText;
         Label^ lblHeading;
         Label^ lblSubText;
-        Button^ btnLoginDash;       // Solid crimson → LoginForm
-        Button^ btnLearnMore;       // Outline ghost
-        Panel^ statsPanel;         // Stats row (donors / units / hospitals)
-        Label^ lblStat1Num;    Label^ lblStat1Desc;
-        Label^ lblStat2Num;    Label^ lblStat2Desc;
-        Label^ lblStat3Num;    Label^ lblStat3Desc;
-        Label^ lblRightTitle;      // White text inside dark box
+        Button^ btnLoginDash;
+        Button^ btnLearnMore;
+        Panel^ statsPanel;
+        Label^ lblStat1Num;    
+        Label^ lblStat1Desc;
+        Label^ lblStat2Num;    
+        Label^ lblStat2Desc;
+        Label^ lblStat3Num;    
+        Label^ lblStat3Desc;
+        Label^ lblRightTitle;
         Label^ lblRightDesc;
 
-        // ── Section 3 – Cards ───────────────────────────────────────────
         Panel^ cardsPanel;
         Panel^ cardManagement;
         Panel^ cardInventory;
         Panel^ cardRequests;
-        Label^ lblDescMgmt;        // Stored for MaximumSize updates
+        Label^ lblDescMgmt;
         Label^ lblDescInv;
         Label^ lblDescReq;
 
-        // ── Section 4 – Footer ──────────────────────────────────────────
         Panel^ footerPanel;
         Label^ lblFooterBrand;
         Label^ lblFooterCopy;
 
-        // ── Close button ────────────────────────────────────────────────
         Button^ btnClose;
 
-        // ── GDI+ Animation ─────────────────────────────────────────────
         System::Windows::Forms::Timer^ animTimer;
         float angleO;
         float angleA;
         float angleB;
         float angleAB;
 
-        // ── Designer container ──────────────────────────────────────────
         System::ComponentModel::IContainer^ components;
 
-
-        // ══════════════════════════════════════════════════════════════════
-        //  InitializeComponent
-        // ══════════════════════════════════════════════════════════════════
 #pragma region Windows Form Designer generated code
 
         void InitializeComponent(void)
         {
             components = gcnew System::ComponentModel::Container();
 
-            // ── Allocate all controls ──────────────────────────────────
             topNavPanel = gcnew Panel();
             logoBadge = gcnew Panel();
             lblBrand = gcnew Label();
@@ -176,7 +157,6 @@ namespace BloodBank {
 
             btnClose = gcnew Button();
 
-            // ── Suspend layouts to prevent intermediate redraws ────────
             this->SuspendLayout();
             topNavPanel->SuspendLayout();
             heroPanel->SuspendLayout();
@@ -187,35 +167,26 @@ namespace BloodBank {
             statsPanel->SuspendLayout();
             pillBadgePanel->SuspendLayout();
 
-            // ────────────────────────────────────────────────────────────
-            //  FORM
-            // ────────────────────────────────────────────────────────────
             this->Text = L"LifeBlood \u2014 Blood Bank Management System";
             this->BackColor = CLR_BG_FORM;
             this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::None;
             this->WindowState = FormWindowState::Maximized;
             this->StartPosition = FormStartPosition::CenterScreen;
             this->DoubleBuffered = true;
-            this->AutoScroll = true;   // enables scrollbar when content overflows
+            this->AutoScroll = true;
             this->Load += gcnew EventHandler(this, &LandingPage::OnFormLoad);
             this->Resize += gcnew EventHandler(this, &LandingPage::OnFormResize);
 
-            // ────────────────────────────────────────────────────────────
-            //  SECTION 1 · HEADER  (Dock=Top, H=80)
-            //  White bar · logo · brand · nav text links · Sign Up btn
-            // ────────────────────────────────────────────────────────────
             topNavPanel->Dock = DockStyle::Top;
             topNavPanel->Height = 80;
             topNavPanel->BackColor = CLR_BG_CARD;
             topNavPanel->Paint += gcnew PaintEventHandler(this, &LandingPage::topNavPanel_Paint);
 
-            // ── Logo badge (48×48 crimson-drop icon) ────────────────────
             logoBadge->Size = System::Drawing::Size(48, 48);
             logoBadge->Location = System::Drawing::Point(28, 16);
             logoBadge->BackColor = Color::Transparent;
             logoBadge->Paint += gcnew PaintEventHandler(this, &LandingPage::logoBadge_Paint);
 
-            // ── Brand wordmark ───────────────────────────────────────────
             lblBrand->AutoSize = true;
             lblBrand->BackColor = Color::Transparent;
             lblBrand->Font = gcnew Drawing::Font(L"Segoe UI", 17, FontStyle::Bold);
@@ -223,16 +194,13 @@ namespace BloodBank {
             lblBrand->Text = L"LifeBlood";
             lblBrand->Location = System::Drawing::Point(86, 26);
 
-            // ── Nav text links (positions computed in PositionControls) ─
             SetupNavLink(btnNavHome, L"Home", 72);
             SetupNavLink(btnNavAbout, L"About", 64);
             btnNavAbout->Click += gcnew EventHandler(this, &LandingPage::btnNavAbout_Click);
             SetupNavLink(btnNavContact, L"Contact", 80);
             SetupNavLink(btnNavLogin, L"Login", 64);
-            // Wire Login nav link to LoginForm
             btnNavLogin->Click += gcnew EventHandler(this, &LandingPage::btnLoginDash_Click);
 
-            // ── "Sign Up" solid button ────────────────────────────────────
             btnSignUpNav->Text = L"Sign Up";
             btnSignUpNav->Size = System::Drawing::Size(108, 42);
             btnSignUpNav->FlatStyle = FlatStyle::Flat;
@@ -255,24 +223,17 @@ namespace BloodBank {
             topNavPanel->Controls->Add(btnNavLogin);
             topNavPanel->Controls->Add(btnSignUpNav);
 
-            // ────────────────────────────────────────────────────────────
-            //  SECTION 2 · HERO  (Dock=Top, H=600)
-            //  Left (56%): pill badge + heading + sub + CTAs + stats
-            //  Right (Fill): dark-crimson animated box
-            // ────────────────────────────────────────────────────────────
             heroPanel->Dock = DockStyle::Top;
             heroPanel->Height = 600;
             heroPanel->BackColor = CLR_BG_FORM;
 
-            // ── Left content panel (Dock=Left, width set in PositionControls)
             leftContentPanel->Dock = DockStyle::Left;
-            leftContentPanel->Width = 600;          // placeholder; overridden
+            leftContentPanel->Width = 600;
             leftContentPanel->BackColor = CLR_BG_FORM;
 
-            // Pill badge: "♥ Every drop counts"
             pillBadgePanel->Size = System::Drawing::Size(234, 38);
             pillBadgePanel->BackColor = Color::Transparent;
-            pillBadgePanel->Location = System::Drawing::Point(60, 72);  // overridden
+            pillBadgePanel->Location = System::Drawing::Point(60, 72);
             pillBadgePanel->Paint += gcnew PaintEventHandler(this, &LandingPage::pillBadge_Paint);
 
             lblPillText->AutoSize = true;
@@ -282,23 +243,20 @@ namespace BloodBank {
             lblPillText->Text = L"\u2665  Every drop counts";
             lblPillText->Location = System::Drawing::Point(18, 9);
 
-            // Massive bold heading
             lblHeading->AutoSize = false;
             lblHeading->Font = gcnew Drawing::Font(L"Segoe UI", 36, FontStyle::Bold);
             lblHeading->ForeColor = CLR_TEXT;
             lblHeading->Text = L"Saving Lives,\nOne Donation\nat a Time.";
             lblHeading->Size = System::Drawing::Size(520, 180);
-            lblHeading->Location = System::Drawing::Point(60, 128);    // overridden
+            lblHeading->Location = System::Drawing::Point(60, 128);
 
-            // Muted description
             lblSubText->AutoSize = false;
             lblSubText->Font = gcnew Drawing::Font(L"Segoe UI", 11, FontStyle::Regular);
             lblSubText->ForeColor = CLR_MUTED;
             lblSubText->Text = L"A comprehensive platform to manage donors,\nblood inventory, and life-saving requests.";
             lblSubText->Size = System::Drawing::Size(460, 58);
-            lblSubText->Location = System::Drawing::Point(60, 322);    // overridden
+            lblSubText->Location = System::Drawing::Point(60, 322);
 
-            // CTA 1: "Login to Dashboard"  (solid crimson)
             btnLoginDash->Text = L"Login to Dashboard";
             btnLoginDash->Size = System::Drawing::Size(202, 52);
             btnLoginDash->FlatStyle = FlatStyle::Flat;
@@ -313,7 +271,6 @@ namespace BloodBank {
             btnLoginDash->MouseLeave += gcnew EventHandler(this, &LandingPage::BtnInvalidate);
             btnLoginDash->Click += gcnew EventHandler(this, &LandingPage::btnLoginDash_Click);
 
-            // CTA 2: "Learn More"  (outline ghost)
             btnLearnMore->Text = L"Learn More";
             btnLearnMore->Size = System::Drawing::Size(148, 52);
             btnLearnMore->FlatStyle = FlatStyle::Flat;
@@ -326,15 +283,12 @@ namespace BloodBank {
             btnLearnMore->Paint += gcnew PaintEventHandler(this, &LandingPage::btnOutline_Paint);
             btnLearnMore->MouseEnter += gcnew EventHandler(this, &LandingPage::BtnInvalidate);
             btnLearnMore->MouseLeave += gcnew EventHandler(this, &LandingPage::BtnInvalidate);
-            // btnLearnMore: no navigation in this milestone — visually interactive only
 
-            // Stats row panel (transparent; separators drawn by Paint)
             statsPanel->Size = System::Drawing::Size(480, 70);
-            statsPanel->Location = System::Drawing::Point(60, 490);    // overridden
+            statsPanel->Location = System::Drawing::Point(60, 490);
             statsPanel->BackColor = Color::Transparent;
             statsPanel->Paint += gcnew PaintEventHandler(this, &LandingPage::statsPanel_Paint);
 
-            // Stat 1 — Donors
             lblStat1Num->AutoSize = true;
             lblStat1Num->BackColor = Color::Transparent;
             lblStat1Num->Font = gcnew Drawing::Font(L"Segoe UI", 17, FontStyle::Bold);
@@ -348,7 +302,6 @@ namespace BloodBank {
             lblStat1Desc->Text = L"Donors";
             lblStat1Desc->Location = System::Drawing::Point(0, 38);
 
-            // Stat 2 — Units in Stock
             lblStat2Num->AutoSize = true;
             lblStat2Num->BackColor = Color::Transparent;
             lblStat2Num->Font = gcnew Drawing::Font(L"Segoe UI", 17, FontStyle::Bold);
@@ -362,7 +315,6 @@ namespace BloodBank {
             lblStat2Desc->Text = L"Units in Stock";
             lblStat2Desc->Location = System::Drawing::Point(162, 38);
 
-            // Stat 3 — Partner Hospitals
             lblStat3Num->AutoSize = true;
             lblStat3Num->BackColor = Color::Transparent;
             lblStat3Num->Font = gcnew Drawing::Font(L"Segoe UI", 17, FontStyle::Bold);
@@ -389,46 +341,38 @@ namespace BloodBank {
             leftContentPanel->Controls->Add(btnLearnMore);
             leftContentPanel->Controls->Add(statsPanel);
 
-            // ── Right animation panel (Dock=Fill inside heroPanel) ──────
             rightAnimPanel->Dock = DockStyle::Fill;
             rightAnimPanel->BackColor = Color::Transparent;
             rightAnimPanel->Paint += gcnew PaintEventHandler(this, &LandingPage::rightAnimPanel_Paint);
 
-            // Welcome text (bottom of the dark hero box)
             lblRightTitle->AutoSize = true;
             lblRightTitle->BackColor = Color::Transparent;
             lblRightTitle->Font = gcnew Drawing::Font(L"Segoe UI", 16, FontStyle::Bold);
             lblRightTitle->ForeColor = Color::White;
             lblRightTitle->Text = L"Welcome to LifeBlood MMS";
-            lblRightTitle->Location = System::Drawing::Point(40, 430);     // overridden
+            lblRightTitle->Location = System::Drawing::Point(40, 430);
 
             lblRightDesc->AutoSize = true;
             lblRightDesc->BackColor = Color::Transparent;
             lblRightDesc->Font = gcnew Drawing::Font(L"Segoe UI", 10, FontStyle::Regular);
             lblRightDesc->ForeColor = Color::FromArgb(210, 255, 255, 255);
             lblRightDesc->Text = L"Streamlining the connection between\ngenerous donors and critical needs.";
-            lblRightDesc->Location = System::Drawing::Point(40, 464);     // overridden
+            lblRightDesc->Location = System::Drawing::Point(40, 464);
 
             rightAnimPanel->Controls->Add(lblRightTitle);
             rightAnimPanel->Controls->Add(lblRightDesc);
 
-            // ── Add to heroPanel: Fill first, Left last (reverse dock) ───
-            heroPanel->Controls->Add(rightAnimPanel);       // Dock=Fill  → processed last
-            heroPanel->Controls->Add(leftContentPanel);     // Dock=Left  → processed first
+            heroPanel->Controls->Add(rightAnimPanel);
+            heroPanel->Controls->Add(leftContentPanel);
 
-            // ────────────────────────────────────────────────────────────
-            //  SECTION 3 · CARDS  (Dock=Top, H=300)
-            //  Three white cards with icon · title · description · hover
-            // ────────────────────────────────────────────────────────────
             cardsPanel->Dock = DockStyle::Top;
             cardsPanel->Height = 300;
             cardsPanel->BackColor = CLR_BG_FORM;
             cardsPanel->Paint += gcnew PaintEventHandler(this, &LandingPage::cardsPanel_Paint);
 
-            // Emoji icon strings (supplementary-plane need ConvertFromUtf32)
-            String^ iconPeople = Char::ConvertFromUtf32(0x1F465);   // 👥
-            String^ iconShield = Char::ConvertFromUtf32(0x1F6E1);   // 🛡
-            String^ iconHeart = L"\u2764";                          // ❤
+            String^ iconPeople = Char::ConvertFromUtf32(0x1F465);
+            String^ iconShield = Char::ConvertFromUtf32(0x1F6E1);
+            String^ iconHeart = L"\u2764";
 
             lblDescMgmt = SetupCard(cardManagement, iconPeople,
                 L"Donor Management",
@@ -440,15 +384,10 @@ namespace BloodBank {
                 L"Life-Saving Requests",
                 L"Hospitals request blood; admins approve\nwith a single click. Inventory auto-updates.");
 
-            // Add in reverse for correct left-to-right Z-order
             cardsPanel->Controls->Add(cardRequests);
             cardsPanel->Controls->Add(cardInventory);
             cardsPanel->Controls->Add(cardManagement);
 
-            // ────────────────────────────────────────────────────────────
-            //  SECTION 4 · FOOTER  (Dock=Bottom, H=80)
-            //  Brand mark left · copyright text right
-            // ────────────────────────────────────────────────────────────
             footerPanel->Dock = DockStyle::Bottom;
             footerPanel->Height = 80;
             footerPanel->BackColor = CLR_BG_CARD;
@@ -458,22 +397,19 @@ namespace BloodBank {
             lblFooterBrand->BackColor = Color::Transparent;
             lblFooterBrand->Font = gcnew Drawing::Font(L"Segoe UI", 16, FontStyle::Bold);
             lblFooterBrand->ForeColor = CLR_TEXT;
-            lblFooterBrand->Text = L"\u2665 LifeBlood";          // ♥ LifeBlood
-            lblFooterBrand->Location = System::Drawing::Point(40, 28);    // overridden
+            lblFooterBrand->Text = L"\u2665 LifeBlood";
+            lblFooterBrand->Location = System::Drawing::Point(40, 28);
 
             lblFooterCopy->AutoSize = true;
             lblFooterCopy->BackColor = Color::Transparent;
             lblFooterCopy->Font = gcnew Drawing::Font(L"Segoe UI", 10, FontStyle::Regular);
             lblFooterCopy->ForeColor = CLR_MUTED;
             lblFooterCopy->Text = L"\u00A9 2026 LifeBlood MMS. Every drop counts.";
-            lblFooterCopy->Location = System::Drawing::Point(40, 28);    // overridden
+            lblFooterCopy->Location = System::Drawing::Point(40, 28);
 
             footerPanel->Controls->Add(lblFooterBrand);
             footerPanel->Controls->Add(lblFooterCopy);
 
-            // ────────────────────────────────────────────────────────────
-            //  CLOSE BUTTON  [✕]  (floating, Anchor=Top|Right)
-            // ────────────────────────────────────────────────────────────
             btnClose->Text = Char::ConvertFromUtf32(0x2715);
             btnClose->Size = System::Drawing::Size(44, 44);
             btnClose->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top | AnchorStyles::Right);
@@ -488,19 +424,12 @@ namespace BloodBank {
             btnClose->MouseEnter += gcnew EventHandler(this, &LandingPage::btnClose_MouseEnter);
             btnClose->MouseLeave += gcnew EventHandler(this, &LandingPage::btnClose_MouseLeave);
 
-            // ────────────────────────────────────────────────────────────
-            //  ADD CONTROLS TO FORM  (reverse dock order)
-            //  Dock engine processes last-added first, so:
-            //    topNavPanel (added last) → processed first → top of form
-            //    footerPanel (added first) → processed last → Dock=Bottom
-            // ────────────────────────────────────────────────────────────
-            this->Controls->Add(footerPanel);    // Dock=Bottom (processed last by engine)
-            this->Controls->Add(cardsPanel);     // Dock=Top  (3rd section)
-            this->Controls->Add(heroPanel);      // Dock=Top  (2nd section)
-            this->Controls->Add(topNavPanel);    // Dock=Top  (1st, processed first → very top)
-            this->Controls->Add(btnClose);       // floating over everything
+            this->Controls->Add(footerPanel);
+            this->Controls->Add(cardsPanel);
+            this->Controls->Add(heroPanel);
+            this->Controls->Add(topNavPanel);
+            this->Controls->Add(btnClose);
 
-            // ── Resume layouts ─────────────────────────────────────────
             statsPanel->ResumeLayout(false);
             statsPanel->PerformLayout();
             pillBadgePanel->ResumeLayout(false);
@@ -520,15 +449,8 @@ namespace BloodBank {
 
 #pragma endregion
 
-
-        // ══════════════════════════════════════════════════════════════════
-        //  FORM EVENTS
-        // ══════════════════════════════════════════════════════════════════
-
     private: System::Void OnFormLoad(Object^ sender, EventArgs^ e)
     {
-        // Enable double-buffered back-buffer on rightAnimPanel via Reflection.
-        // Panel::DoubleBuffered is Protected — cannot set it directly.
         PropertyInfo^ pi = Panel::typeid->GetProperty(
             L"DoubleBuffered",
             BindingFlags::Instance | BindingFlags::NonPublic);
@@ -545,34 +467,23 @@ namespace BloodBank {
         btnClose->BringToFront();
     }
 
-
-           // ══════════════════════════════════════════════════════════════════
-           //  RESPONSIVE LAYOUT ENGINE
-           //  Called on Load and every Resize.
-           //  All pixel positions derive from panel sizes → scales to any resolution.
-           // ══════════════════════════════════════════════════════════════════
-
     private: System::Void PositionControls()
     {
         int W = this->ClientSize.Width;
         int H = this->ClientSize.Height;
         if (W <= 0 || H <= 0) return;
 
-        // ── Close button: one-time init; Anchor keeps it pinned on resize ─
         btnClose->Location = System::Drawing::Point(W - btnClose->Width - 2, 2);
 
-        // ── Section 1: Nav links and Sign Up button ───────────────────────
         {
-            int navH = topNavPanel->Height;   // 80
-            int btnH = btnSignUpNav->Height;  // 42
+            int navH = topNavPanel->Height;
+            int btnH = btnSignUpNav->Height;
 
-            // Sign Up: right edge with extra space for the close button
             int closeBuffer = btnClose->Width + 16;
             btnSignUpNav->Location = System::Drawing::Point(W - btnSignUpNav->Width - 28 - closeBuffer,
                 (navH - btnH) / 2);
             RoundControl(btnSignUpNav, btnSignUpNav->Height / 2);
 
-            // Text links: lay out right-to-left before Sign Up
             array<Button^>^ links = gcnew array<Button^>{ btnNavContact, btnNavAbout, btnNavLogin, btnNavHome };
             int rightEdge = btnSignUpNav->Left - 12;
             for each (Button ^ b in links)
@@ -583,46 +494,38 @@ namespace BloodBank {
             }
         }
 
-        // ── Section 2: Hero split ─────────────────────────────────────────
         {
             int hW = heroPanel->Width;
-            int hH = heroPanel->Height;   // 600
+            int hH = heroPanel->Height;
             if (hW <= 0 || hH <= 0) return;
 
-            // ── Left panel: 56% of hero width ─────────────────────────────
             int leftW = static_cast<int>(hW * 0.56f);
             leftContentPanel->Width = leftW;
-            heroPanel->PerformLayout();   // recalculate Dock=Left + Dock=Fill
+            heroPanel->PerformLayout();
 
             int padL = Math::Max(50, static_cast<int>(leftW * 0.10f));
-            int midY = hH / 2;  // 300
+            int midY = hH / 2;
 
-            // Pill badge (centred vertically above heading)
             pillBadgePanel->Location = System::Drawing::Point(padL, midY - 218);
 
-            // Heading: immediately below pill
             int hdgW = Math::Min(520, leftW - padL - 20);
             lblHeading->Size = System::Drawing::Size(hdgW, 182);
             lblHeading->Location = System::Drawing::Point(padL, pillBadgePanel->Bottom + 14);
 
-            // Subtext: below heading
             int stW = Math::Min(460, leftW - padL - 20);
             lblSubText->Size = System::Drawing::Size(stW, 58);
             lblSubText->Location = System::Drawing::Point(padL, lblHeading->Bottom + 14);
 
-            // CTA buttons: side by side below subtext
             btnLoginDash->Location = System::Drawing::Point(padL, lblSubText->Bottom + 26);
             btnLearnMore->Location = System::Drawing::Point(
                 btnLoginDash->Right + 16, btnLoginDash->Top);
             RoundControl(btnLoginDash, btnLoginDash->Height / 2);
             RoundControl(btnLearnMore, btnLearnMore->Height / 2);
 
-            // Stats row: below CTA buttons
             int spW = Math::Min(480, leftW - padL - 20);
             statsPanel->Size = System::Drawing::Size(spW, 70);
             statsPanel->Location = System::Drawing::Point(padL, btnLoginDash->Bottom + 24);
 
-            // Responsive stat column positions
             int col = spW / 3;
             lblStat1Num->Location = System::Drawing::Point(0, 2);
             lblStat1Desc->Location = System::Drawing::Point(0, 38);
@@ -632,17 +535,14 @@ namespace BloodBank {
             lblStat3Desc->Location = System::Drawing::Point(col * 2, 38);
             statsPanel->Invalidate();
 
-            // ── Right panel: rebuild rounded clip region and text positions ──
             Rectangle box = GetRightPanelBoxRect();
             if (box.Width > 10 && box.Height > 10)
             {
-                // Welcome text near the bottom of the dark hero box
                 lblRightTitle->MaximumSize = System::Drawing::Size(box.Width - 80, 0);
                 lblRightTitle->Location = System::Drawing::Point(box.X + 40, box.Bottom - 110);
                 lblRightDesc->MaximumSize = System::Drawing::Size(box.Width - 80, 0);
                 lblRightDesc->Location = System::Drawing::Point(box.X + 40, box.Bottom - 64);
 
-                // Rounded clip region (radius = 36) applied to the panel
                 int cr = 36, d = cr * 2;
                 GraphicsPath^ rgn = gcnew GraphicsPath();
                 rgn->AddArc(Rectangle(box.X, box.Y, d, d), 180, 90);
@@ -655,10 +555,9 @@ namespace BloodBank {
             }
         }
 
-        // ── Section 3: Feature cards ─────────────────────────────────────
         {
             int bW = cardsPanel->Width;
-            int bH = cardsPanel->Height;   // 300
+            int bH = cardsPanel->Height;
             if (bW <= 0 || bH <= 0) return;
 
             const int CARD_H = 196;
@@ -666,7 +565,7 @@ namespace BloodBank {
             int cardW = Math::Max(220, (bW - 80 - CARD_GAP * 2) / 3);
             int totalW = cardW * 3 + CARD_GAP * 2;
             int startX = (bW - totalW) / 2;
-            cardRestY = (bH - CARD_H) / 2;   // vertical centre; hover logic reads this
+            cardRestY = (bH - CARD_H) / 2;
 
             cardManagement->Size = System::Drawing::Size(cardW, CARD_H);
             cardInventory->Size = System::Drawing::Size(cardW, CARD_H);
@@ -686,13 +585,11 @@ namespace BloodBank {
             RoundControl(cardRequests, 14);
         }
 
-        // ── Section 4: Footer labels ─────────────────────────────────────
         {
             int fW = footerPanel->Width;
-            int fH = footerPanel->Height;   // 80
+            int fH = footerPanel->Height;
             int midFY = (fH - lblFooterBrand->PreferredHeight) / 2;
             lblFooterBrand->Location = System::Drawing::Point(40, midFY);
-            // Footer copyright auto-sizes; position once after PreferredWidth is known
             lblFooterCopy->Location = System::Drawing::Point(
                 fW - lblFooterCopy->PreferredWidth - 40,
                 (fH - lblFooterCopy->PreferredHeight) / 2);
@@ -702,10 +599,6 @@ namespace BloodBank {
         cardsPanel->Invalidate();
     }
 
-
-           // ── Inset box rectangle within rightAnimPanel ─────────────────────
-           //    Provides breathing room around the dark hero box so the light
-           //    form background shows in the gap — creating the "floating" look.
     private: Rectangle GetRightPanelBoxRect()
     {
         int pW = rightAnimPanel->Width;
@@ -715,12 +608,6 @@ namespace BloodBank {
         return Rectangle(0, RP_TOP, bW, bH);
     }
 
-
-           // ══════════════════════════════════════════════════════════════════
-           //  ANIMATION ENGINE  (preserved from homeForm.h)
-           // ══════════════════════════════════════════════════════════════════
-
-           // ── Timer tick: advance orbit angles then request repaint ─────────
     private: System::Void OnAnimTick(Object^ sender, EventArgs^ e)
     {
         angleO -= 0.020f;
@@ -730,7 +617,6 @@ namespace BloodBank {
         rightAnimPanel->Invalidate();
     }
 
-           // ── Right-panel paint: gradient + vignette + GDI+ animation ─────
     private: System::Void rightAnimPanel_Paint(Object^ sender, PaintEventArgs^ e)
     {
         Graphics^ g = e->Graphics;
@@ -739,7 +625,6 @@ namespace BloodBank {
         Rectangle box = GetRightPanelBoxRect();
         if (box.Width <= 0 || box.Height <= 0) return;
 
-        // Dark crimson diagonal gradient background
         LinearGradientBrush^ bgBrush = gcnew LinearGradientBrush(
             box,
             Color::FromArgb(210, 10, 45),
@@ -748,7 +633,6 @@ namespace BloodBank {
         g->FillRectangle(bgBrush, box);
         delete bgBrush;
 
-        // Radial vignette overlay for depth
         int vcx = box.X + box.Width / 2;
         int vcy = box.Y + box.Height / 2;
         int vr = Math::Max(box.Width, box.Height);
@@ -761,24 +645,20 @@ namespace BloodBank {
         delete vignette;
         delete ringPath;
 
-        // Animation geometry derived from box size
         int cx = box.X + box.Width / 2;
         int cy = box.Y + box.Height / 2 - 28;
         int baseSize = Math::Min(box.Width, box.Height);
         int mainSize = Math::Max(72, baseSize / 4);
         int orbitRadius = Math::Max(110, baseSize / 3);
 
-        // 1. Large central blood drop emoji with white outline
         DrawOutlinedBloodEmoji(g, cx, cy, mainSize, Color::FromArgb(210, 170, 35, 50), Color::White);
 
-        // 2. Four orbiting blood-type drops at different radii and speeds
-        DrawOrbitingDrop(g, cx, cy, orbitRadius, angleO, L"O\u2212");   // O-
+        DrawOrbitingDrop(g, cx, cy, orbitRadius, angleO, L"O\u2212");
         DrawOrbitingDrop(g, cx, cy, orbitRadius + 28, angleA, L"A+");
         DrawOrbitingDrop(g, cx, cy, orbitRadius - 18, angleB, L"B+");
         DrawOrbitingDrop(g, cx, cy, orbitRadius + 44, angleAB, L"AB+");
     }
 
-           // ── Orbiting blood-type drop + label ─────────────────────────────
     private: System::Void DrawOrbitingDrop(Graphics^ g, int cx, int cy,
         int radius, float angle, String^ text)
     {
@@ -822,7 +702,6 @@ namespace BloodBank {
         delete emojiFont;
     }
 
-           // ── Main blood drop emoji with outline ─────────────────────────-
     private: System::Void DrawOutlinedBloodEmoji(Graphics^ g, int cx, int cy, int size, Color fillColor, Color outlineColor)
     {
         String^ dropEmoji = Char::ConvertFromUtf32(0x1FA78);
@@ -845,12 +724,6 @@ namespace BloodBank {
         delete font;
     }
 
-
-           // ══════════════════════════════════════════════════════════════════
-           //  PAINT HANDLERS
-           // ══════════════════════════════════════════════════════════════════
-
-           // ── Top nav: 1 px bottom separator ───────────────────────────────
     private: System::Void topNavPanel_Paint(Object^ sender, PaintEventArgs^ e)
     {
         Panel^ pnl = safe_cast<Panel^>(sender);
@@ -859,7 +732,6 @@ namespace BloodBank {
         delete sep;
     }
 
-           // ── Cards section: 1 px top separator ────────────────────────────
     private: System::Void cardsPanel_Paint(Object^ sender, PaintEventArgs^ e)
     {
         Panel^ pnl = safe_cast<Panel^>(sender);
@@ -868,7 +740,6 @@ namespace BloodBank {
         delete sep;
     }
 
-           // ── Footer: 1 px top separator ────────────────────────────────────
     private: System::Void footerPanel_Paint(Object^ sender, PaintEventArgs^ e)
     {
         Panel^ pnl = safe_cast<Panel^>(sender);
@@ -877,7 +748,6 @@ namespace BloodBank {
         delete sep;
     }
 
-           // ── Logo badge: rounded square + filled crimson blood drop ────────
     private: System::Void logoBadge_Paint(Object^ sender, PaintEventArgs^ e)
     {
         Panel^ pnl = safe_cast<Panel^>(sender);
@@ -886,7 +756,6 @@ namespace BloodBank {
 
         Rectangle rect = Rectangle(0, 0, pnl->Width - 1, pnl->Height - 1);
 
-        // Pale crimson badge background
         GraphicsPath^ bgPath = CreateRoundedPath(rect, 10);
         SolidBrush^ bgBrush = gcnew SolidBrush(Color::FromArgb(245, 232, 236));
         g->FillPath(bgBrush, bgPath);
@@ -901,7 +770,6 @@ namespace BloodBank {
         delete dropFont;
     }
 
-           // ── Pill badge: fully-rounded rect with light-pink fill ───────────
     private: System::Void pillBadge_Paint(Object^ sender, PaintEventArgs^ e)
     {
         Panel^ pnl = safe_cast<Panel^>(sender);
@@ -909,7 +777,7 @@ namespace BloodBank {
         g->SmoothingMode = SmoothingMode::AntiAlias;
 
         Rectangle     rect = Rectangle(0, 0, pnl->Width - 1, pnl->Height - 1);
-        int           r = rect.Height / 2;     // fully rounded → pill shape
+        int           r = rect.Height / 2;
         GraphicsPath^ path = CreateRoundedPath(rect, r);
 
         SolidBrush^ bg = gcnew SolidBrush(CLR_PINK_LIGHT);
@@ -921,7 +789,6 @@ namespace BloodBank {
         delete border; delete path;
     }
 
-           // ── Stats row: vertical dividers between the three stat columns ───
     private: System::Void statsPanel_Paint(Object^ sender, PaintEventArgs^ e)
     {
         Panel^ pnl = safe_cast<Panel^>(sender);
@@ -935,7 +802,6 @@ namespace BloodBank {
         delete sep;
     }
 
-           // ── Nav text link: CLR_TEXT text, accent + underline on hover ─────
     private: System::Void btnNavText_Paint(Object^ sender, PaintEventArgs^ e)
     {
         Button^ btn = safe_cast<Button^>(sender);
@@ -960,7 +826,6 @@ namespace BloodBank {
         }
     }
 
-           // ── Solid crimson button: rounded rect fill + top-shine + text ────
     private: System::Void btnSolid_Paint(Object^ sender, PaintEventArgs^ e)
     {
         Button^ btn = safe_cast<Button^>(sender);
@@ -976,7 +841,6 @@ namespace BloodBank {
         int radius = rect.Height / 2;
         GraphicsPath^ path = CreateRoundedPath(rect, radius);
 
-        // Slightly darker on hover
         Color fillColor = isHover
             ? Color::FromArgb(0xA8, 0x31, 0x25)
             : CLR_ACCENT;
@@ -984,7 +848,6 @@ namespace BloodBank {
         g->FillPath(fill, path);
         delete fill;
 
-        // Subtle top-half shine highlight
         Rectangle     shineRect = Rectangle(rect.X + 1, rect.Y + 1,
             rect.Width - 2, rect.Height / 2);
         GraphicsPath^ shinePath = CreateRoundedPath(shineRect, 9);
@@ -999,7 +862,6 @@ namespace BloodBank {
         delete path;
     }
 
-           // ── Outline ghost button: accent border only, light tint on hover ─
     private: System::Void btnOutline_Paint(Object^ sender, PaintEventArgs^ e)
     {
         Button^ btn = safe_cast<Button^>(sender);
@@ -1033,8 +895,6 @@ namespace BloodBank {
         delete path;
     }
 
-           // ── Feature card: white fill + accent stripe + stacked shadow ─────
-           //    isHover is inferred from pnl->Top vs cardRestY (avoids extra state).
     private: System::Void Card_Paint(Object^ sender, PaintEventArgs^ e)
     {
         Panel^ pnl = safe_cast<Panel^>(sender);
@@ -1046,7 +906,6 @@ namespace BloodBank {
 
         bool isHover = (pnl->Top == cardRestY - 5);
 
-        // Multi-layer soft drop shadow
         int shadowDepth = isHover ? 6 : 3;
         for (int i = shadowDepth; i >= 1; i--)
         {
@@ -1058,18 +917,15 @@ namespace BloodBank {
             delete sp; delete sb;
         }
 
-        // White card fill
         GraphicsPath^ path = CreateRoundedPath(rect, 14);
         SolidBrush^ fill = gcnew SolidBrush(CLR_BG_CARD);
         g->FillPath(fill, path);
         delete fill;
 
-        // 4 px crimson accent stripe at top
         SolidBrush^ stripe = gcnew SolidBrush(CLR_ACCENT);
         g->FillRectangle(stripe, Rectangle(rect.X, rect.Y, rect.Width, 4));
         delete stripe;
 
-        // Border: accent tint on hover, light gray at rest
         Color borderColor = isHover
             ? Color::FromArgb(110, CLR_ACCENT.R, CLR_ACCENT.G, CLR_ACCENT.B)
             : Color::FromArgb(210, 212, 215);
@@ -1078,19 +934,12 @@ namespace BloodBank {
         delete borderPen; delete path;
     }
 
-
-           // ══════════════════════════════════════════════════════════════════
-           //  CARD SETUP + HOVER ANIMATION
-           // ══════════════════════════════════════════════════════════════════
-
-           // ── Build one feature card; returns desc Label for width updates ──
     private: Label^ SetupCard(Panel^ pnl, String^ icon, String^ title, String^ desc)
     {
         pnl->BackColor = Color::Transparent;
         pnl->Cursor = Cursors::Hand;
         pnl->Paint += gcnew PaintEventHandler(this, &LandingPage::Card_Paint);
 
-        // Icon (emoji rendered via Segoe UI Emoji)
         Label^ lblIcon = gcnew Label();
         lblIcon->Text = icon;
         lblIcon->BackColor = Color::Transparent;
@@ -1099,7 +948,6 @@ namespace BloodBank {
         lblIcon->Location = System::Drawing::Point(20, 18);
         lblIcon->AutoSize = true;
 
-        // Title
         Label^ lblTitle = gcnew Label();
         lblTitle->Text = title;
         lblTitle->BackColor = Color::Transparent;
@@ -1108,7 +956,6 @@ namespace BloodBank {
         lblTitle->Location = System::Drawing::Point(20, 60);
         lblTitle->AutoSize = true;
 
-        // Description
         Label^ lblDesc = gcnew Label();
         lblDesc->Text = desc;
         lblDesc->BackColor = Color::Transparent;
@@ -1122,7 +969,6 @@ namespace BloodBank {
         pnl->Controls->Add(lblTitle);
         pnl->Controls->Add(lblDesc);
 
-        // Propagate hover events from every child label → parent panel
         pnl->MouseEnter += gcnew EventHandler(this, &LandingPage::Card_MouseEnter);
         pnl->MouseLeave += gcnew EventHandler(this, &LandingPage::Card_MouseLeave);
         lblIcon->MouseEnter += gcnew EventHandler(this, &LandingPage::Card_MouseEnter);
@@ -1135,7 +981,6 @@ namespace BloodBank {
         return lblDesc;
     }
 
-           // ── Card lift: move up 5 px from rest position ────────────────────
     private: System::Void Card_MouseEnter(Object^ sender, EventArgs^ e)
     {
         Control^ ctrl = safe_cast<Control^>(sender);
@@ -1149,7 +994,6 @@ namespace BloodBank {
         }
     }
 
-           // ── Card restore: return to rest only when mouse leaves the panel ─
     private: System::Void Card_MouseLeave(Object^ sender, EventArgs^ e)
     {
         Control^ ctrl = safe_cast<Control^>(sender);
@@ -1164,19 +1008,11 @@ namespace BloodBank {
         }
     }
 
-           // ── Generic button invalidate on hover (re-triggers custom Paint) ─
     private: System::Void BtnInvalidate(Object^ sender, EventArgs^ e)
     {
         safe_cast<Button^>(sender)->Invalidate();
     }
 
-
-           // ══════════════════════════════════════════════════════════════════
-           //  SHARED GDI+ HELPERS
-           // ══════════════════════════════════════════════════════════════════
-
-           // ── Build a rounded-rectangle GraphicsPath.
-           //    CALLER must delete the returned object. ─────────────────────
     private: GraphicsPath^ CreateRoundedPath(Rectangle rect, int radius)
     {
         GraphicsPath^ path = gcnew GraphicsPath();
@@ -1189,7 +1025,6 @@ namespace BloodBank {
         return path;
     }
 
-           // ── Apply a rounded-rectangle Region to any Control ──────────────
     private: System::Void RoundControl(Control^ ctrl, int radius)
     {
         GraphicsPath^ path = CreateRoundedPath(
@@ -1198,7 +1033,6 @@ namespace BloodBank {
         delete path;
     }
 
-           // ── Configure a flat nav text-link button ─────────────────────────
     private: System::Void SetupNavLink(Button^ btn, String^ text, int width)
     {
         btn->Text = text;
@@ -1215,12 +1049,6 @@ namespace BloodBank {
         btn->MouseLeave += gcnew EventHandler(this, &LandingPage::BtnInvalidate);
     }
 
-
-           // ══════════════════════════════════════════════════════════════════
-           //  NAVIGATION  —  child form wiring
-           // ══════════════════════════════════════════════════════════════════
-
-           // ── "Login to Dashboard" + "Login" nav link ───────────────────────
     private: System::Void btnLoginDash_Click(Object^ sender, EventArgs^ e)
     {
         this->Hide();
@@ -1229,7 +1057,6 @@ namespace BloodBank {
         lf->Show();
     }
 
-           // ── "Sign Up" nav button ──────────────────────────────────────────
     private: System::Void btnSignUp_Click(Object^ sender, EventArgs^ e)
     {
         this->Hide();
@@ -1238,25 +1065,16 @@ namespace BloodBank {
         sf->Show();
     }
 
-           // ── "About" nav link ──────────────────────────────────────────────
     private: System::Void btnNavAbout_Click(Object^ sender, EventArgs^ e)
     {
-        // Creates and shows the AboutForm as a popup dialog
         AboutForm^ aboutWindow = gcnew AboutForm();
         aboutWindow->ShowDialog();
     }
 
-           // ── Child form closed: restore this landing page ───────────────────
-           //    Fires for both LoginForm and SignupForm regardless of close reason.
     private: System::Void OnChildClosed(Object^ sender, FormClosedEventArgs^ e)
     {
         this->Show();
     }
-
-
-           // ══════════════════════════════════════════════════════════════════
-           //  CLOSE BUTTON
-           // ══════════════════════════════════════════════════════════════════
 
     private: System::Void btnClose_Click(Object^ sender, EventArgs^ e)
     {
@@ -1266,7 +1084,7 @@ namespace BloodBank {
 
     private: System::Void btnClose_MouseEnter(Object^ sender, EventArgs^ e)
     {
-        btnClose->ForeColor = CLR_ACCENT;   // crimson tint signals danger
+        btnClose->ForeColor = CLR_ACCENT;
     }
 
     private: System::Void btnClose_MouseLeave(Object^ sender, EventArgs^ e)
@@ -1274,5 +1092,5 @@ namespace BloodBank {
         btnClose->ForeColor = CLR_MUTED;
     }
 
-    };  // end class LandingPage
-}     // end namespace BloodBank
+    };
+}
