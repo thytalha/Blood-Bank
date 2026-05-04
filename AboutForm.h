@@ -13,11 +13,11 @@ using namespace System::Windows::Forms;
 using namespace System::Data;
 using namespace System::Data::SqlClient;
 
-namespace BloodBank { // Switched to your project's namespace
+namespace BloodBank {
 
-    // ─────────────────────────────────────────────
     // Helper: Rounded Rectangle path generator
-    // ─────────────────────────────────────────────
+
+
     ref class RoundedPanel : public Panel {
     public:
         int CornerRadius;
@@ -67,12 +67,13 @@ namespace BloodBank { // Switched to your project's namespace
         }
     };
 
-    // ─────────────────────────────────────────────
+
     // Main About Form
-    // ─────────────────────────────────────────────
+
     public ref class AboutForm : public Form {
 
-        // ── Controls ──────────────────────────────
+		//Controls
+
         Label^ lblTitle;
         Label^ lblSubtitle;
         RoundedPanel^ pnlMission;
@@ -115,12 +116,13 @@ namespace BloodBank { // Switched to your project's namespace
             InitializeValueCards();
             InitializeTeamSection();
 
-            LoadDonorCount();  // Uses your Database.h!
+            LoadDonorCount();  // Uses Database.h
         }
 
     private:
 
-        // ── CLOSE BUTTON ──────────────────────────────
+		// Close button in top-right corner
+
         void InitializeCloseButton() {
             btnClose = gcnew Button();
             btnClose->Text = Char::ConvertFromUtf32(0x2715); // ✕
@@ -140,7 +142,9 @@ namespace BloodBank { // Switched to your project's namespace
             this->Close(); // Closes the popup and returns to landing page
         }
 
-        // ── TITLE ─────────────────────────────────
+
+		// Title and subtitle at the top of the form
+
         void InitializeTitle() {
             lblTitle = gcnew Label();
             lblTitle->Text = "About LifeBlood MS";
@@ -160,7 +164,9 @@ namespace BloodBank { // Switched to your project's namespace
             this->Controls->Add(lblSubtitle);
         }
 
-        // ── MISSION CARD ──────────────────────────
+
+		// Mission card with SQL-fed donor count and painted banner
+
         void InitializeMissionCard() {
             pnlMission = gcnew RoundedPanel();
             pnlMission->BackColor = cardBg;
@@ -209,7 +215,7 @@ namespace BloodBank { // Switched to your project's namespace
             this->Controls->Add(pnlMission);
         }
 
-        // ── BANNER PAINT (gradient + heart icon) ──
+        // Banner paint (gradient + heart icon)
         void PaintBanner(Object^ sender, PaintEventArgs^ e) {
             Graphics^ g = e->Graphics;
             g->SmoothingMode = SmoothingMode::AntiAlias;
@@ -221,7 +227,7 @@ namespace BloodBank { // Switched to your project's namespace
             GraphicsPath^ clip = GetRoundedRect(r, 14);
             g->SetClip(clip);
 
-            // Gradient: dark → lighter burgundy
+            // Gradient: dark -> lighter burgundy
             LinearGradientBrush^ grad = gcnew LinearGradientBrush(
                 r,
                 Color::FromArgb(100, 0, 20),
@@ -229,7 +235,7 @@ namespace BloodBank { // Switched to your project's namespace
                 LinearGradientMode::Horizontal);
             g->FillPath(grad, clip);
 
-            // Draw a heart outline (Bezier approximation)
+            // heart outline
             DrawHeartIcon(g, p->Width / 2 - 38, p->Height / 2 - 42, 80);
         }
 
@@ -237,7 +243,7 @@ namespace BloodBank { // Switched to your project's namespace
             Pen^ pen = gcnew Pen(Color::FromArgb(200, 255, 255, 255), 3.5f);
             pen->LineJoin = LineJoin::Round;
 
-            // Two bezier halves of a heart
+            // Two halves of a heart
             array<PointF>^ left = {
                 PointF(x + size / 2.0f, y + size * 0.35f),
                 PointF(x + size * 0.2f, y),
@@ -254,7 +260,7 @@ namespace BloodBank { // Switched to your project's namespace
             g->DrawBeziers(pen, right);
         }
 
-        // ── VALUE CARDS (Precision, Compassion, Speed)
+        // value cards (Precision, Compassion, Speed)
         void InitializeValueCards() {
             pnlPrecision = MakeValueCard(Char::ConvertFromUtf32(0x2299) + "  Precision",
                 "Real-time inventory, automated expiry\nalerts, and audit-grade activity logs.",
@@ -327,7 +333,9 @@ namespace BloodBank { // Switched to your project's namespace
             p->Region = gcnew System::Drawing::Region(path);
         }
 
-        // ── TEAM SECTION ──────────────────────────
+
+		// Team section
+
         void InitializeTeamSection() {
             pnlTeam = gcnew RoundedPanel();
             pnlTeam->BackColor = cardBg;
@@ -367,7 +375,7 @@ namespace BloodBank { // Switched to your project's namespace
             card->Location = Point(x, y);
             card->Paint += gcnew PaintEventHandler(this, &AboutForm::PaintTeamCard);
 
-            // Avatar circle - REMOVED LAMBDA
+            // Avatar circle
             Panel^ avatar = gcnew Panel();
             avatar->Size = Drawing::Size(52, 52);
             avatar->Location = Point(14, 14);
@@ -415,7 +423,6 @@ namespace BloodBank { // Switched to your project's namespace
 
             Drawing::Font^ font = gcnew Drawing::Font("Segoe UI Semibold", 18, FontStyle::Bold);
 
-            // Note: Explicitly casted to float to fix the "possible loss of data" warnings
             Drawing::RectangleF rect = Drawing::RectangleF(0.0f, 0.0f, (float)(av->Width - 2), (float)(av->Height - 2));
 
             g->DrawString(initial, font, Brushes::White, rect, sf);
@@ -435,7 +442,7 @@ namespace BloodBank { // Switched to your project's namespace
             p->Region = gcnew System::Drawing::Region(path);
         }
 
-        // ── UTILITY: Rounded Rectangle Path ───────
+        // Rounded Rectangle Path
         GraphicsPath^ GetRoundedRect(Drawing::Rectangle r, int radius) {
             int d = radius * 2;
             GraphicsPath^ path = gcnew GraphicsPath();
@@ -447,13 +454,10 @@ namespace BloodBank { // Switched to your project's namespace
             return path;
         }
 
-        // ── SQL: Load Total Donor Count using your Database.h ────────────
         void LoadDonorCount() {
             try {
-                // Corrected to match your actual schema:
                 SqlCommand^ cmd = gcnew SqlCommand("SELECT COUNT(*) FROM Users WHERE Role = 'Donor'");
 
-                // Using your existing Singleton instance
                 Object^ result = Database::GetInstance()->ExecuteScalar(cmd);
 
                 if (result != nullptr && result != DBNull::Value) {
